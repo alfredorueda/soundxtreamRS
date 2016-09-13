@@ -1,0 +1,54 @@
+
+<div>
+    <h2><span translate="soundxtreamappApp.comments.detail.title">Comments</span> {{comments.id}}</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th translate="entity.detail.field">Field</th>
+                <th translate="entity.detail.value">Value</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <span translate="soundxtreamappApp.comments.comment_text">Comment_text</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{comments.comment_text}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="soundxtreamappApp.comments.date_comment">Date_comment</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{comments.date_comment | date:'medium'}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="soundxtreamappApp.comments.song">song</span>
+                </td>
+                <td>
+                    <a class="form-control-static" ui-sref="song.detail({id:comments.song.id})">{{comments.song.name}}</a>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="soundxtreamappApp.comments.user">user</span>
+                </td>
+                <td>
+                    {{comments.user.firstName}}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <button type="submit"
+            onclick="window.history.back()"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+    </button>
+</div>

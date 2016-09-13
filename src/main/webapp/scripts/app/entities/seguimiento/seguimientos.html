@@ -1,0 +1,78 @@
+<div>
+    <h2 translate="soundxtreamappApp.seguimiento.home.title">Seguimientos</h2>
+    <jh-alert></jh-alert>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-4 no-padding-left">
+                <button class="btn btn-primary" ui-sref="seguimiento.new" >
+                    <span class="glyphicon glyphicon-plus"></span>
+                    <span 
+class="hidden-xs"                        translate="soundxtreamappApp.seguimiento.home.createLabel">Create new Seguimiento
+                    </span>
+                </button>
+            </div>
+            <div class="col-xs-8 no-padding-right">
+                <form name="searchForm" class="form-inline">
+                    <div class="input-group pull-right" >
+                        <input type="text" class="form-control" ng-model="searchQuery" id="searchQuery" placeholder="{{ 'soundxtreamappApp.seguimiento.home.search' | translate }}">
+                        <span  class="input-group-btn width-min" >
+                            <button class="btn btn-info" ng-click="search()">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                        </span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <div class="table-responsive">
+        <table class="jh-table table table-striped">
+            <thead>
+                <tr jh-sort="predicate" ascending="reverse" callback="reset()">
+                    <th jh-sort-by="id"><span translate="global.field.id">ID</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="fecha"><span translate="soundxtreamappApp.seguimiento.fecha">Fecha</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="siguiendo"><span translate="soundxtreamappApp.seguimiento.siguiendo">Siguiendo</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="seguidor.login"><span translate="soundxtreamappApp.seguimiento.seguidor">seguidor</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="seguido.login"><span translate="soundxtreamappApp.seguimiento.seguido">seguido</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody infinite-scroll="loadPage(page + 1)" infinite-scroll-disabled="links['last'] == page">
+                <tr ng-repeat="seguimiento in seguimientos track by seguimiento.id">
+                    <td><a ui-sref="seguimiento.detail({id:seguimiento.id})">{{seguimiento.id}}</a></td>
+                    <td>{{seguimiento.fecha | date:'medium'}}</td>
+                    <td>{{seguimiento.siguiendo}}</td>
+                    <td>
+                        {{seguimiento.seguidor.login}}
+                    </td>
+                    <td>
+                        {{seguimiento.seguido.login}}
+                    </td>
+                    <td class="text-right">
+                        <div class="btn-group flex-btn-group-container">
+                            <button type="submit"
+                                    ui-sref="seguimiento.detail({id:seguimiento.id})"
+                                    class="btn btn-info btn-sm"> 
+                                <span class="glyphicon glyphicon-eye-open"></span>
+                                <span class="hidden-xs hidden-sm" translate="entity.action.view"></span>
+                            </button>
+                            <button type="submit"
+                                    ui-sref="seguimiento.edit({id:seguimiento.id})"
+                                    class="btn btn-primary btn-sm">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                                <span class="hidden-xs hidden-sm" translate="entity.action.edit"></span>
+                            </button>
+                            <button type="submit"
+                                    ui-sref="seguimiento.delete({id:seguimiento.id})"
+                                    class="btn btn-danger btn-sm">                                    
+                                <span class="glyphicon glyphicon-remove-circle"></span>
+                                <span class="hidden-xs hidden-sm" translate="entity.action.delete"></span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

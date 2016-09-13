@@ -1,0 +1,78 @@
+<div>
+    <h2 translate="soundxtreamappApp.comments.home.title">Commentss</h2>
+    <jh-alert></jh-alert>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-4 no-padding-left">
+                <button class="btn btn-primary" ui-sref="comments.new" >
+                    <span class="glyphicon glyphicon-plus"></span>
+                    <span 
+class="hidden-xs"                        translate="soundxtreamappApp.comments.home.createLabel">Create new Comments
+                    </span>
+                </button>
+            </div>
+            <div class="col-xs-8 no-padding-right">
+                <form name="searchForm" class="form-inline">
+                    <div class="input-group pull-right" >
+                        <input type="text" class="form-control" ng-model="searchQuery" id="searchQuery" placeholder="{{ 'soundxtreamappApp.comments.home.search' | translate }}">
+                        <span  class="input-group-btn width-min" >
+                            <button class="btn btn-info" ng-click="search()">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                        </span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <div class="table-responsive">
+        <table class="jh-table table table-striped">
+            <thead>
+                <tr jh-sort="predicate" ascending="reverse" callback="reset()">
+                    <th jh-sort-by="id"><span translate="global.field.id">ID</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="comment_text"><span translate="soundxtreamappApp.comments.comment_text">Comment_text</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="date_comment"><span translate="soundxtreamappApp.comments.date_comment">Date_comment</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="song.name"><span translate="soundxtreamappApp.comments.song">song</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="user.firstName"><span translate="soundxtreamappApp.comments.user">user</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody infinite-scroll="loadPage(page + 1)" infinite-scroll-disabled="links['last'] == page">
+                <tr ng-repeat="comments in commentss track by comments.id">
+                    <td><a ui-sref="comments.detail({id:comments.id})">{{comments.id}}</a></td>
+                    <td>{{comments.comment_text}}</td>
+                    <td>{{comments.date_comment | date:'medium'}}</td>
+                    <td>
+                        <a ui-sref="song.detail({id:comments.song.id})">{{comments.song.name}}</a>
+                    </td>
+                    <td>
+                        {{comments.user.firstName}}
+                    </td>
+                    <td class="text-right">
+                        <div class="btn-group flex-btn-group-container">
+                            <button type="submit"
+                                    ui-sref="comments.detail({id:comments.id})"
+                                    class="btn btn-info btn-sm"> 
+                                <span class="glyphicon glyphicon-eye-open"></span>
+                                <span class="hidden-xs hidden-sm" translate="entity.action.view"></span>
+                            </button>
+                            <button type="submit"
+                                    ui-sref="comments.edit({id:comments.id})"
+                                    class="btn btn-primary btn-sm">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                                <span class="hidden-xs hidden-sm" translate="entity.action.edit"></span>
+                            </button>
+                            <button type="submit"
+                                    ui-sref="comments.delete({id:comments.id})"
+                                    class="btn btn-danger btn-sm">                                    
+                                <span class="glyphicon glyphicon-remove-circle"></span>
+                                <span class="hidden-xs hidden-sm" translate="entity.action.delete"></span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

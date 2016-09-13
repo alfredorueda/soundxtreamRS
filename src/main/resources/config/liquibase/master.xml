@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <include file="classpath:config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20160329160518_added_entity_Style.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20160326000016_added_entity_Song.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20160326001835_added_entity_Playlist.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20160326002624_added_entity_Song_user.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20160326151139_added_entity_Comments.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20160503152640_added_entity_Seguimiento.xml" relativeToChangelogFile="false"/>
+    <include file="classpath:config/liquibase/changelog/20160525183144_added_entity_Samples.xml" relativeToChangelogFile="false"/>
+    <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
+</databaseChangeLog>

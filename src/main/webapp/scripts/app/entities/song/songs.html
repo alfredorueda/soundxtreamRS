@@ -1,0 +1,61 @@
+<div class="row">
+    <div class="panel panel-default">
+        <div class="panel-body">
+
+            <hr>
+            <div class="col-md-12" style="vertical-align: top;"
+                 infinite-scroll="loadPage(page + 1)"
+                 infinite-scroll-disabled="links['last'] == page" infinite-scroll-distance='2'
+                 infinite-scroll-container="'#content'">
+                <h4><i class="fa fa-music" aria-hidden="true"></i> Your songs</h4>
+                <div ng-repeat="songDTO in songs" class="track-box" style="margin-left: 13px;">
+                    <div class="track-image">
+                        <img ng-if="songDTO.song.artwork != null" src="{{songDTO.song.artwork}}" style="background: -webkit-linear-gradient(-45deg, rgb(85, 147, 255) 0%, rgb(150, 27, 255) 100%);"/>
+                        <img ng-if="songDTO.song.artwork == null" src="/assets/images/gradient.jpg"/>
+                        <div class="controls">
+                            <md-button ng-if="playerPlaylist.getSongId(mediaPlayer.currentTrack) != songDTO.song.id || playerPlaylist.playlistCurrent != 'fromYourSongs'"
+                                       ng-click="playerPlaylist.addSongAll(songs,mediaPlayer,$index,'fromYourSongs')" class="md-play" aria-label="play">
+                                <md-icon>
+                                    <i class="material-icons">play_arrow</i>
+                                </md-icon>
+                            </md-button>
+                            <md-button ng-if="playerPlaylist.getSongId(mediaPlayer.currentTrack) == songDTO.song.id && playerPlaylist.playlistCurrent == 'fromYourSongs'"
+                                       ng-click="mediaPlayer.playPause()" class="md-play" aria-label="play">
+                                <md-icon>
+                                    <i ng-if="!mediaPlayer.playing" class="material-icons">play_arrow</i>
+                                    <i ng-if="mediaPlayer.playing" class="material-icons">pause</i>
+                                </md-icon>
+                            </md-button>
+                        </div>
+                        <div class="stats">
+                            <button class="sx__button like__button"
+                                    ng-class="{true:'like__button active',false:'like__button'}[songDTO.liked]"
+                                    ng-click="like(songDTO.song.id)">
+                                <i class="fa fa-heart-o fa-lg"></i>{{songDTO.totalLikes}}
+                            </button>
+                            <button class="sx__button like__button"
+                                    ng-class="{true:'like__button active',false:'like__button'}[songDTO.shared]"
+                                    ng-click="share(songDTO.song.id)">
+                                <i class="fa fa-retweet fa-lg" aria-hidden="true"></i>{{songDTO.totalShares}}
+                            </button>
+                        </div>
+                    </div>
+                    <div class="info">
+                        <h5 style="cursor: pointer;text-align: center;" ui-sref="song.detail({id:songDTO.song.id})">{{songDTO.song.name}}</h5>
+                        <h6 style="cursor: pointer;text-align: center;" ui-sref="user-profile({login:songDTO.song.user.login})">{{songDTO.song.user.login}}</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-10" ng-if="songs.empty">
+                <p>Not found songs with this criteria</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<style>
+    #btn-filter{
+        transition: 0.5s all linear;
+    }
+</style>

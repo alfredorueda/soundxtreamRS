@@ -1,0 +1,24 @@
+{
+  "generator-jhipster": {
+    "baseName": "soundxtreamapp",
+    "packageName": "com.xavierpandis.soundxtream",
+    "packageFolder": "com/xavierpandis/soundxtream",
+    "authenticationType": "session",
+    "hibernateCache": "ehcache",
+    "clusteredHttpSession": "no",
+    "websocket": "spring-websocket",
+    "databaseType": "sql",
+    "devDatabaseType": "mysql",
+    "prodDatabaseType": "mysql",
+    "searchEngine": "elasticsearch",
+    "useSass": false,
+    "buildTool": "maven",
+    "frontendBuilder": "grunt",
+    "enableTranslation": true,
+    "enableSocialSignIn": true,
+    "rememberMeKey": "ab1763da7092d50f22b690b40e3346fdf94e2a8e",
+    "testFrameworks": [
+      "gatling"
+    ]
+  }
+}

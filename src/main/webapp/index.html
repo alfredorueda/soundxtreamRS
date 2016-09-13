@@ -1,0 +1,330 @@
+<!doctype html>
+<html class="no-js" itemscope itemtype="http://schema.org/Article">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>SoundXtream</title>
+
+        <meta name="description" content="">
+        <meta name="google" value="notranslate">
+        <meta name="viewport" content="width=device-width">
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+        <!-- build:css assets/styles/vendor.css -->
+        <!-- bower:css -->
+        <link rel="stylesheet" href="bower_components/angular-loading-bar/build/loading-bar.css" />
+        <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="bower_components/Ionicons/css/ionicons.css" />
+        <link rel="stylesheet" href="bower_components/ng-img-crop/compile/minified/ng-img-crop.css" />
+        <link rel="stylesheet" href="bower_components/AngularJS-Toaster/toaster.css" />
+        <link rel="stylesheet" href="bower_components/ui-select/dist/select.css" />
+        <link rel="stylesheet" href="bower_components/angular-material/angular-material.css" />
+        <link rel="stylesheet" href="bower_components/trix/dist/trix.css" />
+        <link rel="stylesheet" href="bower_components/ng-img-crop-full-extended/compile/minified/ng-img-crop.css" />
+        <!-- endbower -->
+        <!-- endbuild -->
+        <link rel="stylesheet" href="assets/font-awesome-4.5.0/css/font-awesome.css">
+        <link rel="stylesheet" href="bower_components/material-design-icons/iconfont/material-icons.css">
+        <link rel="stylesheet" href="assets/styles/main.css">
+        <link rel="stylesheet" href="assets/styles/styles.css">
+        <link rel="stylesheet" href="assets/styles/style-sx.css">
+        <!-- endbuild -->
+    </head>
+    <body ng-app="soundxtreamappApp" ng-controller="playerPlaylistController as playerPlaylist" >
+        <!--[if lt IE 9]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        <toaster-container toaster-options="{'close-button':true, 'position-class': 'toast-bottom-right'}"></toaster-container>
+        <aside ui-view="navbar" id="nav-container" ng-show="isAuthenticated()"></aside>
+        <section data-ng-include=" 'scripts/components/navbar/header.html' " id="header" class="top-header"></section>
+
+        <section id="content">
+            <div ui-view="content" class="app-content"></div>
+        </section>
+
+        <div class="player-wrapper" ng-cloak="" ng-show="mediaPlayer.currentTrack">
+            <audio id="mediaPlayer" media-player="mediaPlayer" playlist="playerPlaylist.audioPlaylist"></audio>
+            <div class="player-controls">
+                <div class="prev-track-button" ng-click="mediaPlayer.prev()">
+                    <i class="material-icons">skip_previous</i>
+                </div>
+                <div class="playPause-button" ng-click="mediaPlayer.playPause()">
+                    <i ng-if="!mediaPlayer.playing" class="material-icons">play_arrow</i>
+                    <i ng-if="mediaPlayer.playing" class="material-icons">pause</i>
+                </div>
+                <div class="next-track-button" ng-click="mediaPlayer.next()">
+                    <i class="material-icons">skip_next</i>
+                </div>
+                <div class="current-time">
+                    <span>{{mediaPlayer.formatTime}}</span>
+                </div>
+            </div>
+            <div class="timeline-wrapper"><!--  ng-click="mediaPlayer.seek(mediaPlayer.duration * playerPlaylist.seek($event))" -->
+                <div class="timeline">
+                    <div class="timeline-pointer" ng-style="{ left: mediaPlayer.currentTime*100/mediaPlayer.duration + '%' }"></div>
+                    <div class="timeline-current" ng-style="{ width: mediaPlayer.currentTime*100/mediaPlayer.duration + '%' }"></div>
+                    <div class="timeline-full"></div>
+                </div>
+            </div>
+            <div class="player-controls">
+                <div class="full-time">
+                    <span>{{ mediaPlayer.formatDuration }}</span>
+                </div>
+                <div class="volume-button">
+                    <i class="material-icons">volume_up</i>
+                </div>
+                <!--<div class="playlist-button">
+                    <md-switch tooltip-placement="top" uib-tooltip="Show playlist" tooltip-append-to-body="true" ng-model="playerPlaylist.showPlaylist" md-no-ink class="sx-switch md-primary" aria-label="Show playlist">
+                    </md-switch>
+                </div>-->
+            </div>
+            <div class="player-info-wrapper">
+                <div class="player-info">
+                    <img class="player-info-cover" ng-src="{{playerPlaylist.getSongImage(mediaPlayer.currentTrack)}}" height="40px" width="40px"/>
+                    <span class="player-info-title">{{playerPlaylist.getSongName(mediaPlayer.currentTrack)}}</span>
+                    <span class="player-info-artist">{{playerPlaylist.getSongArtist(mediaPlayer.currentTrack)}}</span>
+                </div>
+            </div>
+        </div>
+       <div class="page-loading-overlay">
+            <div class="loader-2"></div>
+        </div>
+        <div class="load_circle_wrapper">
+            <div class="loading_spinner">
+                <div id="wrap_spinner">
+                    <div id="loader">
+                        <ul>
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                            <li></li>
+                        </ul>
+                    </div>
+                    <div class="text_loading">
+                        <span>S</span>
+                        <span>O</span>
+                        <span>U</span>
+                        <span>N</span>
+                        <span>D</span>
+                        <span>X</span>
+                        <span>T</span>
+                        <span>R</span>
+                        <span>E</span>
+                        <span>A</span>
+                        <span>M</span>
+                    </div>
+                </div>
+                <br/>
+
+            </div>
+        </div>
+
+
+        <div ui-view="login"></div>
+
+        <!-- Google Analytics: uncomment and change UA-XXXXX-X to be your site's ID.
+        <script>
+            (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+            function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+            e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+            e.src='//www.google-analytics.com/analytics.js';
+            r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+            ga('create','UA-XXXXX-X');ga('send','pageview');
+        </script>-->
+
+        <!-- build:js scripts/vendor.js -->
+        <!-- bower:js -->
+        <script src="bower_components/jquery/dist/jquery.js"></script>
+        <script src="bower_components/angular/angular.js"></script>
+        <script src="bower_components/angular-aria/angular-aria.js"></script>
+        <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+        <script src="bower_components/angular-cache-buster/angular-cache-buster.js"></script>
+        <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+        <script src="bower_components/angular-dynamic-locale/src/tmhDynamicLocale.js"></script>
+        <script src="bower_components/angular-local-storage/dist/angular-local-storage.js"></script>
+        <script src="bower_components/angular-loading-bar/build/loading-bar.js"></script>
+        <script src="bower_components/angular-resource/angular-resource.js"></script>
+        <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+        <script src="bower_components/angular-translate/angular-translate.js"></script>
+        <script src="bower_components/messageformat/messageformat.js"></script>
+        <script src="bower_components/angular-translate-interpolation-messageformat/angular-translate-interpolation-messageformat.js"></script>
+        <script src="bower_components/angular-translate-loader-partial/angular-translate-loader-partial.js"></script>
+        <script src="bower_components/angular-translate-storage-cookie/angular-translate-storage-cookie.js"></script>
+        <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+        <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="bower_components/json3/lib/json3.js"></script>
+        <script src="bower_components/ng-file-upload/ng-file-upload.js"></script>
+        <script src="bower_components/ngInfiniteScroll/build/ng-infinite-scroll.js"></script>
+        <script src="bower_components/sockjs-client/dist/sockjs.js"></script>
+        <script src="bower_components/stomp-websocket/lib/stomp.min.js"></script>
+        <script src="bower_components/jquery-ui/jquery-ui.js"></script>
+        <script src="bower_components/ng-img-crop/compile/minified/ng-img-crop.js"></script>
+        <script src="bower_components/angular-media-player/dist/angular-media-player.min.js"></script>
+        <script src="bower_components/angular-dragdrop/src/angular-dragdrop.js"></script>
+        <script src="bower_components/angular-animate/angular-animate.js"></script>
+        <script src="bower_components/AngularJS-Toaster/toaster.js"></script>
+        <script src="bower_components/ui-select/dist/select.js"></script>
+        <script src="bower_components/angular-messages/angular-messages.js"></script>
+        <script src="bower_components/angular-material/angular-material.js"></script>
+        <script src="bower_components/angular-timeago/src/timeAgo.js"></script>
+        <script src="bower_components/trix/dist/trix.js"></script>
+        <script src="bower_components/angular-trix/dist/angular-trix.js"></script>
+        <script src="bower_components/ng-img-crop-full-extended/compile/minified/ng-img-crop.js"></script>
+        <script src="bower_components/angular-socialshare/dist/angular-socialshare.min.js"></script>
+        <script src="bower_components/angular-read-more/dist/readmore.min.js"></script>
+        <script src="bower_components/angular-ui-mention/dist/mention.js"></script>
+        <!-- endbower -->
+        <!-- endbuild -->
+
+
+    <!-- build:js({.tmp,src/main/webapp}) scripts/app.js -->
+    <script src="scripts/app/app.js"></script>
+    <script src="scripts/app/app.constants.js"></script>
+    <script src="scripts/components/auth/auth.service.js"></script>
+    <script src="scripts/components/auth/principal.service.js"></script>
+    <script src="scripts/components/auth/authority.directive.js"></script>
+    <script src="scripts/components/auth/services/account.service.js"></script>
+    <script src="scripts/components/auth/services/activate.service.js"></script>
+    <script src="scripts/components/auth/services/password.service.js"></script>
+    <script src="scripts/components/auth/services/register.service.js"></script>
+    <script src="scripts/components/form/form.directive.js"></script>
+    <script src="scripts/components/form/maxbytes.directive.js"></script>
+    <script src="scripts/components/form/minbytes.directive.js"></script>
+    <script src="scripts/components/form/uib-pager.config.js"></script>
+    <script src="scripts/components/form/uib-pagination.config.js"></script>
+    <script src="scripts/components/admin/audits.service.js"></script>
+    <script src="scripts/components/admin/logs.service.js"></script>
+    <script src="scripts/components/admin/configuration.service.js"></script>
+    <script src="scripts/components/admin/monitoring.service.js"></script>
+    <script src="scripts/components/interceptor/auth.interceptor.js"></script>
+    <script src="scripts/components/interceptor/errorhandler.interceptor.js"></script>
+    <script src="scripts/components/interceptor/notification.interceptor.js"></script>
+    <script src="scripts/components/navbar/navbar.directive.js"></script>
+    <script src="scripts/components/navbar/navbar.controller.js"></script>
+    <script src="scripts/components/user/user.service.js"></script>
+    <script src="scripts/components/util/truncate.filter.js"></script>
+    <script src="scripts/components/util/base64.service.js"></script>
+    <script src="scripts/components/util/capitalize.filter.js"></script>
+    <script src="scripts/components/alert/alert.service.js"></script>
+    <script src="scripts/components/alert/alert.directive.js"></script>
+    <script src="scripts/components/util/parse-links.service.js"></script>
+    <script src="scripts/components/util/date-util.service.js"></script>
+    <script src="scripts/components/util/data-util.service.js"></script>
+    <script src="scripts/components/util/sort.directive.js"></script>
+    <script src="scripts/app/account/account.js"></script>
+    <script src="scripts/app/account/activate/activate.js"></script>
+    <script src="scripts/app/account/activate/activate.controller.js"></script>
+    <script src="scripts/app/account/login/login.js"></script>
+    <script src="scripts/app/account/login/login.controller.js"></script>
+    <script src="scripts/app/account/password/password.js"></script>
+    <script src="scripts/app/account/password/password.controller.js"></script>
+    <script src="scripts/app/account/password/password.directive.js"></script>
+    <script src="scripts/app/account/register/register.js"></script>
+    <script src="scripts/app/account/register/register.controller.js"></script>
+    <script src="scripts/app/account/settings/settings.js"></script>
+    <script src="scripts/app/account/settings/settings.controller.js"></script>
+    <script src="scripts/app/account/reset/finish/reset.finish.controller.js"></script>
+    <script src="scripts/app/account/reset/finish/reset.finish.js"></script>
+    <script src="scripts/app/account/reset/request/reset.request.controller.js"></script>
+    <script src="scripts/app/account/reset/request/reset.request.js"></script>
+    <script src="scripts/app/admin/admin.js"></script>
+    <script src="scripts/app/admin/audits/audits.js"></script>
+    <script src="scripts/app/admin/audits/audits.controller.js"></script>
+    <script src="scripts/app/admin/configuration/configuration.js"></script>
+    <script src="scripts/app/admin/configuration/configuration.controller.js"></script>
+    <script src="scripts/app/admin/docs/docs.js"></script>
+    <script src="scripts/app/admin/health/health.js"></script>
+    <script src="scripts/app/admin/health/health.controller.js"></script>
+    <script src="scripts/app/admin/health/health.modal.controller.js"></script>
+    <script src="scripts/app/admin/logs/logs.js"></script>
+    <script src="scripts/app/admin/logs/logs.controller.js"></script>
+    <script src="scripts/app/admin/metrics/metrics.js"></script>
+    <script src="scripts/app/admin/metrics/metrics.controller.js"></script>
+    <script src="scripts/app/admin/metrics/metrics.modal.controller.js"></script>
+    <script src="scripts/app/admin/user-management/user-management-detail.controller.js"></script>
+    <script src="scripts/app/admin/user-management/user-management-dialog.controller.js"></script>
+    <script src="scripts/app/admin/user-management/user-management-delete-dialog.controller.js"></script>
+    <script src="scripts/app/admin/user-management/user-management.controller.js"></script>
+    <script src="scripts/app/admin/user-management/user-management.js"></script>
+    <script src="scripts/app/entities/entity.js"></script>
+    <script src="scripts/app/error/error.js"></script>
+    <script src="scripts/app/main/main.js"></script>
+    <script src="scripts/app/main/main.controller.js"></script>
+    <script src="bower_components/messageformat/locale/en.js"></script>
+    <script src="bower_components/messageformat/locale/fr.js"></script>
+    <script src="scripts/components/language/language.service.js"></script>
+    <script src="scripts/components/language/language.controller.js"></script>
+    <script src="scripts/app/account/social/directive/social.directive.js"></script>
+    <script src="scripts/app/account/social/social-register.js"></script>
+    <script src="scripts/app/account/social/social-register.controller.js"></script>
+    <script src="scripts/app/account/social/social.service.js"></script>
+    <script src="scripts/components/auth/services/sessions.service.js"></script>
+    <script src="scripts/components/auth/provider/auth.session.service.js"></script>
+    <script src="scripts/app/account/sessions/sessions.js"></script>
+    <script src="scripts/app/account/sessions/sessions.controller.js"></script>
+    <script src="scripts/app/admin/tracker/tracker.js"></script>
+    <script src="scripts/app/admin/tracker/tracker.controller.js"></script>
+    <script src="scripts/components/tracker/tracker.service.js"></script>
+    <script src="scripts/app/entities/style/style.js"></script>
+    <script src="scripts/app/entities/style/style.controller.js"></script>
+    <script src="scripts/app/entities/style/style-dialog.controller.js"></script>
+    <script src="scripts/app/entities/style/style-delete-dialog.controller.js"></script>
+    <script src="scripts/app/entities/style/style-detail.controller.js"></script>
+    <script src="scripts/components/entities/style/style.service.js"></script>
+    <script src="scripts/components/entities/style/style.search.service.js"></script>
+    <script src="scripts/app/entities/song/song.js"></script>
+    <script src="scripts/app/entities/song/song.controller.js"></script>
+    <script src="scripts/app/entities/song/song-dialog.controller.js"></script>
+    <script src="scripts/app/entities/song/song-delete-dialog.controller.js"></script>
+    <script src="scripts/app/entities/song/song-detail.controller.js"></script>
+    <script src="scripts/app/entities/song/song-to-playlist.controller.js"></script>
+    <script src="scripts/components/entities/song/song.service.js"></script>
+    <script src="scripts/components/entities/song/song.search.service.js"></script>
+    <script src="scripts/app/entities/playlist/playlist.js"></script>
+    <script src="scripts/app/entities/playlist/playlist.controller.js"></script>
+    <script src="scripts/app/entities/playlist/playlist-dialog.controller.js"></script>
+    <script src="scripts/app/entities/playlist/playlist-delete-dialog.controller.js"></script>
+    <script src="scripts/app/entities/playlist/playlist-detail.controller.js"></script>
+    <script src="scripts/components/entities/playlist/playlist.service.js"></script>
+    <script src="scripts/components/entities/playlist/playlist.search.service.js"></script>
+    <script src="scripts/app/entities/song_user/song_user.js"></script>
+    <script src="scripts/app/entities/song_user/song_user.controller.js"></script>
+    <script src="scripts/app/entities/song_user/song_user-dialog.controller.js"></script>
+    <script src="scripts/app/entities/song_user/song_user-delete-dialog.controller.js"></script>
+    <script src="scripts/app/entities/song_user/song_user-detail.controller.js"></script>
+    <script src="scripts/components/entities/song_user/song_user.service.js"></script>
+    <script src="scripts/components/entities/song_user/song_user.search.service.js"></script>
+    <script src="scripts/app/entities/comments/comments.js"></script>
+    <script src="scripts/app/entities/comments/comments.controller.js"></script>
+    <script src="scripts/app/entities/comments/comments-dialog.controller.js"></script>
+    <script src="scripts/app/entities/comments/comments-delete-dialog.controller.js"></script>
+    <script src="scripts/app/entities/comments/comments-detail.controller.js"></script>
+    <script src="scripts/components/entities/comments/comments.service.js"></script>
+    <script src="scripts/components/entities/comments/comments.search.service.js"></script>
+    <script src="scripts/app/upload/upload.js"></script>
+    <script src="scripts/app/upload/upload.controller.js"></script>
+    <script src="scripts/app/user-profile/user-profile.js"></script>
+    <script src="scripts/app/user-profile/user-profile.controller.js"></script>
+    <script src="scripts/app/user-profile/user-profile-likes.controller.js"></script>
+    <script src="scripts/app/user-profile/user-profile-playlists.controller.js"></script>
+    <script src="scripts/app/entities/playlist/allplaylist-song.controller.js"></script>
+    <script src="scripts/components/player/player.controller.js"></script>
+    <script src="scripts/app/entities/seguimiento/seguimiento.js"></script>
+    <script src="scripts/app/entities/seguimiento/seguimiento.controller.js"></script>
+    <script src="scripts/app/entities/seguimiento/seguimiento-dialog.controller.js"></script>
+    <script src="scripts/app/entities/seguimiento/seguimiento-delete-dialog.controller.js"></script>
+    <script src="scripts/app/entities/seguimiento/seguimiento-detail.controller.js"></script>
+    <script src="scripts/components/entities/seguimiento/seguimiento.service.js"></script>
+    <script src="scripts/components/entities/seguimiento/seguimiento.search.service.js"></script>
+    <script src="scripts/app/entities/samples/samples.js"></script>
+    <script src="scripts/app/entities/samples/samples.controller.js"></script>
+    <script src="scripts/app/entities/samples/samples-dialog.controller.js"></script>
+    <script src="scripts/app/entities/samples/samples-delete-dialog.controller.js"></script>
+    <script src="scripts/app/entities/samples/samples-detail.controller.js"></script>
+    <script src="scripts/components/entities/samples/samples.service.js"></script>
+    <script src="scripts/components/entities/samples/samples.search.service.js"></script>
+    <script src="scripts/app/main/stream.controller.js"></script>
+    <!-- endbuild -->
+</body>
+</html>

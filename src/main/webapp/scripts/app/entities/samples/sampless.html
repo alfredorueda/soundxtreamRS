@@ -1,0 +1,78 @@
+<md-content style="padding: 5px;">
+    <h2 translate="soundxtreamappApp.samples.home.title">Sampless</h2>
+    <jh-alert></jh-alert>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-4 no-padding-left">
+                <button class="btn btn-primary" ui-sref="samples.new" >
+                    <span class="glyphicon glyphicon-plus"></span>
+                    <span
+class="hidden-xs"                        translate="soundxtreamappApp.samples.home.createLabel">Create new Samples
+                    </span>
+                </button>
+            </div>
+            <div class="col-xs-8 no-padding-right">
+                <form name="searchForm" class="form-inline">
+                    <div class="input-group pull-right" >
+                        <input type="text" class="form-control" ng-model="searchQuery" id="searchQuery" placeholder="{{ 'soundxtreamappApp.samples.home.search' | translate }}">
+                        <span  class="input-group-btn width-min" >
+                            <button class="btn btn-info" ng-click="search()">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                        </span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <div class="table-responsive">
+        <table class="jh-table table table-striped">
+            <thead>
+                <tr jh-sort="predicate" ascending="reverse" callback="reset()">
+                    <th jh-sort-by="id"><span translate="global.field.id">ID</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="name"><span translate="soundxtreamappApp.samples.name">Name</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="duration"><span translate="soundxtreamappApp.samples.duration">Duration</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="tags"><span translate="soundxtreamappApp.samples.tags">Tags</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="url"><span translate="soundxtreamappApp.samples.url">Url</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="user.login"><span translate="soundxtreamappApp.samples.user">user</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody infinite-scroll="loadPage(page + 1)" infinite-scroll-disabled="links['last'] == page">
+                <tr ng-repeat="samples in sampless track by samples.id">
+                    <td><a ui-sref="samples.detail({id:samples.id})">{{samples.id}}</a></td>
+                    <td>{{samples.name}}</td>
+                    <td>{{samples.duration}}</td>
+                    <td>{{samples.tags}}</td>
+                    <td>{{samples.url}}</td>
+                    <td>
+                        {{samples.user.login}}
+                    </td>
+                    <td class="text-right">
+                        <div class="btn-group flex-btn-group-container">
+                            <button type="submit"
+                                    ui-sref="samples.detail({id:samples.id})"
+                                    class="btn btn-info btn-sm">
+                                <span class="glyphicon glyphicon-eye-open"></span>
+                                <span class="hidden-xs hidden-sm" translate="entity.action.view"></span>
+                            </button>
+                            <button type="submit"
+                                    ui-sref="samples.edit({id:samples.id})"
+                                    class="btn btn-primary btn-sm">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                                <span class="hidden-xs hidden-sm" translate="entity.action.edit"></span>
+                            </button>
+                            <button type="submit"
+                                    ui-sref="samples.delete({id:samples.id})"
+                                    class="btn btn-danger btn-sm">
+                                <span class="glyphicon glyphicon-remove-circle"></span>
+                                <span class="hidden-xs hidden-sm" translate="entity.action.delete"></span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</md-content>

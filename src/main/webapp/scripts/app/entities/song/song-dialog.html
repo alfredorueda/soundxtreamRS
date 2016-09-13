@@ -1,0 +1,113 @@
+
+<form name="editForm" role="form" novalidate ng-submit="save()" show-validation>
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="clear()">&times;</button>
+        <h4 class="modal-title" id="mySongLabel" translate="soundxtreamappApp.song.home.createOrEditLabel">Create or edit a Song</h4>
+    </div>
+    <div class="modal-body">
+        <jh-alert-error></jh-alert-error>
+        <div class="form-group">
+            <label for="id" translate="global.field.id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                    ng-model="songDTO.song.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="control-label" translate="soundxtreamappApp.song.name" for="field_name">Name</label>
+            <input type="text" class="form-control" name="name" id="field_name"
+                    ng-model="songDTO.song.name"
+                    required />
+            <div ng-show="editForm.name.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.name.$error.required" translate="entity.validation.required">
+                    This field is required.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" translate="soundxtreamappApp.song.url" for="field_url">Url</label>
+            <input type="text" class="form-control" name="url" id="field_url"
+                    ng-model="songDTO.song.url"
+                    required />
+            <div ng-show="editForm.url.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.url.$error.required" translate="entity.validation.required">
+                    This field is required.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" translate="soundxtreamappApp.song.label" for="field_label">Label</label>
+            <input type="text" class="form-control" name="label" id="field_label"
+                    ng-model="songDTO.song.label"
+                    required />
+            <div ng-show="editForm.label.$invalid">
+                <p class="help-block"
+                    ng-show="editForm.label.$error.required" translate="entity.validation.required">
+                    This field is required.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label" translate="soundxtreamappApp.song.date_posted" for="field_date_posted">Date_posted</label>
+            <input id="field_date_posted" type="text" class="form-control" uib-datepicker-popup="{{dateformat}}" ng-model="songDTO.song.date_posted" is-open="datePickerForDate_posted.status.opened"
+            />
+            <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="datePickerForDate_postedOpen($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+            </span>
+        </div>
+        <div class="form-group">
+            <label class="control-label" translate="soundxtreamappApp.song.artwork" for="field_artwork">Artwork</label>
+            <input type="text" class="form-control" name="artwork" id="field_artwork"
+                    ng-model="songDTO.song.artwork"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" translate="soundxtreamappApp.song.tags" for="field_tags">Tags</label>
+            <input type="text" class="form-control" name="tags" id="field_tags"
+                    ng-model="songDTO.song.tags"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" translate="soundxtreamappApp.song.duration" for="field_duration">Duration</label>
+            <input type="number" class="form-control" name="duration" id="field_duration"
+                    ng-model="songDTO.song.duration"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" translate="soundxtreamappApp.song.description" for="field_description">Description</label>
+            <!--<input type="text" class="form-control" name="description" id="field_description"
+                    ng-model="songDTO.song.description"
+                     />-->
+            <div ng-model="songDTO.song.description" quill></div>
+        </div>
+
+        <div class="form-group">
+            <label translate="soundxtreamappApp.song.user" for="field_user">user</label>
+            <select class="form-control" id="field_user" name="user" ng-model="songDTO.song.user" ng-options="user as user.login for user in users track by user.id">
+                <option value=""></option>
+            </select>
+        </div>
+        <div class="form-group-lg">
+            <label class="control-label">Styles</label>
+            <ui-select multiple ng-model="songDTO.song.styles" ng-disabled="disabled" style="width: 800px;">
+                <ui-select-match>{{$item.name}}</ui-select-match>
+                <ui-select-choices repeat="style in styles | propsFilter: {name: $select.search}">
+                    <div ng-bind-html="style.name | highlight: $select.search"></div>
+                    <small>
+                        <span ng-bind-html="''+style.name | highlight: $select.search"></span>
+                    </small>
+                </ui-select-choices>
+            </ui-select>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+        </button>
+        <!-- ng-disabled="editForm.$invalid || isSaving" -->
+        <button type="submit"  class="sx__button">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span>
+        </button>
+    </div>
+</form>

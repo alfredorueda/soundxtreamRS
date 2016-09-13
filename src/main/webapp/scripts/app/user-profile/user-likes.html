@@ -1,0 +1,47 @@
+<!--
+<div infinite-scroll="loadPage(page + 1)" infinite-scroll-disabled="links['last'] == page" infinite-scroll-distance='2'
+     infinite-scroll-container="'#content'">
+    <div ng-repeat="userLike in userLikes" ng-if="userLike.liked != false">
+        <div style="display:inline-block; height: 70px;padding: 5px;">
+            <img style="height: 60px;width:60px;background: -webkit-linear-gradient(-45deg, rgb(85, 147, 255) 0%, rgb(150, 27, 255) 100%);" ng-src="{{userLike.song.artwork}}"/>
+        </div>
+        <div style="display:inline-block; height: 70px;">
+            <h5 ui-sref="song.detail({id:userLike.song.id})" style="width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+                {{userLike.song.name}}
+            </h5>
+        </div>
+    </div>
+
+    <div ng-if="userLikes.length == 0">
+        <div class="alert alert-warning" role="alert"><h5><span class="glyphicon glyphicon-bullhorn"></span> This user doesn't have any likes yet</h5></div>
+    </div>
+</div>
+-->
+
+
+<div infinite-scroll="loadPage(page + 1)" infinite-scroll-disabled="links['last'] == page" infinite-scroll-distance='2'
+     infinite-scroll-container="'#content'" class="row" style="margin-bottom: 15px;">
+    <div class="col-md-12">
+        <div>
+            <h5 class="h5-title-info">{{user.login}}'s likes</h5>
+        </div>
+        <div class="col-md-3 col-sm-3 col-lg-3 col-xs-12" ng-repeat="userLike in userLikes">
+            <img src="{{userLike.song.artwork}}"
+                 style="height: 161px; position: relative; width: 100%;display: block;
+                        background: -webkit-linear-gradient(-45deg, rgb(85, 147, 255) 0%, rgb(150, 27, 255) 100%);"/>
+            <p style="position: absolute;
+                        top: 0px;
+                        white-space: nowrap;
+                        margin: 10px;
+                        font-size: 15px;
+                        background: rgba(0,0,0,.7);
+                        padding: 3px;
+                        color: #fff;
+                        width: 75%;
+                        overflow: hidden;
+                        text-overflow: ellipsis;">
+                {{userLike.song.name}}
+            </p>
+        </div>
+    </div>
+</div>

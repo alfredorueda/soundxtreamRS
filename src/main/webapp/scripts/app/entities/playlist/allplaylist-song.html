@@ -1,0 +1,38 @@
+<div class="page page-list">
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="row music-covers-listing">
+                    <div ng-repeat="playlist in playlists" class="col-md-2">
+                        <div class="list-item__wrap">
+                            <div class="list-item__image">
+                                <img ng-src="{{playlist.artwork}}"/>
+                                <div class="list-item__play" ui-sref="playlist.detail({id:playlist.id})"></div>
+                            </div>
+                            <div class="list-item__name">
+                                <h5 class="color-primary" style="width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+                                    {{playlist.name}}
+                                </h5>
+                                <h6>
+                                    by: {{playlist.user.login}}
+                                </h6>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+<style>
+    @media (min-width: 1380px){
+        .col-md-3 {
+            width: 16%;
+        }
+    }
+</style>

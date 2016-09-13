@@ -1,0 +1,15 @@
+<div infinite-scroll="loadPage(page + 1)" infinite-scroll-disabled="links['last'] == page" infinite-scroll-distance='2'
+     infinite-scroll-container="'#content'" class="row" style="margin-bottom: 15px;">
+    <div class="col-md-12">
+        <h4>{{playlistsUser.length}} Playlists</h4>
+        <div class="col-md-3 col-sm-3 col-lg-3 col-xs-12" ng-repeat="playlist in playlistsUser">
+            <img src="{{playlist.artwork}}"
+                 style="height: 161px; position: relative; width: 100%;display: block;
+                        background: -webkit-linear-gradient(-45deg, rgb(85, 147, 255) 0%, rgb(150, 27, 255) 100%);"/>
+            <p style="position: absolute; top: 0px; margin: 10px; font-size: 15px;
+                        background: rgba(0,0,0,.7); padding: 3px; color: #fff;">
+                {{playlist.name}}
+            </p>
+        </div>
+    </div>
+</div>

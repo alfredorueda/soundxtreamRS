@@ -1,0 +1,154 @@
+<!--<div class="row">
+    <div class="col-md-3 col-xs-12">
+        <md-content class="col-info-user">
+            <div class="user_image">
+                <img src="{{user.user_image}}" style="border: 1px solid #333;" height="145px" width="145px"/>
+            </div>
+            <div style="text-align: center; margin: 22px;">
+                <h5>{{user.login}}</h5>
+                <h6>{{user.firstName}}, {{user.lastName}}</h6>
+            </div>
+            <div style="text-align: center;">
+                <h6  tooltip-placement="top" uib-tooltip="Join date" tooltip-append-to-body="true"><i class="material-icons">date_range</i></h6>
+                <h5>{{user.createdDate | date: 'fullDate'}}</h5>
+            </div>
+            <div class="background-user-image" style="background-image: url('{{user.user_image}}');"></div>
+        </md-content>
+    </div>
+    <div class="col-md-6 col-xs-12">
+        <md-content class="col-activity-user">
+            <div>
+                <img src="{{user.user_image}}"
+                     style="border: 1px solid #333;" height="100px"
+                     width="100px"/>
+                <div style="margin: 22px;">
+                    <p>{{songDTO.song.user.login}}</p>
+                </div>
+            </div>
+        </md-content>
+    </div>
+    <div class="col-md-3 col-xs-12">
+        <md-content class="col-other-info" style="margin-bottom: 5px;">
+            <h4 style="padding-left: 7px;"><small>Playlists</small></h4>
+            <md-divider></md-divider>
+            <div ng-repeat="playlist in playlistsUser">
+                <div ng-if="!$last" style="display:inline-block; height: 70px;padding: 5px;">
+                    <img style="height: 60px;width:60px;background: -webkit-linear-gradient(-45deg, rgb(85, 147, 255) 0%, rgb(150, 27, 255) 100%);" ng-src="{{playlist.artwork}}"/>
+                </div>
+                <div ng-if="!$last" style="display:inline-block; height: 70px;">
+                    <h5 ui-sref="playlist.detail({id:playlist.id})" style="width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+                            {{playlist.name}}
+                    </h5>
+                </div>
+            </div>
+            <div style="text-align: center;">
+                <button class="sx__button">View all</button>
+            </div>
+        </md-content>
+        <md-content class="col-other-info">
+            <h4 style="padding-left: 7px;"><small>{{totalLikes}} likes</small></h4>
+            <md-divider></md-divider>
+            <div ng-repeat="like in lastLikes">
+                <div ng-if="!$last" style="display:inline-block; height: 70px;padding: 5px;">
+                    <img style="height: 60px;width:60px;background: -webkit-linear-gradient(-45deg, rgb(85, 147, 255) 0%, rgb(150, 27, 255) 100%);" ng-src="{{like.song.artwork}}"/>
+                </div>
+                <div ng-if="!$last" style="display:inline-block; height: 70px;">
+                    <h5 ui-sref="playlist.detail({id:playlist.id})" style="width: 190px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+                        {{like.song.name}}
+                    </h5>
+                </div>
+            </div>
+            <div style="text-align: center;">
+                <button class="sx__button">View all</button>
+            </div>
+        </md-content>
+    </div>
+</div>-->
+<md-content>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-top: 20px;margin-bottom: 20px;">
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="width: 19%;">
+                <div class="user-image" style="border-radius: 2%;">
+                    <img class="artist__blur" ng-if="user.user_image != null" src="{{user.user_image}}" height="161px"/>
+                    <img class="artist__blur" ng-if="user.user_image == null" src="/assets/images/gradient.jpg" height="161px"/>
+                    <img ng-if="user.user_image != null" class="user-image-focus" style="height: 150px;width: 150px;" src="{{user.user_image}}"/>
+                    <img ng-if="user.user_image == null" class="user-image-focus" style="height: 150px;width: 150px;" src="/assets/images/gradient.jpg"/>
+                </div>
+                <button id="btn-filter" type="button"  ng-show="account.login == user.login" class="sx__button sx__button__primary"
+                        style="z-index: 2;position: absolute;margin: -21px auto;width: 180px;;display: block; sbox-shadow: 0px 12px 10px -7px rgba(0,0,0,.4);" ui-sref="settings">
+                    <i class="fa fa-camera" aria-hidden="true"></i>
+                    Update image
+                </button>
+            </div>
+            <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                <div>
+                    <h5>{{user.login}}</h5>
+                    <h6>{{user.firstName}}, {{user.lastName}}</h6>
+                </div>
+                <button ng-if="account.login != user.login" type="button"
+                        ng-class="{true:'like__button active',false:'like__button'}[user.followedByUser]"
+                        ng-click="follow(user)" class="sx__button like__button">
+                    {{user.followedByUser ? 'Following' : 'Follow'}}
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-bottom: 10px;">
+            <ul class="nav nav-tabs">
+                <li role="presentation" class="active" ui-sref="user-profile({login:user.login})"
+                    ui-sref-active-eq="active">
+                    <a>About {{user.login}}</a>
+                </li>
+                <li role="presentation" class="active" ui-sref="user-profile.likes({login:user.login})"
+                    ui-sref-active-eq="active">
+                    <a>Likes
+                        <small>{{totalLikes}}</small>
+                    </a>
+                </li>
+                <li role="presentation" class="active" ui-sref="user-profile.playlists({login:user.login})"
+                    ui-sref-active-eq="active">
+                    <a>Playlists</a>
+                </li>
+                <li role="presentation" class="active" ui-sref="user-profile.tracks({login:user.login})"
+                    ui-sref-active-eq="active">
+                    <a>Tracks</a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" ui-view="user-view">
+            <div>
+                {{user.description}}
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="row">
+                    <div class="col-md-4" ui-sref="user-profile.followers">
+                        <p><span><i class="fa fa-users" aria-hidden="true"></i> Followers</span></p>
+                        <p style="font-size: 17px;margin-top: -9px;">{{user.totalFollowers}}</p>
+                    </div>
+                    <div class="col-md-4" ui-sref="user-profile.following">
+                        <p><span><i class="fa fa-users" aria-hidden="true"></i> Following</span></p>
+                        <p style="font-size: 17px;margin-top: -9px;">{{user.totalFollowings}}</p>
+                    </div>
+            </div>
+        </div>
+    </div>
+</md-content>
+<style>
+    .btn-upload-over {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    .h5-title-info{
+        border-width: 0px 0px 0px 6px;
+        border-color: #6F00F8;
+        border-style: solid;
+        padding: 12px;
+        background: rgba(111, 0, 248, 0.13);
+        display: inline-block;
+        width: 400px;
+        border-radius: 0px 2px 62px 0px;
+    }
+</style>

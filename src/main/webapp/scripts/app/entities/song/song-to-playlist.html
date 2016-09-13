@@ -1,0 +1,67 @@
+<!--<div class="modal-body">
+    <pre><code>{{songDTO.song | json}}</code></pre>
+    <jh-alert-error></jh-alert-error>
+    <div class="form-group list_playlist">
+        <div ng-repeat="playlist in playlists">
+            <p>{{playlist.name}}</p>
+            <img ng-if="song.artwork" ng-src="{{playlist.artwork}}" height="50px" width="50px"/>
+            <button class="sx__button" ng-click="add(playlist.id)">ADD</button>
+        </div>
+    </div>
+    <div class="form-group">
+        <div>
+            <h2>Create your playlist</h2>
+            <form ng-submit="create()">
+                <label class="control-label" for="field_name">Name</label>
+                <input type="text" class="form-control" name="label" id="field_name" ng-model="playlistNew.name"
+                       required />
+                <input type="checkbox" ng-model="addConfirm"/>Save track to playlist
+                <button class="sx__button" type="submit">Create</button>
+            </form>
+        </div>
+    </div>
+</div>-->
+
+<div layout-gt-sm="row" layout="column">
+    <div flex-gt-sm="50" flex>
+        <div class="playlist-items">
+            <md-list>
+                <md-subheader class="md-header-sx md-no-sticky">Your playlists</md-subheader>
+                <md-divider></md-divider>
+                <md-list-item ng-repeat="playlist in playlists" ng-click="add(playlist.id)" class="noright">
+                    <img alt="{{ playlist.artwork }}" ng-src="{{ playlist.artwork }}" class="md-avatar"/>
+                    <p>{{ playlist.name }}</p>
+                    <span class="md-secondary">ADD</span>
+                </md-list-item>
+            </md-list>
+        </div>
+    </div>
+    <div flex-gt-sm="50" flex>
+        <div class="playlist-create">
+            <md-list>
+                <md-subheader class="md-header-sx md-header">No playlist?</md-subheader>
+                <md-divider></md-divider>
+                <input type="text" required class="form-control input_sx_mat" ng-change="checkName()" ng-model="playlistNew.name"
+                       placeholder="Create a playlist">
+                <div ng-show="errorName" class="sx__padding_button">
+                    <span class="error_span" ng-show="errorName">Error: Ya existe una playlist con el nombre {{playlistNew.name}}</span>
+                </div>
+                <button class="sx__button sx__padding_button" ng-click="create()">Create</button>
+            </md-list>
+        </div>
+    </div>
+</div>
+<style>
+    .error_span {
+        color: #ff2e00;
+    }
+    .list_playlist {
+        height: 260px;
+        overflow-y: scroll;
+    }
+    .input_sx_mat {
+        margin-left: 10px;
+        //width: 97%;
+        width: 93%;
+    }
+</style>

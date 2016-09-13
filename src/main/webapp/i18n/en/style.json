@@ -1,0 +1,23 @@
+{
+    "soundxtreamappApp": {
+        "style" : {
+            "home": {
+                "title": "Styles",
+                "createLabel": "Create a new Style",
+                "createOrEditLabel": "Create or edit a Style",
+                "search": "Search for Style"
+            },
+            "created": "A new Style is created with identifier {{ param }}",
+            "updated": "A Style is updated with identifier {{ param }}",
+            "deleted": "A Style is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Style {{ id }}?"
+            },
+            "detail": {
+                "title": "Style"
+            },
+            "name": "Name",
+            "song": "Song"
+        }
+    }
+}

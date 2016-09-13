@@ -1,0 +1,269 @@
+<div class="hero-nav">
+    <div class="hero-nav__inner">
+        <h1>Soundxtream</h1>
+        <div>
+            <!--<input id="inputor" placeholder="Search something" type="text" class="form-control input_sx_mat"/>-->
+            <div class="mention-container">
+                <textarea ui-mention mention-example
+                  ng-model="post.message"
+                  placeholder="Use @mention to trigger"
+                  ng-trim="false">
+
+                </textarea>
+                <div class="mention-highlight"></div>
+
+                <ul ng-if="$mention.choices.length" class="dropdown">
+                    <li ng-repeat="choice in $mention.choices" ng-class="{active:$mention.activeChoice==choice}">
+                        <a ng-click="$mention.select(choice)">
+                            {{::choice.first}} {{::choice.last}}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <input ng-model="newValue" placeholder="New Value"><button ng-click="post.message=newValue">Set Value</button><br>
+
+            <p>
+                $mentions.mentions: {{$mention.mentions | json}}
+            </p>
+
+            <p>
+                ng-model (post.message): {{post.message | json}}
+            </p>
+        </div>
+    </div>
+</div>
+<div class="page-content">
+    <div class="row">
+        <div class="col-md-12">
+            <p>
+                <h4>Some tracks</h4>
+            </p>
+            <div ng-repeat="songDTO in tracks" class="track-box" style="margin-left: 13px;">
+                <div class="track-image">
+                    <img ng-if="songDTO.song.artwork != null" src="{{songDTO.song.artwork}}" style="background: -webkit-linear-gradient(-45deg, rgb(85, 147, 255) 0%, rgb(150, 27, 255) 100%);"/>
+                    <img ng-if="songDTO.song.artwork == null" src="/assets/images/gradient.jpg"/>
+                    <div class="controls">
+                        <md-button ng-if="playerPlaylist.getSongId(mediaPlayer.currentTrack) != songDTO.song.id || playerPlaylist.playlistCurrent != 'fromMain'"
+                                   ng-click="playerPlaylist.addSongAll(tracks,mediaPlayer,$index,'fromMain')" class="md-play" aria-label="play">
+                            <md-icon>
+                                <i class="material-icons">play_arrow</i>
+                            </md-icon>
+                        </md-button>
+                        <md-button ng-if="playerPlaylist.getSongId(mediaPlayer.currentTrack) == songDTO.song.id && playerPlaylist.playlistCurrent == 'fromMain'"
+                                   ng-click="mediaPlayer.playPause()" class="md-play" aria-label="play">
+                            <md-icon>
+                                <i ng-if="!mediaPlayer.playing" class="material-icons">play_arrow</i>
+                                <i ng-if="mediaPlayer.playing" class="material-icons">pause</i>
+                            </md-icon>
+                        </md-button>
+                    </div>
+                    <div class="stats">
+                        <button class="sx__button like__button"
+                                ng-click="like(songDTO.song.id)">
+                            <i class="fa fa-heart-o fa-lg"></i>{{songDTO.totalLikes}}
+                        </button>
+                        <button class="sx__button like__button"
+                                ng-click="share(songDTO.song.id)">
+                            <i class="fa fa-retweet fa-lg" aria-hidden="true"></i>{{songDTO.totalShares}}
+                        </button>
+                    </div>
+                </div>
+                <div class="info">
+                    <h5 style="cursor: pointer;text-align: center;" ui-sref="song.detail({id:songDTO.song.id})">{{songDTO.song.name}}</h5>
+                    <h6 style="cursor: pointer;text-align: center;" ui-sref="user-profile({login:songDTO.song.user.login})">{{songDTO.song.user.login}}</h6>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <p>
+            <h4>Some playlists</h4>
+            </p>
+            <div ng-repeat="playlist in playlists" class="playlist-box" style="margin-left: 13px;">
+                <div class="playlist-image">
+                    <img src="{{playlist.artwork}}" style="background: -webkit-linear-gradient(-45deg, rgb(85, 147, 255) 0%, rgb(150, 27, 255) 100%);"/>
+                    <div class="number-songs">{{playlist.songs.length}}</div>
+                </div>
+                <div class="info">
+                    <h5 ui-sref="playlist.detail({id:playlist.id})">{{playlist.name}}</h5>
+                    <h6>{{playlist.user.login}}</h6>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .header-image {
+        background-image: url('/assets/images/logo_home.jpg');
+        //background-position: center;
+        //background-size: cover;
+        //height: 320px;
+        /*margin-left: -15px;
+        margin-right: -15px;*/
+    }
+    .controls-main{
+        height: auto;
+        width: auto;
+        position: absolute;
+        bottom: 50%;
+        left: 43%;
+        transform: translate(-50%,50%);
+        padding: 2px;
+    }
+
+    #content {
+        position: absolute;
+        left: 0;
+        /*margin-left: 20px;
+        margin-right: 20px;*/
+    }
+
+
+    .hero-nav {
+        position: relative;
+        top: 0;
+        right: 0;
+
+        bottom: 0;
+        left: 0;
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: center;
+        -webkit-justify-content: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        -webkit-align-items: center;
+        -ms-flex-align: center;
+        align-items: center;
+        height: 650px;
+        min-height: 105px;
+        background-image:url('/assets/images/wallmountains.jpg');
+        //background-image: url(https://images.unsplash.com/photo-1442606383395-175ee96ed967?q=80&fm=jpg&s=5c8c74be9bc91b47c79a1aaf92264be5);
+        background-size: cover;
+        background-position: center;
+        overflow: hidden;
+    }
+    .hero-nav .hero-nav__inner {
+        z-index: 1;
+    }
+    .hero-nav h1 {
+        color: #efefef;
+        font-size: 5vw;
+    }
+    /*.hero-nav:before {
+        content: "";
+        background: transparent;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        -webkit-transition: background 400ms;
+        transition: background 400ms;
+    }*/
+    .hero-nav.fixme:before {
+        background: rgba(0, 0, 0, 0.8);
+    }
+
+    .page-content {
+        position: relative;
+        width: 90%;
+        padding: 2.5%;
+        margin: 0 auto;
+        //z-index: -3;
+        z-index: 0;
+        line-height: 1.625;
+    }
+
+    textarea[ui-mention], textarea[ui-mention] + * {
+        line-height: 1em;
+        font-size: 1rem;
+        padding: 5px;
+        border: 1px;
+        font-family: helvetica;
+        font-weight: normal; }
+
+    textarea[ui-mention] {
+        min-height: 100px;
+        width: 100%;
+        display: block;
+        border: 1px solid;
+        z-index: 2;
+        position: relative; }
+    textarea[ui-mention][ui-mention] {
+        background: transparent; }
+
+    a {
+        color: blue;
+        text-decoration: underline;
+        cursor: pointer; }
+    a:hover {
+        color: green; }
+
+    .mention-container {
+        position: relative; }
+
+    .mention-highlight {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border: 1px;
+        padding: 2px;
+        z-index: 1;
+        color: transparent;
+        white-space: pre-wrap;
+        border: 1px solid transparent;
+        width: 100%; }
+    .mention-highlight span {
+        border-radius: 3px;
+        background: lightblue;
+        box-shadow: 0px 0px 0px 1px blue; }
+
+    .dropdown {
+        position: absolute;
+        top: 100%;
+        min-width: 150px;
+        right: 0;
+        background: lightblue;
+        list-style: none;
+        padding: 0;
+        margin: 0; }
+    .dropdown a {
+        display: block;
+        padding: 10px;
+        text-decoration: none; }
+    .dropdown .active {
+        background: lightgreen; }
+</style>
+<script>
+    /*var heroShinker = function() {
+        var hero = $('.hero-nav'),
+            heroHeight = $('.hero-nav').outerHeight(true);
+        $(hero).parent().css('padding-top', heroHeight);
+        $("#content").scroll(function() {
+            var scrollOffset = $("#content").scrollTop();
+            if (scrollOffset < heroHeight) {
+                $(hero).css('height', (heroHeight - scrollOffset));
+            }
+            else{
+                $(hero).css('height', "150px");
+            }
+            if (scrollOffset > (heroHeight - 215)) {
+                hero.addClass('fixme');
+                $(hero).css('top',"50px");
+                $(hero).parent().css('padding-top', heroHeight-"50");
+            } else {
+                hero.removeClass('fixme');
+                $(hero).css('top',"0px");
+                $(hero).parent().css('padding-top', heroHeight+"50");
+            };
+        });
+    }
+    heroShinker();*/
+</script>

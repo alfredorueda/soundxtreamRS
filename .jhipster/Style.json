@@ -1,0 +1,25 @@
+{
+    "relationships": [
+        {
+            "relationshipId" : 1,
+            "relationshipName" : "song",
+            "otherEntityName" : "song",
+            "relationshipType" : "many-to-many",
+            "ownerSide" : false
+        }
+    ],
+    "fields": [
+        {
+            "fieldId": 1,
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "changelogDate": "20160329160518",
+    "dto": "no",
+    "service": "no",
+    "pagination": "infinite-scroll"
+}

@@ -1,0 +1,27 @@
+{
+    "soundxtreamappApp": {
+        "song_user" : {
+            "home": {
+                "title": "Song_users",
+                "createLabel": "Create a new Song_user",
+                "createOrEditLabel": "Create or edit a Song_user",
+                "search": "Search for Song_user"
+            },
+            "created": "A new Song_user is created with identifier {{ param }}",
+            "updated": "A Song_user is updated with identifier {{ param }}",
+            "deleted": "A Song_user is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Song_user {{ id }}?"
+            },
+            "detail": {
+                "title": "Song_user"
+            },
+            "liked": "Liked",
+            "shared": "Shared",
+            "likedDate": "LikedDate",
+            "sharedDate": "SharedDate",
+            "user": "User",
+            "song": "Song"
+        }
+    }
+}

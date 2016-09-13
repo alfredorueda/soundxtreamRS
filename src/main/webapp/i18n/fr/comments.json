@@ -1,0 +1,26 @@
+{
+    "soundxtreamappApp": {
+        "comments" : {
+            "home": {
+                "title": "Commentss",
+                "createLabel": "Créer un nouveau Comments",
+                "createOrEditLabel": "Créer ou éditer un Comments",
+                "search": "Search for Comments"
+            },
+            "created": "Un nouveau Comments a été créé avec l'identifiant {{ param }}",
+            "updated": "Le Comments avec l'identifiant {{ param }} a été mis à jour",
+            "deleted": "Le Comments avec l'identifiant {{ param }} a été supprimé",
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Comments {{ id }} ?"
+            },
+            "detail": {
+                "title": "Comments"
+            },
+            "comment_text": "Comment_text",
+            "date_comment": "Date_comment",
+            "song": "Song",
+            "user": "User"
+        }
+    }
+}
+

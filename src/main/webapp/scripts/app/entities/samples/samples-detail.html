@@ -1,0 +1,62 @@
+
+<div>
+    <h2><span translate="soundxtreamappApp.samples.detail.title">Samples</span> {{samples.id}}</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th translate="entity.detail.field">Field</th>
+                <th translate="entity.detail.value">Value</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <span translate="soundxtreamappApp.samples.name">Name</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{samples.name}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="soundxtreamappApp.samples.duration">Duration</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{samples.duration}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="soundxtreamappApp.samples.tags">Tags</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{samples.tags}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="soundxtreamappApp.samples.url">Url</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{samples.url}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="soundxtreamappApp.samples.user">user</span>
+                </td>
+                <td>
+                    {{samples.user.login}}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <button type="submit"
+            onclick="window.history.back()"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+    </button>
+</div>

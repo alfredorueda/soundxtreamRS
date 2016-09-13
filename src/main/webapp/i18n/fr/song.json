@@ -1,0 +1,36 @@
+{
+    "soundxtreamappApp": {
+        "song" : {
+            "home": {
+                "title": "Songs",
+                "createLabel": "Créer un nouveau Song",
+                "createOrEditLabel": "Créer ou éditer un Song",
+                "search": "Search for Song"
+            },
+            "created": "Un nouveau Song a été créé avec l'identifiant {{ param }}",
+            "updated": "Le Song avec l'identifiant {{ param }} a été mis à jour",
+            "deleted": "Le Song avec l'identifiant {{ param }} a été supprimé",
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Song {{ id }} ?"
+            },
+            "detail": {
+                "title": "Song"
+            },
+            "name": "Name",
+            "url": "Url",
+            "label": "Label",
+            "date_posted": "Date_posted",
+            "artwork": "Artwork",
+            "banner_song": "Banner_song",
+            "tags": "Tags",
+            "duration": "Duration",
+            "description": "Description",
+            "playsCount": "PlaysCount",
+            "typeSong": "TypeSong",
+            "bpm": "Bpm",
+            "user": "User",
+            "style": "Style"
+        }
+    }
+}
+

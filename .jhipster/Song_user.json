@@ -1,0 +1,45 @@
+{
+    "relationships": [
+        {
+            "relationshipId": 1,
+            "relationshipName": "user",
+            "otherEntityName": "user",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "login",
+            "ownerSide": true
+        },{
+            "relationshipId": 2,
+            "relationshipName": "song",
+            "otherEntityName": "song",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "name",
+            "ownerSide": true
+        }
+    ],
+    "fields": [
+        {
+            "fieldId": 1,
+            "fieldName": "liked",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldId": 2,
+            "fieldName": "shared",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldId": 3,
+            "fieldName": "likedDate",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldId": 4,
+            "fieldName": "sharedDate",
+            "fieldType": "ZonedDateTime"
+        }
+    ],
+    "changelogDate": "20160326002624",
+    "dto": "no",
+    "service": "no",
+    "pagination": "infinite-scroll"
+}

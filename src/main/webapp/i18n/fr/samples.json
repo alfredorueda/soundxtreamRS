@@ -1,0 +1,27 @@
+{
+    "soundxtreamappApp": {
+        "samples" : {
+            "home": {
+                "title": "Sampless",
+                "createLabel": "Créer un nouveau Samples",
+                "createOrEditLabel": "Créer ou éditer un Samples",
+                "search": "Search for Samples"
+            },
+            "created": "Un nouveau Samples a été créé avec l'identifiant {{ param }}",
+            "updated": "Le Samples avec l'identifiant {{ param }} a été mis à jour",
+            "deleted": "Le Samples avec l'identifiant {{ param }} a été supprimé",
+            "delete": {
+                "question": "Etes-vous certain de vouloir supprimer le Samples {{ id }} ?"
+            },
+            "detail": {
+                "title": "Samples"
+            },
+            "name": "Name",
+            "duration": "Duration",
+            "tags": "Tags",
+            "url": "Url",
+            "user": "User"
+        }
+    }
+}
+

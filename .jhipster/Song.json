@@ -1,0 +1,95 @@
+{
+    "relationships": [
+        {
+            "relationshipId": 1,
+            "relationshipName": "user",
+            "otherEntityName": "user",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "login",
+            "ownerSide": true
+        },
+        {
+            "relationshipId": 2,
+            "relationshipName": "style",
+            "otherEntityName": "style",
+            "relationshipType": "many-to-many",
+            "otherEntityField": "name",
+            "ownerSide": true
+        }
+    ],
+    "fields": [
+        {
+            "fieldId": 1,
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldId": 2,
+            "fieldName": "url",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldId": 3,
+            "fieldName": "label",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldId": 4,
+            "fieldName": "date_posted",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldId": 5,
+            "fieldName": "artwork",
+            "fieldType": "String"
+        },
+        {
+            "fieldId": 6,
+            "fieldName": "banner_song",
+            "fieldType": "String"
+        },
+        {
+            "fieldId": 7,
+            "fieldName": "tags",
+            "fieldType": "String"
+        },
+        {
+            "fieldId": 8,
+            "fieldName": "duration",
+            "fieldType": "Float"
+        },
+        {
+            "fieldId": 9,
+            "fieldName": "description",
+            "fieldType": "String"
+        },
+        {
+            "fieldId": 10,
+            "fieldName": "playsCount",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldId": 11,
+            "fieldName": "typeSong",
+            "fieldType": "String"
+        },
+        {
+            "fieldId": 12,
+            "fieldName": "bpm",
+            "fieldType": "Integer"
+        }
+    ],
+    "changelogDate": "20160326000016",
+    "dto": "no",
+    "service": "no",
+    "pagination": "infinite-scroll"
+}

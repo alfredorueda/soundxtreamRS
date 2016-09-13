@@ -1,0 +1,470 @@
+<md-content class="md-padding">
+    <div class="row">
+        <header class="header-image" ng-if="songDTO.song.banner_song != null" style="width: 100%;height: 390px;
+        background: linear-gradient(0deg, rgba(0, 0, 0, 0.54) 0%, rgba(120, 121, 121, 0.14) 100%), url('{{songDTO.song.banner_song}}');
+        background-position: center 0px;background-size: cover;">
+            <div class="headline">
+                <div class="container" style="position: relative;">
+                    <img src="{{songDTO.song.artwork}}" ng-click="openModal()" style="display: block; /*margin: 0 auto;*/"
+                         class="featurette-image" height="200px" width="200px"/>
+                    <h4 class="song__title sxblock__text">{{songDTO.song.name}}</h4>
+                    <div class="clear"></div>
+                    <h6 class="song__artist sxblock__text__h6" ui-sref="profile({login:songDTO.song.user.login})"><span
+                        translate="by">by</span> {{songDTO.song.user.login}}</h6>
+                    <div class="type_song" style="position: absolute;top: 0;right: 0;">
+                        <p class="badge"
+                           style="text-transform: uppercase;padding: 6px;font-size: 18px; border-radius: 0px;background: rgba(0,0,0,.75);">{{songDTO.song.typeSong}}</p>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <header class="header-image" ng-if="songDTO.song.banner_song == null" style="width: 100%;height: 298px;background: -webkit-linear-gradient(-45deg, rgb(85, 147, 255) 0%, rgb(150, 27, 255) 100%);">
+            <div class="headline">
+                <div class="container" style="position: relative;">
+                    <img src="{{songDTO.song.artwork}}" ng-click="openModal()" style="display: block;"
+                         class="featurette-image" height="200px" width="200px"/>
+                    <h4 class="song__title sxblock__text">{{songDTO.song.name}}</h4>
+                    <div class="clear"></div>
+                    <h6 class="song__artist sxblock__text__h6" ui-sref="profile({login:songDTO.song.user.login})"><span
+                        translate="by">by</span> {{songDTO.song.user.login}}</h6>
+                    <div class="type_song" style="position: absolute;top: 0;right: 0;padding: 4px">
+                        <p class="badge"
+                           style="text-transform: uppercase;padding: 6px;font-size: 18px; border-radius: 0px;background: rgba(0,0,0,.75);">{{songDTO.song.typeSong}}</p>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <br/>
+    </div>
+    <div layout="row">
+        <div class="col-md-12">
+            <button class="sx__button" ng-click="playerPlaylist.addSongAndPlay(songDTO.song,mediaPlayer)">
+                <i class="fa fa-headphones  fa-lg"></i>
+            </button>
+            <button tooltip-placement="bottom" uib-tooltip="Add in playlist" tooltip-append-to-body="true"
+                    class="sx__button" ui-sref="song.detail.addPlaylist">
+                <i class="fa fa-plus-square-o fa-lg"></i>
+            </button>
+            <button class="sx__button like__button"
+                    ng-class="{true:'like__button active',false:'like__button'}[songDTO.liked]"
+                    ng-click="like(songDTO.song.id)">
+                <i class="fa fa-heart-o fa-lg"></i>
+            </button>
+            <button ng-if="account.login == songDTO.song.user.login" class="sx__button"
+                    ui-sref="song.edit"><!-- ui-sref="song.edit({id:songDTO.song.id})" -->
+                <i class="fa fa-pencil-square-o fa-lg"></i>
+            </button>
+            <button ng-if="account.login == songDTO.song.user.login" class="sx__button"
+                    ui-sref="song.delete">
+                <i class="fa fa-trash fa-lg"></i>
+            </button>
+            <button class="sx__button"
+                    socialshare
+                    socialshare-provider="facebook"
+                    socialshare-text="{{songDTO.song.name}} - Soundxtream"
+                    socialshare-hastags="soundxtream"
+                    socialshare-url="http://soundxtream.com/#/song/{{songDTO.song.id}}"
+                    socialshare-media="http://soundxtream.com/{{songDTO.song.artwork}}"
+                    socialshare-type="feed"
+                    socialshare-via="641579629328110">
+                <i class="fa fa-facebook fa-lg" aria-hidden="true"></i>Facebook
+            </button>
+            <button class="sx__button"
+               socialshare
+               socialshare-provider="twitter"
+               socialshare-text="{{songDTO.song.name}} - Soundxtream"
+               socialshare-hashtags="soundxtream"
+               socialshare-url="http://soundxtream.com/#/song/{{songDTO.song.id}}">
+                <i class="fa fa-twitter fa-lg" aria-hidden="true"></i>Twitter
+            </button>
+            <form id="createComment">
+                <div class="form-group">
+                    <input type="text" class="sx__textarea form-control input_sx_mat" my-enter="createComment()"
+                           placeholder="Express your thoughts" ng-model="newComment.comment_text" aria-invalid="false">
+
+                </div>
+            </form>
+        </div>
+    </div>
+    <hr/>
+    <div class="row">
+        <div class="col-md-9">
+            <div class="row">
+                <div class="col-xs-3">
+                    <h5><i class="fa fa-user"></i> Artist</h5>
+                    <div style="position: relative;">
+                        <div class="user-image">
+                            <img class="artist__blur" ng-if="songDTO.song.user.user_image != null"
+                                 src="{{songDTO.song.user.user_image}}" height="161px"/>
+                            <img class="artist__blur" ng-if="songDTO.song.user.user_image == null"
+                                 src="/assets/images/gradient.jpg" height="161px"/>
+                            <img ng-if="songDTO.song.user.user_image != null" class="user-image-focus"
+                                 src="{{songDTO.song.user.user_image}}"/>
+                            <img ng-if="songDTO.song.user.user_image == null" class="user-image-focus"
+                                 src="/assets/images/gradient.jpg"/>
+                        </div>
+                        <p class="user-info-login song_owner">
+                            <a ui-sref="user-profile({login: songDTO.song.user.login})">{{songDTO.song.user.login}}</a>
+                        </p>
+                    </div>
+                    <div>
+                        <button  ng-click="follow(songDTO.song.user)"
+                                 ng-class="{true:'sx__button sx__button__primary',false:'sx__button'}[songDTO.song.user.followedByUser]"
+                                 class="sx__button">
+                            Follow
+                        </button>
+                        <p><i class="fa fa-user"></i> {{songDTO.song.user.totalFollowers}} followers</p>
+                    </div>
+                </div>
+                <div class="col-md-9 col-xs-12">
+                    <div class="row">
+                        <h5><i class="fa fa-comments"></i> Description</h5>
+                        <!--<div style="margin-top: 2px;" ng-bind-html="songDTO.song.description"></div>-->
+
+
+                        <div hm-read-more
+                             hm-text="{{ songDTO.song.description }}"
+                             hm-limit="100"
+                             hm-more-text="Read more"
+                             hm-less-text="Read less"
+                             hm-dots-class="dots"
+                             hm-link-class="links">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="comments-listing">
+                        <h5><i class="fa fa-comments"></i> Comments</h5>
+                        <md-divider></md-divider>
+                        <div class="user-comment" style="padding: 12px;">
+                            <div class="user-comment__row" style="height: 50px;" ng-repeat="comment in comments">
+                                <div class="user-comment__number">
+                                    {{ $index+1 }}
+                                </div>
+                                <div style="width: auto;display: inline-block;vertical-align: middle;line-height: 37px;">
+                                    <img style="border-radius:100%;" src="{{comment.user.user_image}}" width="35px"
+                                         height="35px"/>
+                                </div>
+                                <div class="user-comment__name" style="display: inline-block;vertical-align: top;">
+                                    <div class="comment_user">
+                                        <a ui-sref="user-profile({login:comment.user.login})">{{ comment.user.login }}</a>
+                                    </div>
+                                    <div class="comment_text">
+                                        {{ comment.comment_text }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="empty-comments" ng-if="comments.length == 0">
+                                <div class="empty-icon">
+                                    <i class="musicicon-dj4">
+                                    </i>
+                                </div>
+                                <div class="empty-message">
+                                    No comments on this track
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="row">
+                <div class="col-xs-12">
+                    <md-content>
+                        <div class="panel-body panel-styles">
+                            <h5><i class="fa fa-tags" aria-hidden="true"></i> Styles</h5>
+                            <div class="song-styles-holder">
+                                <span ng-repeat="style in songDTO.song.styles" class="badge">{{style.name}}</span>
+                            </div>
+                        </div>
+                    </md-content>
+                </div>
+            </div>
+            <md-divider></md-divider>
+            <div class="row">
+                <div class="col-xs-12">
+                    <md-content>
+                        <div class="panel-body">
+                            <h5><i class="fa fa-area-chart" aria-hidden="true"></i> Song stats</h5>
+                            <div>
+                                <p>
+                                    <i class="fa fa-play-circle fa-lg" style="padding: 3px; display: inline-block;"></i>
+                                    <span ng-if="songDTO.song.playsCount == null">0 reproductions</span>
+                                    <span ng-if="songDTO.song.playsCount != null">{{songDTO.song.playsCount | counter}} reproductions</span>
+                                </p>
+                                <p>
+                                    <i class="fa fa-heart fa-lg" style="padding: 3px; display: inline-block;"></i>
+                                    <span>{{songDTO.total | counter}} likes</span>
+                                </p>
+                                <p>
+                                    <i class="fa fa-retweet fa-lg" style="padding: 3px; display: inline-block;"></i>
+                                    <span>{{3400000 | counter}} shared</span>
+                                </p>
+                            </div>
+                        </div>
+                    </md-content>
+                </div>
+            </div>
+            <md-divider></md-divider>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="panel-body">
+                        <h5><i class="fa fa-user"></i> In playlists</h5>
+                        <ul ng-if="playlistWithSong.length > 0" class="list-playlist">
+                            <li class="list-playlist-item" ng-repeat="playlistSong in playlistWithSong | limitTo:10">
+                                <img src="{{playlistSong.artwork}}" alt="{{playlistSong.artwork}}" class="img-circle">
+                                <!--<img ng-src="{{playlistSong.artwork}}" class="md-avatar image-responsive"/>-->
+                                <div>
+                                    <h4 ui-sref="playlist.detail({id:playlistSong.id})"
+                                        style="width: 190px;white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
+                                        {{playlistSong.name}}
+                                    </h4>
+                                    <p>{{playlistSong.user.login}}</p>
+                                </div>
+                            </li>
+                        </ul>
+                        <ul ng-if="playlistWithSong.length == 0">
+                            <li>Not found any playlist with this song!</li>
+                        </ul>
+                        <div ng-if="playlistWithSong.length > 0" style="text-align: center;">
+                            <button class="sx__button sx__button__primary"
+                                    ui-sref="allPlaylistWSong({id_song:songDTO.song.id})">
+                                MORE
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <md-divider></md-divider>
+            <div class="row">
+                <div class="col-xs-12">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</md-content>
+
+
+<style>
+    .list-playlist{
+        padding-left: 0px;
+        list-style: none;
+
+    }
+    .list-playlist-item *{
+        vertical-align: top;
+    }
+    .list-playlist-item img{
+        height: 45px;
+        margin-top: 7px;
+        display: inline-block;
+    }
+    .list-playlist-item div{
+        display: inline-block;
+        width: 160px;
+    }
+    .header-image {
+        display: block;
+        width: 100%;
+        //text-align: center;
+    / / background: url('http://placehold.it/1900x500') no-repeat center center scroll;
+        /*-webkit-background-size: cover;
+        -moz-background-size: cover;
+        background-size: cover;
+        -o-background-size: cover*/
+        background-position: center;
+        height: 420px;
+        background-size: 1020px;
+       // background-size: 800px;
+        overflow: hidden;
+    }
+
+    .headline {
+        //padding: 90px 0;
+        padding: 15px 0;
+    }
+
+    .headline h1 {
+        font-size: 30px;
+        color: #fff;
+        background: rgba(0, 0, 0, 0.71);
+    }
+
+    .headline h2 {
+        font-size: 77px;
+        background: #fff;
+        background: rgba(255, 255, 255, 0.9);
+    }
+
+    .featurette-divider {
+        margin: 80px 0;
+    }
+
+    .featurette {
+        overflow: hidden;
+    }
+
+    .featurette-image.pull-left {
+        margin-right: 40px;
+    }
+
+    .featurette-image.pull-right {
+        margin-left: 40px;
+    }
+
+    .featurette-heading {
+        font-size: 50px;
+    }
+
+    footer {
+        margin: 50px 0;
+    }
+
+    @media (max-width: 1200px) {
+        .headline h1 {
+            font-size: 30px;
+        }
+
+        .headline h2 {
+            font-size: 63px;
+        }
+
+        .featurette-divider {
+            margin: 50px 0;
+        }
+
+        .featurette-image.pull-left {
+            margin-right: 20px;
+        }
+
+        .featurette-image.pull-right {
+            margin-left: 20px;
+        }
+
+        .featurette-heading {
+            font-size: 35px;
+        }
+    }
+
+    @media (max-width: 991px) {
+        .headline h1 {
+            font-size: 30px;
+        }
+
+        .headline h2 {
+            font-size: 50px;
+        }
+
+        .featurette-divider {
+            margin: 40px 0;
+        }
+
+        .featurette-image {
+            max-width: 50%;
+        }
+
+        .featurette-image.pull-left {
+            margin-right: 10px;
+        }
+
+        .featurette-image.pull-right {
+            margin-left: 10px;
+        }
+
+        .featurette-heading {
+            font-size: 30px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            margin: 0 15px;
+        }
+
+        .featurette-divider {
+            margin: 40px 0;
+        }
+
+        .featurette-heading {
+            font-size: 25px;
+        }
+    }
+
+    @media (max-width: 668px) {
+        .headline h1 {
+            font-size: 30px;
+        }
+
+        .headline h2 {
+            font-size: 32px;
+        }
+
+        .featurette-divider {
+            margin: 30px 0;
+        }
+    }
+
+    @media (max-width: 640px) {
+        .headline {
+            padding: 75px 0 25px 0;
+        }
+
+        .headline h1 {
+            font-size: 60px;
+        }
+
+        .headline h2 {
+            font-size: 30px;
+        }
+    }
+
+    @media (max-width: 375px) {
+        .featurette-divider {
+            margin: 10px 0;
+        }
+
+        .featurette-image {
+            max-width: 100%;
+        }
+
+        .featurette-image.pull-left {
+            margin-right: 0;
+            margin-bottom: 10px;
+        }
+
+        .featurette-image.pull-right {
+            margin-bottom: 10px;
+            margin-left: 0;
+        }
+    }
+    .panel-styles i.material-icons{
+        font-size: 12px;
+    }
+    .song-styles-holder .badge{
+        /*padding: 5px;
+        margin: 1px;
+        font-weight: 200;
+        background: rgb(111, 0, 248);*/
+
+        padding: 5px;
+        margin: 1px;
+        text-transform: uppercase;
+        font-weight: 200;
+        border-radius: 0;
+        background: rgba(0,0,0,.75);
+    }
+    .song_owner > a{
+        color: #fff!important;
+        transition: 0.5s linear text-transform;
+    }
+    .song_owner > a:hover{
+        color: rgb(111, 0, 248)!important;
+        text-transform: uppercase;
+        transition: 0.5s linear text-transform;
+    }
+</style>

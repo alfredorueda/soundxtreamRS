@@ -1,0 +1,18 @@
+<div class="row" style="margin-bottom: 15px;">
+    <div class="col-md-12">
+        <div>
+            <h5 class="h5-title-info">{{user.totalFollowers}} Followers</h5>
+        </div>
+        <div ng-repeat="followers in user.followersUsers" class="user-box" style="margin-left: 13px;">
+            <div class="user-image">
+                <img class="artist__blur" ng-if="followers.user_image != null" src="{{followers.user_image}}" height="161px"/>
+                <img class="artist__blur" ng-if="followers.user_image == null" src="/assets/images/gradient.jpg" height="161px"/>
+                <img ng-if="followers.user_image != null" class="user-image-focus" src="{{followers.user_image}}"/>
+                <img ng-if="followers.user_image == null" class="user-image-focus" src="/assets/images/gradient.jpg"/>
+            </div>
+            <p class="user-info-login" ui-sref="user-profile({login: followers.login})">
+                {{followers.login}}
+            </p>
+        </div>
+    </div>
+</div>

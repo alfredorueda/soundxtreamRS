@@ -1,0 +1,54 @@
+{
+    "relationships": [
+        {
+            "relationshipId": 1,
+            "relationshipName": "song",
+            "otherEntityName": "song",
+            "relationshipType": "many-to-many",
+            "otherEntityField": "name",
+            "ownerSide": true
+        },
+        {
+            "relationshipId": 2,
+            "relationshipName": "user",
+            "otherEntityName": "user",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "login",
+            "ownerSide": true
+        }
+    ],
+    "fields": [
+        {
+            "fieldId": 1,
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldId": 2,
+            "fieldName": "artwork",
+            "fieldType": "String"
+        },
+        {
+            "fieldId": 3,
+            "fieldName": "dateCreated",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldId": 4,
+            "fieldName": "full_duration",
+            "fieldType": "Double"
+        },
+        {
+            "fieldId": 5,
+            "fieldName": "banner_playlist",
+            "fieldType": "String"
+        }
+    ],
+    "changelogDate": "20160326001835",
+    "dto": "no",
+    "service": "no",
+    "pagination": "infinite-scroll"
+}

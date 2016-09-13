@@ -1,0 +1,176 @@
+<style>
+    .cropArea {
+        background: rgba(33, 33, 33, 0.98);
+        overflow: hidden;
+        width: 200px;
+        height: 200px;
+        display: inline-block;
+        position: relative;
+        border: 1px solid rgba(0, 0, 0, .15);
+        z-index: 2;
+    }
+
+    .cropAreaBanner {
+        background: rgba(33, 33, 33, 0.98);
+        overflow: hidden;
+        width: 620px;
+        height: 200px;
+        display: inline-block;
+        border: 1px solid rgba(0, 0, 0, .15);
+    }
+
+    .croppedResult {
+        vertical-align: top;
+        display: inline-block;
+    }
+    #createForm{
+        padding: 14px;
+    }
+</style>
+<form name="createForm" id="createForm" role="form" novalidate ng-submit="save()" show-validation>
+    <div>
+        <h4>Create new playlist</h4>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <div ngf-drop ng-model="picFile" ngf-pattern="image/*" accept="image/*"
+                         class="cropArea">
+                        <img-crop area-type="square" image="picFile  | ngfDataUrl"
+                                  result-image="croppedArtwork" result-image-size="500"
+                                  ng-init="croppedArtwork=''"
+                                  result-image-quality="1.0">
+                        </img-crop>
+                        <button type="button" ngf-select ng-model="picFile" class="btn-upload-over sx__button sx__button__primary"
+                                accept="image/*">
+                            Select Picture
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="form-group">
+                    <label class="control-label" translate="soundxtreamappApp.playlist.name"
+                           for="field_name">Name</label>
+                    <input type="text" class="form-control" name="name" id="field_name"
+                           ng-model="playlist.name"
+                           required/>
+                    <div ng-show="editForm.name.$invalid">
+                        <p class="help-block"
+                           ng-show="editForm.name.$error.required" translate="entity.validation.required">
+                            This field is required.
+                        </p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" translate="soundxtreamappApp.playlist.full_duration"
+                           for="field_duration">Full length</label>
+                    <input type="number" class="form-control" name="name" id="field_duration" value="0"
+                           ng-model="playlist.full_duration" disabled required/>
+                </div>
+                <button type="button" class="sx__button" ng-click="isCollapsed = !isCollapsed">
+                    <span class="glyphicon glyphicon-picture"></span> Add custom banner
+                </button>
+            </div>
+            <style>
+                .btn-upload-over {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                }
+
+                .list-playlist {
+                    height: 300px;
+                    overflow: auto;
+                }
+
+                .track-playlist {
+                    padding: 10px;
+                    background: #6F00F8;
+                    color: #fff;
+                }
+
+                md-divider {
+                    color: #fff;
+                }
+
+                .track-playlist img {
+                    height: 45px;
+                    width: 45px;
+                    display: inline-block;
+                }
+            </style>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <div uib-collapse="!isCollapsed">
+                        <h5>For better quality min resolution: 826px*266px</h5>
+                        <div style="position: relative;" ngf-max-total-size="'10MB'" ngf-drop
+                             ng-model="bannerFile" ngf-pattern="image/*" accept="image/*"
+                             class="cropAreaBanner">
+                            <img-crop area-type="rectangle" aspect-ratio="3" image="bannerFile  | ngfDataUrl"
+                                      result-image="croppedBanner" result-image-size='{w: 2480,h: 800}'
+                                      ng-init="croppedBanner=''" result-image-quality="1.0">
+                            </img-crop>
+                            <button type="button" ngf-select ng-model="bannerFile"
+                                    class="btn-upload-over sx__button sx__button__primary"
+                                    accept="image/*">
+                                Select Picture
+                            </button>
+                        </div>
+                        <div style="position: relative;" ng-if="bannerFile">
+                            <img ngf-src="croppedBanner" class="thumb" height="200px" width="620px"/>
+                            <button type="button" class="btn-upload-over sx__button sx__button__primary">Preview</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 list-playlist">
+                <h5>Import tracks from your playlists</h5>
+                <md-card ng-repeat="item in playlists" ng-if="item.songs.length > 0">
+                    <md-card-title>
+                        <md-card-title-text>
+                            <span class="md-subhead">{{item.name}}</span>
+                            <span>
+                                <md-button type="button" class="md-primary sx__button sx__button__primary" ng-click="collapse =! collapse">View
+                                    tracks
+                                </md-button>
+                            </span>
+                        </md-card-title-text>
+                    </md-card-title>
+                    <md-divider></md-divider>
+                    <div uib-collapse="collapse" ng-init="collapse=true">
+                        <div class="track-playlist" ng-repeat="track in item.songs">
+                            <img src="{{track.artwork}}"/>
+                            <span>{{track.name}}</span>
+                            <button type="button" class="sx__button" ng-click="addTrack(track)">
+                                <span class="fa fa-clone" aria-hidden="true"></span>
+                                ADD
+                            </button>
+                        </div>
+                        <md-divider></md-divider>
+                    </div>
+                </md-card>
+            </div>
+            <div class="col-md-6 list-playlist">
+                <h5>Tracks added</h5>
+                <md-list>
+                    <md-list-item ng-repeat="trackIn in playlist.songs" ng-if="playlist.songs.length > 0">
+                        <img alt="{{ trackIn.name }}" ng-src="{{ trackIn.artwork }}" class="md-avatar" />
+                        <p>{{trackIn.name}}</p>
+                        <button type="button" ng-click="remove($index)" class="sx__button sx__button_primary">Remove</button>
+                    </md-list-item>
+                </md-list>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="sx__button" data-dismiss="modal" ng-click="clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span
+            translate="entity.action.cancel">Cancel</span>
+        </button>
+        <button type="submit" ng-disabled="editForm.$invalid || isSaving" class="sx__button sx__button__primary">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span>
+        </button>
+    </div>
+</form>
