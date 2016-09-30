@@ -25,7 +25,7 @@
                     </div>
                 </div>
                 <div class="info">
-                    <h5 ui-sref="song.detail({id:song_user.song.id})">{{song_user.song.name}}</h5>
+                    <h5 ui-sref="song.detail({accessUrl:song_user.song.access_url, user: song_user.song.user.login})">{{song_user.song.name}}</h5>
                     <h6 ui-sref="user-profile({login:song_user.song.user.login})">{{song_user.song.user.login}}</h6>
                 </div>
             </div>

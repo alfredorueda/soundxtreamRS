@@ -31,6 +31,8 @@ angular.module('soundxtreamappApp')
             });
         });
 
+
+
         $scope.follow = function(user){
             $scope.seguimiento = {
                 id: null,
@@ -129,10 +131,10 @@ angular.module('soundxtreamappApp')
         var successLike = function(result){
             $scope.songDTO.liked = result.liked;
             if($scope.songDTO.liked){
-                $scope.songDTO.total += 1;
+                $scope.songDTO.totalLikes += 1;
             }
             else{
-                $scope.songDTO.total -= 1;
+                $scope.songDTO.totalLikes -= 1;
             }
             if(result.liked == true){
                 toaster.pop('success',"Success","Song added to your favorites");
@@ -145,14 +147,14 @@ angular.module('soundxtreamappApp')
         $scope.openModal = function (){
             var modalInstance = $modal.open({
                 template: "<img style='padding: 10px;' src='"+$scope.songDTO.song.artwork+"' height='100%' width='100%'/><button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>",
-                size: "sm"
+                size: "md"
             });
         }
 
         $scope.showImage = function(image,title){
             var modalInstance = $modal.open({
-                template: '<div><h3 style="padding: 5px;">'+title+'</h3><hr/><img src='+image+' style="width: 100%;"/></div>',
-                size: 'sm'
+                template: '<div><h3 style="padding: 5px;">'+title+'</h3><img src='+image+' style="width: 90%; padding: 2.5%;"/></div>',
+                size: 'md'
             });
         };
 

@@ -16,8 +16,15 @@ angular.module('soundxtreamappApp')
             Playlist.getPlaylistUser({login: $scope.account.login, page: $scope.page, size: 6, sort: [$scope.predicate + ',' + ($scope.reverse ? 'asc' : 'desc'), 'id']}, function(result, headers) {
                 $scope.links = ParseLinks.parse(headers('link'));
                 for (var i = 0; i < result.length; i++) {
+                    for(var k = 0; k < result[i].songs.length; k++){
+                        if(result[i].songs[k].artwork == null){
+                            result[i].songs[k].artwork = "/uploads/no_image.jpg";
+                        }
+                    }
+
                     $scope.playlists.push(result[i]);
                 }
+                console.log($scope.playlists);
             });
         };
         $scope.reset = function() {

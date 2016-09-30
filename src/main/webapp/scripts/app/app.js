@@ -43,8 +43,6 @@ angular.module('soundxtreamappApp', ['LocalStorageModule', 'tmh.dynamicLocale', 
             $rootScope.toState = toState;
             $rootScope.toStateParams = toStateParams;
 
-            console.log(toState);
-
             if(toState.name == "home"){
                 if(Principal.isAuthenticated()){
                     $state.go("stream");
@@ -109,6 +107,14 @@ angular.module('soundxtreamappApp', ['LocalStorageModule', 'tmh.dynamicLocale', 
             }
             return shorted;
         };
+    })
+    .filter('toMinSec', function(){
+        return function(input){
+            var minutes = parseInt(input/60, 10);
+            var seconds = Math.round(input%60);
+
+            return minutes+' minutes'+(seconds ? ' and '+seconds+' seconds' : '');
+        }
     })
     .config(function (cfpLoadingBarProvider,$stateProvider, $urlRouterProvider, $httpProvider, $locationProvider, $translateProvider, tmhDynamicLocaleProvider, httpRequestInterceptorCacheBusterProvider, AlertServiceProvider) {
         // uncomment below to make alerts look like toast

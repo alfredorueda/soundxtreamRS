@@ -1,3 +1,4 @@
+<!--
 <div class="panel panel-default">
     <div class="panel-body">
         <div class="row">
@@ -71,3 +72,58 @@
         animation-iteration-count: infinite;
     }
 </style>
+-->
+<div class="panel panel-default">
+    <div class="panel-body">
+        <div class="row">
+            <div class="page-actions">
+                <div class="buttons-left">
+                    <button ui-sref="playlist.new" class="sx__button sx__button__primary"><i class="fa fa-headphones"></i>&nbsp;&nbsp;New playlist</button>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="form-group col-md-12">
+            <label style="float: left;line-height: 32px;margin-bottom: 0px;">Search by name</label>
+            <div class="col-md-3">
+                <input type="text" class="form-control" ng-model="searchSong.name"/>
+            </div>
+        </div>
+        <div class="col-md-12" infinite-scroll="loadPage(page + 1)" infinite-scroll-disabled="links['last'] == page"
+             infinite-scroll-distance='2'
+             infinite-scroll-container="'#content'">
+            <div ng-repeat="playlist in playlists | filter:searchSong.name" class="allList col-sm-4 col-md-4 col-lg-4">
+                <div context-menu="menuOptions" class="firstImages" style="background-color: black;" ui-sref="playlist.detail({id: playlist.id})">
+                    <div class="blur">
+                        <div ng-if="playlist.artwork == null" class="background" style="background-image: url({{playlist.songs[0].artwork}});"></div>
+                        <div ng-if="playlist.artwork != null" class="background" style="background-image: url({{playlist.artwork}});"></div>
+                    </div>
+                    <div ng-if="playlist.artwork == null">
+                        <img src="{{playlist.songs[1].artwork}}" class="secondArt" alt="" ng-hide="playlist.songs.length == 0 || playlist.songs.length < 1 || playlist.songs[1].artwork == null">
+                        <img src="{{playlist.songs[2].artwork}}" class="thirdArt" alt="" ng-hide="playlist.songs.length == 0 || playlist.songs.length < 3 || playlist.songs[2].artwork == null">
+                        <img src="{{playlist.songs[0].artwork}}" class="firstArt" alt="" ng-hide="playlist.songs.length == 0 || playlist.songs[0].artwork == null">
+                    </div>
+                    <div ng-if="playlist.artwork != null">
+                        <img src="{{playlist.songs[0].artwork}}" class="secondArt" alt="" ng-hide="playlist.songs.length == 0 || playlist.songs.length < 1 || playlist.songs[1].artwork == null">
+                        <img src="{{playlist.songs[1].artwork}}" class="thirdArt" alt="" ng-hide="playlist.songs.length == 0 || playlist.songs.length < 3 || playlist.songs[2].artwork == null">
+                        <img src="{{playlist.artwork}}" class="firstArt" alt="" ng-hide="playlist.songs.length == 0 || playlist.songs[0].artwork == null">
+                    </div>
+                    <div class="infoList">
+                        <p style="font-size: 17px;"><b>{{playlist.name}}</b></p>
+                        <p style="font-size: 11px;">{{playlist.songs.length}} TRACKS  </p>
+                    </div>
+                    <div class="listControls">
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div ng-cloak class="col-md-12 likes_empty_warning" ng-if="playlists.length == 0">
+            <i class="material-icons">warning</i>
+            <h3>No playlists</h3>
+        </div>
+    </div>
+</div>
+
+

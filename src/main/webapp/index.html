@@ -34,7 +34,7 @@
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
         <toaster-container toaster-options="{'close-button':true, 'position-class': 'toast-bottom-right'}"></toaster-container>
-        <aside ui-view="navbar" id="nav-container" ng-show="isAuthenticated()"></aside>
+        <aside ui-view="navbar" style="overflow: hidden;" id="nav-container" ng-show="isAuthenticated()"></aside>
         <section data-ng-include=" 'scripts/components/navbar/header.html' " id="header" class="top-header"></section>
 
         <section id="content">
@@ -80,12 +80,19 @@
             <div class="player-info-wrapper">
                 <div class="player-info">
                     <img class="player-info-cover" ng-src="{{playerPlaylist.getSongImage(mediaPlayer.currentTrack)}}" height="40px" width="40px"/>
-                    <span class="player-info-title">{{playerPlaylist.getSongName(mediaPlayer.currentTrack)}}</span>
-                    <span class="player-info-artist">{{playerPlaylist.getSongArtist(mediaPlayer.currentTrack)}}</span>
+                    <span class="player-info-title">
+                        <a href="/#/{{playerPlaylist.getSongArtist(mediaPlayer.currentTrack)}}/track/{{playerPlaylist.getSongAccess(mediaPlayer.currentTrack)}}">{{playerPlaylist.getSongName(mediaPlayer.currentTrack)}}</a>
+                    </span>
+                    <span class="player-info-artist">
+                        <a href="/#/profile/{{playerPlaylist.getSongArtist(mediaPlayer.currentTrack)}}">{{playerPlaylist.getSongArtist(mediaPlayer.currentTrack)}}</a>
+                    </span>
                 </div>
             </div>
+            <div class="player-img-wrapper">
+                <div style="background-image: url({{playerPlaylist.getSongImage(mediaPlayer.currentTrack)}});" class="artist__blur image_bg_player"></div>
+            </div>
         </div>
-       <div class="page-loading-overlay">
+        <div class="page-loading-overlay">
             <div class="loader-2"></div>
         </div>
         <div class="load_circle_wrapper">

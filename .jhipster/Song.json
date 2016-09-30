@@ -86,6 +86,11 @@
             "fieldId": 12,
             "fieldName": "bpm",
             "fieldType": "Integer"
+        },
+        {
+            "fieldId": 13,
+            "fieldName": "access_url",
+            "fieldType": "String"
         }
     ],
     "changelogDate": "20160326000016",

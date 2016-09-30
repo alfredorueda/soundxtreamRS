@@ -21,6 +21,7 @@
             "dateCreated": "DateCreated",
             "full_duration": "Full_duration",
             "banner_playlist": "Banner_playlist",
+            "access_url": "Access_url",
             "song": "Song",
             "user": "User"
         }

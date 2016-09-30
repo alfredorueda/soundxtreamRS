@@ -85,6 +85,9 @@ public class SongResource {
         song.setUser(user);
         ZonedDateTime today = ZonedDateTime.now();
         song.setDate_posted(today);
+        if(song.getArtwork() == null){
+            song.setArtwork("uploads/no_image.jpg");
+        }
         Song result = songRepository.save(song);
         songSearchRepository.save(result);
         return ResponseEntity.created(new URI("/api/songs/" + result.getId()))
@@ -103,6 +106,9 @@ public class SongResource {
         log.debug("REST request to update Song : {}", song);
         if (song.getId() == null) {
             return createSong(song);
+        }
+        if(song.getArtwork() == null){
+            song.setArtwork("uploads/no_image.jpg");
         }
         ZonedDateTime today = ZonedDateTime.now();
         song.setDate_posted(today);
@@ -519,5 +525,56 @@ public class SongResource {
 
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/songs");
         return new ResponseEntity<>(listSongDTO, headers, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/trackUrl/{accessUrl}/by/{user}",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<SongDTO> getTrackByAccessUrl(@PathVariable String accessUrl, @PathVariable String user) {
+        log.debug("REST request to get Track : {}", accessUrl);
+        Song song = songRepository.findOneByAccessUrl(accessUrl,user);
+
+        User userIn = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).get();
+        SongDTO songDTO = new SongDTO();
+        songDTO.setSong(song);
+
+        Song_user song_user = song_userRepository.findExistUserLiked(song.getId(),userIn.getLogin());
+
+        if(song_user == null || song_user.getLiked() == null || !song_user.getLiked()){
+            songDTO.setLiked(false);
+        }
+        else{
+            songDTO.setLiked(true);
+        }
+
+        if(song_user == null || song_user.getShared() == null || !song_user.getShared()){
+            songDTO.setShared(false);
+        }
+        else{
+            songDTO.setShared(true);
+        }
+
+        int countLikes = song_userRepository.findTotalLikes(song.getId());
+        int countShares = song_userRepository.findTotalShares(song.getId());
+        songDTO.setTotalLikes(countLikes);
+        songDTO.setTotalShares(countShares);
+
+        return Optional.ofNullable(songDTO)
+            .map(result -> new ResponseEntity<>(
+                result,
+                HttpStatus.OK))
+            .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @RequestMapping(value = "/trackByUser",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<List<Song>> getTracksByUser()
+        throws URISyntaxException {
+        log.debug("REST request to get a page of Tracks");
+        List<Song> page = songRepository.findByUserIsCurrentUser();
+        return new ResponseEntity<>(page, HttpStatus.OK);
     }
 }

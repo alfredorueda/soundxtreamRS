@@ -1,13 +1,19 @@
 'use strict';
 
 angular.module('soundxtreamappApp').controller('PlaylistDialogController',
-    ['$rootScope', '$scope', '$stateParams', '$state', '$uibModalInstance', 'entity', 'Playlist', 'Song', 'User', 'Upload',
-        function ($rootScope, $scope, $stateParams, $state, $uibModalInstance, entity, Playlist, Song, User, Upload) {
+    ['$rootScope', '$scope', '$stateParams', '$state', '$uibModalInstance', 'entity', 'Playlist', 'Song', 'User', 'Upload', 'Principal',
+        function ($rootScope, $scope, $stateParams, $state, $uibModalInstance, entity, Playlist, Song, User, Upload,Principal) {
+
+            Principal.identity().then(function(account) {
+                $scope.account = account;
+                $scope.isAuthenticated = Principal.isAuthenticated;
+            });
 
             $scope.playlist = entity;
             $scope.songs = Song.query();
             $scope.users = User.query();
             $scope.selectedTracks = [];
+            $scope.playlists = Playlist.getPlaylistUser({login: $scope.account.login});
 
             $scope.load = function (id) {
                 Playlist.get({id: id}, function (result) {

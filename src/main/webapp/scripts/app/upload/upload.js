@@ -17,6 +17,13 @@ angular.module('soundxtreamappApp')
                         templateUrl: 'scripts/app/upload/upload.html',
                         controller: 'UploadController'
                     }
+                },
+                resolve: {
+                    mainTranslatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate,$translatePartialLoader) {
+                        $translatePartialLoader.addPart('main');
+                        $translatePartialLoader.addPart('song');
+                        return $translate.refresh();
+                    }]
                 }
             })
     });

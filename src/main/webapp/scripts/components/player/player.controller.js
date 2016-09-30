@@ -2,7 +2,9 @@
  * Created by xavipandis on 28/3/16.
  */
 angular.module('soundxtreamappApp')
-    .controller('playerPlaylistController', ['$scope','Principal','$rootScope','Song','Auth','$state', function ($scope,Principal,$rootScope,Song,Auth,$state) {
+    .controller('playerPlaylistController', ['$scope','Principal','$rootScope','Song','Auth','$state',
+        '$cookies', '$http', '$q',
+        function ($scope,Principal,$rootScope,Song,Auth,$state,$cookies, $http, $q) {
             this.audioPlaylist = [];
             //De donde esta sonando( playlist, cancion solo)
             this.playlistCurrent = null;
@@ -89,7 +91,8 @@ angular.module('soundxtreamappApp')
                         title: audioElement.name,
                         type: 'audio/mpeg',
                         url: audioElement.url,
-                        id: audioElement.id
+                        id: audioElement.id,
+                        access_url: audioElement.access_url
                     };
 
                     this.audioPlaylist.push(angular.copy(song));
@@ -119,7 +122,8 @@ angular.module('soundxtreamappApp')
                         title: audioElement.name,
                         type: 'audio/mpeg',
                         url: audioElement.url,
-                        id: audioElement.id
+                        id: audioElement.id,
+                        access_url: audioElement.access_url
                     };
 
                     this.audioPlaylist.push(angular.copy(song));
@@ -146,7 +150,8 @@ angular.module('soundxtreamappApp')
                     title: audioElement.name,
                     type: 'audio/mpeg',
                     url: audioElement.url,
-                    id: audioElement.id
+                    id: audioElement.id,
+                    access_url: audioElement.access_url
                 };
 
                 this.audioPlaylist.push(angular.copy(song));
@@ -160,6 +165,7 @@ angular.module('soundxtreamappApp')
             };
 
             this.addSongAndPlay = function(audioElement,mediaPlayer){
+                var songWave = audioElement;
                 var song = {
                     artist: audioElement.user.login,
                     displayName: audioElement.name,
@@ -168,13 +174,16 @@ angular.module('soundxtreamappApp')
                     title: audioElement.name,
                     type: 'audio/mpeg',
                     url: audioElement.url,
-                    id: audioElement.id
+                    id: audioElement.id,
+                    access_url: audioElement.access_url
                 };
 
                 this.audioPlaylist.push(angular.copy(song));
 
                 setTimeout(function () {
-                    mediaPlayer.play();
+                    settings.media = songWave.url;
+                    initializeAudio();
+
                     var song = {};
                 }, 200);
             };
@@ -198,7 +207,8 @@ angular.module('soundxtreamappApp')
                         title: audioElement.name,
                         type: 'audio/mpeg',
                         url: audioElement.url,
-                        id: audioElement.id
+                        id: audioElement.id,
+                        access_url: audioElement.access_url
                     };
                     songs.push(angular.copy(song));
                 }
@@ -222,7 +232,8 @@ angular.module('soundxtreamappApp')
                         title: audioElement.name,
                         type: 'audio/mpeg',
                         url: audioElement.url,
-                        id: audioElement.id
+                        id: audioElement.id,
+                        access_url: audioElement.access_url
                     };
                     songs.push(angular.copy(song));
                 }
@@ -251,7 +262,8 @@ angular.module('soundxtreamappApp')
                         title: audioElement.name,
                         type: 'audio/mpeg',
                         url: audioElement.url,
-                        id: audioElement.id
+                        id: audioElement.id,
+                        access_url: audioElement.access_url
                     };
                     songs.push(angular.copy(song));
                 }
@@ -279,6 +291,12 @@ angular.module('soundxtreamappApp')
             this.getSongImage = function (currentTrack) {
                 if (typeof this.audioPlaylist[currentTrack - 1] != "undefined") {
                     return this.audioPlaylist[currentTrack - 1].image;
+                }
+            };
+
+            this.getSongAccess = function(currentTrack){
+                if (typeof this.audioPlaylist[currentTrack - 1] != "undefined") {
+                    return this.audioPlaylist[currentTrack - 1].access_url;
                 }
             };
 

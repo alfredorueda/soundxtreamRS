@@ -37,6 +37,18 @@
             </div>
         </div>
         <div class="form-group">
+            <label class="control-label" translate="soundxtreamappApp.song.access_url" for="field_access_url">access url</label>
+            <input type="text" class="form-control" name="access_url" id="field_access_url"
+                   ng-model="songDTO.song.access_url"
+                   required />
+            <div ng-show="editForm.url.$invalid">
+                <p class="help-block"
+                   ng-show="editForm.url.$error.required" translate="entity.validation.required">
+                    This field is required.
+                </p>
+            </div>
+        </div>
+        <div class="form-group">
             <label class="control-label" translate="soundxtreamappApp.song.label" for="field_label">Label</label>
             <input type="text" class="form-control" name="label" id="field_label"
                     ng-model="songDTO.song.label"

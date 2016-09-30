@@ -42,6 +42,25 @@ angular.module('soundxtreamappApp')
                 method: 'GET',
                 isArray: true,
                 url: 'api/songsApp'
-            }
+            },
+            'getAccessUrl': {
+                method: 'GET',
+                url: 'api/trackUrl/:accessUrl/by/:user',
+                transformResponse: function (data) {
+                    data = angular.fromJson(data);
+                    data.date_posted = DateUtils.convertDateTimeFromServer(data.date_posted);
+                    return data;
+                }
+            },
+            'getTracksUser': {
+                method: 'GET',
+                isArray: true,
+                url: 'api/trackByUser',
+                transformResponse: function (data) {
+                    data = angular.fromJson(data);
+                    data.date_posted = DateUtils.convertDateTimeFromServer(data.date_posted);
+                    return data;
+                }
+            },
         });
     });

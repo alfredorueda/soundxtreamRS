@@ -98,35 +98,6 @@ angular.module('soundxtreamappApp').controller('UploadController',
                 return new Blob([new Uint8Array(array)], {type: 'image/jpeg'});
             }
 
-            /*$scope.saveAll = function () {
-             $scope.isSaving = true;
-             for (var k = 0; k < $scope.songs.length; k++) {
-             $scope.song.name = $scope.songs[k].name;
-             $scope.song.location_url = $scope.songs[k].location_url;
-             Song.save($scope.song, function () {
-             $state.go('song', null, {reload: true});
-             });
-             $scope.song = {
-             name: null,
-             location_url: null
-             };
-             }
-             };*/
-
-            /*$scope.artworkShow = function (e) {
-             $scope.artworkFile = e;
-             var reader = new FileReader();
-             reader.onload = function (e) {
-             var image;
-             image = new Image();
-             image.src = e.target.result;
-             return image.onload = function () {
-             return $('.artwork__holder').attr("src", this.src);
-             };
-             };
-             return reader.readAsDataURL(e);
-             }*/
-
             $scope.uploadArt = function (file) {
                 $scope.formUpload = true;
                 if (file != null) {
@@ -214,9 +185,35 @@ angular.module('soundxtreamappApp').controller('UploadController',
             $scope.uploadSong = function (files) {
                 $scope.filesUpload = files;
                 if (files != null) {
-                    for (var k = 0; k < files.length; k++) {
+                    /*for (var k = 0; k < files.length; k++) {
                         uploadUsingUpload(files[k]);
-                    }
+                    }*/
+
+                    uploadUsingUpload(files[0]);
+                    var accURL = (files[0].name.replace(/\s/g,"")).replace("(","-");
+                    accURL = accURL.replace(")","").toLowerCase();
+                    accURL = accURL.replace( /\.[^/.]+$/ ,"");
+
+                    Song.getTracksUser({},function(res) {
+
+                        console.log(res);
+
+                        var acc2 = accURL, i, ex;
+                        for (var k = 0; k < res.length; k++) {
+                            i = 0;
+                            while (res[k].access_url == acc2) {
+                                ex = true;
+                                i++;
+                                acc2 = accURL + "" + i;
+                            }
+                        }
+
+                        if (ex)
+                            accURL = accURL + "" + i;
+
+
+                        $scope.song.access_url = accURL;
+                    });
                 }
             };
             $scope.uploadSuccess = false;
@@ -414,7 +411,7 @@ angular.module('soundxtreamappApp').controller('UploadController',
                 items.forEach(function (item) {
                     var itemMatches = false;
 
-                    var keys = Object.keys(props);
+                    var keys = Object.keys(props); 
                     for (var i = 0; i < keys.length; i++) {
                         var prop = keys[i];
                         var text = props[prop].toLowerCase();

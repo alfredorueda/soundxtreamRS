@@ -26,7 +26,7 @@ angular.module('soundxtreamappApp')
             })
             .state('song.detail', {
                 parent: 'entity',
-                url: '/song/{id}',
+                url: '/{user}/track/{accessUrl}',
                 data: {
                     authorities: [],
                     pageTitle: 'soundxtreamappApp.song.detail.title'
@@ -42,8 +42,11 @@ angular.module('soundxtreamappApp')
                         $translatePartialLoader.addPart('song');
                         return $translate.refresh();
                     }],
-                    entity: ['$stateParams', 'Song', function($stateParams, Song) {
+                    /*entity: ['$stateParams', 'Song', function($stateParams, Song) {
                         return Song.get({id : $stateParams.id});
+                    }]*/
+                    entity: ['$stateParams', 'Song', function($stateParams, Song) {
+                        return Song.getAccessUrl({accessUrl : $stateParams.accessUrl, user: $stateParams.user});
                     }]
                 }
             })
@@ -93,11 +96,14 @@ angular.module('soundxtreamappApp')
                         size: 'lg',
                         resolve: {
                             entity: ['Song', function(Song) {
-                                return Song.get({id : $stateParams.id});
+                                //return Song.get({id : $stateParams.id});
+                                return Song.getAccessUrl({accessUrl : $stateParams.accessUrl, user: $stateParams.user});
                             }]
                         }
                     }).result.then(function(result) {
-                        $state.go('song.detail',{id:result.id}, {reload:true});
+                        console.log(result.access_url);
+                        console.log(result.user.login);
+                        $state.go('song.detail', {user: result.user.login, accessUrl: result.access_url} ,{reload:true});
                     }, function() {
                         $state.go('^');
                     })
@@ -168,7 +174,7 @@ angular.module('soundxtreamappApp')
                                 return Playlist.getPlaylistUser({});
                             }],
                             entity_song: ['Song',function(Song){
-                                return Song.get({id:$stateParams.id});
+                                return Song.getAccessUrl({accessUrl : $stateParams.accessUrl, user: $stateParams.user});
                             }]
                         }
                     }).result.then(function(result) {

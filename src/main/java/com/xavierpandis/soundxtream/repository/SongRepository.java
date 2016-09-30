@@ -26,6 +26,10 @@ public interface SongRepository extends JpaRepository<Song,Long> {
     @Query("select song from Song song left join fetch song.styles where song.id =:id")
     Song findOneWithEagerRelationships(@Param("id") Long id);
 
+    @Query("select song from Song song left join fetch song.styles where song.access_url =:url and song.user.login =:user")
+    Song findOneByAccessUrl(@Param("url") String url,@Param("user") String user);
 
+    @Query("select song from Song song where song.user.login = ?#{principal.username}")
+    List<Song> findByUserIsCurrentUser();
 
 }

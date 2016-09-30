@@ -1,8 +1,6 @@
 <div class="row">
     <div class="panel panel-default">
         <div class="panel-body">
-
-            <hr>
             <div class="col-md-12" style="vertical-align: top;"
                  infinite-scroll="loadPage(page + 1)"
                  infinite-scroll-disabled="links['last'] == page" infinite-scroll-distance='2'
@@ -41,7 +39,7 @@
                         </div>
                     </div>
                     <div class="info">
-                        <h5 style="cursor: pointer;text-align: center;" ui-sref="song.detail({id:songDTO.song.id})">{{songDTO.song.name}}</h5>
+                        <h5 style="cursor: pointer;text-align: center;" ui-sref="song.detail({accessUrl: songDTO.song.access_url,user: songDTO.song.user.login, id: songDTO.song.id})">{{songDTO.song.name}}</h5>
                         <h6 style="cursor: pointer;text-align: center;" ui-sref="user-profile({login:songDTO.song.user.login})">{{songDTO.song.user.login}}</h6>
                     </div>
                 </div>

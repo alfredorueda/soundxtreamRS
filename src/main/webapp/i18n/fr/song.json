@@ -28,6 +28,7 @@
             "playsCount": "PlaysCount",
             "typeSong": "TypeSong",
             "bpm": "Bpm",
+            "access_url": "Access_url",
             "user": "User",
             "style": "Style"
         }

@@ -51,6 +51,8 @@
 
             <column name="bpm" type="integer"/>
 
+            <column name="access_url" type="varchar(255)"/>
+
             <column name="user_id" type="bigint"/>
             <!-- jhipster-needle-liquibase-add-column - Jhipster will add columns here, do not remove-->
         </createTable>

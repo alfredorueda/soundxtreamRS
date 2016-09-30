@@ -41,6 +41,9 @@ public class Playlist implements Serializable {
     @Column(name = "banner_playlist")
     private String banner_playlist;
 
+    @Column(name = "access_url")
+    private String access_url;
+
     @ManyToMany(fetch=FetchType.EAGER)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @JoinTable(name = "playlist_song",
@@ -100,6 +103,14 @@ public class Playlist implements Serializable {
         this.banner_playlist = banner_playlist;
     }
 
+    public String getAccess_url() {
+        return access_url;
+    }
+
+    public void setAccess_url(String access_url) {
+        this.access_url = access_url;
+    }
+
     public Set<Song> getSongs() {
         return songs;
     }
@@ -145,6 +156,7 @@ public class Playlist implements Serializable {
             ", dateCreated='" + dateCreated + "'" +
             ", full_duration='" + full_duration + "'" +
             ", banner_playlist='" + banner_playlist + "'" +
+            ", access_url='" + access_url + "'" +
             '}';
     }
 }

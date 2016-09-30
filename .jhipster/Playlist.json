@@ -45,6 +45,11 @@
             "fieldId": 5,
             "fieldName": "banner_playlist",
             "fieldType": "String"
+        },
+        {
+            "fieldId": 6,
+            "fieldName": "access_url",
+            "fieldType": "String"
         }
     ],
     "changelogDate": "20160326001835",
