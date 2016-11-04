@@ -57,7 +57,7 @@ angular.module('soundxtreamappApp').controller('PlaylistDialogController',
                         var file = new File([blob], "ds.jpg");
                         $scope.uploadArt(file);
                     } else {
-                        $scope.playlist.artwork = $rootScope.account.user_image;
+                        //$scope.playlist.artwork = $rootScope.account.user_image;
                     }
                     Playlist.update($scope.playlist, onSaveSuccess, onSaveError);
                 } else {
@@ -66,9 +66,9 @@ angular.module('soundxtreamappApp').controller('PlaylistDialogController',
                         var blob = dataURItoBlob(imageBase64);
                         var file = new File([blob], "ds.jpg");
                         $scope.uploadArt(file);
-                    } else {
+                    } /*else {
                         $scope.playlist.artwork = $rootScope.account.user_image;
-                    }
+                    }*/
                     if ($scope.bannerFile != undefined) {
                         var imageBase64Banner = $scope.croppedBanner;
                         var blobBanner = dataURItoBlob(imageBase64Banner);
@@ -77,7 +77,7 @@ angular.module('soundxtreamappApp').controller('PlaylistDialogController',
 
                         $scope.uploadBanner(fileBanner);
                     } else {
-                        $scope.playlist.banner_playlist = $rootScope.account.user_image;
+                        //$scope.playlist.banner_playlist = $rootScope.account.user_image;
                         saveAfterUpload();
                     }
 

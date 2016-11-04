@@ -1,0 +1,70 @@
+
+<div>
+    <h2><span translate="soundxtreamappApp.playlist_user.detail.title">Playlist_user</span> {{playlist_user.id}}</h2>
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th translate="entity.detail.field">Field</th>
+                <th translate="entity.detail.value">Value</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <span translate="soundxtreamappApp.playlist_user.liked">Liked</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{playlist_user.liked}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="soundxtreamappApp.playlist_user.shared">Shared</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{playlist_user.shared}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="soundxtreamappApp.playlist_user.likedDate">LikedDate</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{playlist_user.likedDate | date:'medium'}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="soundxtreamappApp.playlist_user.sharedDate">SharedDate</span>
+                </td>
+                <td>
+                    <span class="form-control-static">{{playlist_user.sharedDate | date:'medium'}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="soundxtreamappApp.playlist_user.user">user</span>
+                </td>
+                <td>
+                    {{playlist_user.user.login}}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span translate="soundxtreamappApp.playlist_user.playlist">playlist</span>
+                </td>
+                <td>
+                    <a class="form-control-static" ui-sref="playlist.detail({id:playlist_user.playlist.id})">{{playlist_user.playlist.login}}</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <button type="submit"
+            onclick="window.history.back()"
+            class="btn btn-info">
+        <span class="glyphicon glyphicon-arrow-left"></span>&nbsp;<span translate="entity.action.back"> Back</span>
+    </button>
+</div>

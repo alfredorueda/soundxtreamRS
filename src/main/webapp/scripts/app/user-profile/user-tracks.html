@@ -3,16 +3,16 @@
         <h5 class="h5-title-info">{{user.login}}'s tracks</h5>
         <div class="col-md-10" style="vertical-align: top;" infinite-scroll="loadPage(page + 1)" infinite-scroll-disabled="links['last'] == page" infinite-scroll-distance='2'
              infinite-scroll-container="'#content'">
-            <div ng-repeat="songDTO in tracksUser" class="track-box" style="margin-left: 13px;">
+            <div ng-repeat="songDTO in allTracksUser" class="track-box" style="margin-left: 13px;">
                 <div class="track-image">
                     <img src="{{songDTO.song.artwork}}" style="background: -webkit-linear-gradient(-45deg, rgb(85, 147, 255) 0%, rgb(150, 27, 255) 100%);"/>
                     <div class="controls">
-                        <md-button ng-if="playerPlaylist.getSongId(mediaPlayer.currentTrack) != songDTO.song.id || playerPlaylist.playlistCurrent != 'from'+user+'Songs'" ng-click="playerPlaylist.addSongAll(tracksUser,mediaPlayer,$index,'from'+user+'Songs')" class="md-play" aria-label="play">
+                        <md-button ng-if="playerPlaylist.getSongId(mediaPlayer.currentTrack) != songDTO.song.id || playerPlaylist.playlistCurrent != 'fromTracks'+user.login" ng-click="playerPlaylist.addSongAll(tracksUser,mediaPlayer,$index,'fromTracks'+user.login)" class="md-play" aria-label="play">
                             <md-icon>
                                 <i class="material-icons">play_arrow</i>
                             </md-icon>
                         </md-button>
-                        <md-button ng-if="playerPlaylist.getSongId(mediaPlayer.currentTrack) == songDTO.song.id && playerPlaylist.playlistCurrent == 'from'+user+'Songs'" ng-click="mediaPlayer.playPause()" class="md-play" aria-label="play">
+                        <md-button ng-if="playerPlaylist.getSongId(mediaPlayer.currentTrack) == songDTO.song.id && playerPlaylist.playlistCurrent == 'fromTracks'+user.login" ng-click="mediaPlayer.playPause()" class="md-play" aria-label="play">
                             <md-icon>
                                 <i ng-if="!mediaPlayer.playing" class="material-icons">play_arrow</i>
                                 <i ng-if="mediaPlayer.playing" class="material-icons">pause</i>

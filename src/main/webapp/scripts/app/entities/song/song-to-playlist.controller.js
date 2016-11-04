@@ -3,8 +3,8 @@
  */
 'use strict';
 angular.module('soundxtreamappApp').controller('SongToPlaylist',
-    ['$scope', '$stateParams', '$state', 'Song_user', '$uibModalInstance','Playlist', 'Principal', 'Song', 'entity','entity_song','toaster',
-        function($scope,$stateParams, $state, Song_user, $uibModalInstance, Playlist, Principal, Song, entity,entity_song,toaster) {
+    ['$scope', '$stateParams', '$state', '$rootScope', 'Song_user', '$uibModalInstance','Playlist', 'Principal', 'Song', 'entity','entity_song','toaster',
+        function($scope,$stateParams, $state, $rootScope, Song_user, $uibModalInstance, Playlist, Principal, Song, entity,entity_song,toaster) {
 
             Principal.identity().then(function(account) {
                 $scope.account = account;
@@ -77,7 +77,7 @@ angular.module('soundxtreamappApp').controller('SongToPlaylist',
             $scope.add = function (id) {
                 $scope.playlist = Playlist.get({id: id});
 
-                $scope.playlist.$promise.then(function () {
+                $scope.playlist.$promise.then(function (result) {
                     var exist = false;
                     for (var k = 0; k < $scope.playlist.songs.length; k++) {
                         if ($scope.playlist.songs[k].id == $scope.songDTO.song.id) {
@@ -91,7 +91,9 @@ angular.module('soundxtreamappApp').controller('SongToPlaylist',
                         for(var k = 0; k < $scope.playlist.songs.length; k++){
                             $scope.playlist.full_duration += $scope.playlist.songs[k].duration;
                         }
-                        Playlist.update($scope.playlist);
+                        Playlist.update($scope.playlist, function(result){
+                            $rootScope.$broadcast('soundxtreamappApp:playlistUpdated', result);
+                        });
                         $uibModalInstance.close();
                     }
                 });

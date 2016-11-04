@@ -1,0 +1,44 @@
+{
+    "relationships": [
+        {
+            "relationshipId": 1,
+            "relationshipName": "user",
+            "otherEntityName": "user",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "login"
+        },
+        {
+            "relationshipId": 2,
+            "relationshipName": "playlist",
+            "otherEntityName": "playlist",
+            "relationshipType": "many-to-one",
+            "otherEntityField": "login"
+        }
+    ],
+    "fields": [
+        {
+            "fieldId": 1,
+            "fieldName": "liked",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldId": 2,
+            "fieldName": "shared",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldId": 3,
+            "fieldName": "likedDate",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldId": 4,
+            "fieldName": "sharedDate",
+            "fieldType": "ZonedDateTime"
+        }
+    ],
+    "changelogDate": "20161030011305",
+    "dto": "no",
+    "service": "no",
+    "pagination": "infinite-scroll"
+}

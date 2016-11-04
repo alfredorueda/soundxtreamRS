@@ -1,21 +1,27 @@
 'use strict';
 
 angular.module('soundxtreamappApp')
-    .controller('SongController', function ($scope,$state, Song, SongSearch, ParseLinks,toaster,Song_user,$sce) {
+    .controller('SongController', function ($scope,$state, Song, SongSearch, ParseLinks,toaster,Song_user,$log,$filter) {
 
-        $scope.isCollapsed = true;
+
         $scope.songs = [];
         $scope.predicate = 'id';
-        $scope.reverse = true;
+        $scope.reverse = false;
         $scope.page = 0;
+        $scope.allTracks = [];
+
+        $scope.searchQuery;
         $scope.loadAll = function() {
-            Song.query({page: $scope.page, size: 6, sort: [$scope.predicate ,($scope.reverse ? 'asc' : 'desc'), 'id']}, function(result, headers) {
+            Song.query({page: $scope.page, size: 10, sort: [$scope.predicate + ',' + ($scope.reverse ? 'asc' : 'desc'), 'id']}, function (result, headers) {
                 $scope.links = ParseLinks.parse(headers('link'));
                 for (var i = 0; i < result.length; i++) {
                     $scope.songs.push(result[i]);
                 }
-                console.log($scope.songs);
-                console.log("NUM LINKS" + $scope.links);
+            });
+
+            Song.queryForPlayer({}, function(result, headers){
+                $scope.allTracks = result;
+                console.log(result)
             });
         };
 
@@ -60,13 +66,6 @@ angular.module('soundxtreamappApp')
             };
         };
 
-
-        /*$scope.saveSong = function(song){
-            Song.update(song,function(){
-                toaster.pop('success',$scope.songDTO.song.name,"Your comment was posted");
-            });
-        };*/
-
         $scope.like = function(id){
             Song_user.addLike({id: id},{},successLike);
         };
@@ -110,29 +109,6 @@ angular.module('soundxtreamappApp')
             }
             if(result.liked == true){
                 toaster.pop('success',"Success","Song added to your favorites");
-            }
-
-        };
-
-        $scope.request = function(duration){
-            if(duration == 'less'){
-                Song.getSongsWithLess({seconds:300},function(res){
-                    $scope.songs = res;
-                });
-            }
-            else if(duration == 'more'){
-                Song.getSongsWithMore({seconds:300},function(res){
-                    $scope.songs = res;
-                });
-            }
-            else if(duration == 'none'){
-                $scope.songs = [];
-                Song.query({page: $scope.page, size: 20, sort: [$scope.predicate + ',' + ($scope.reverse ? 'asc' : 'desc'), 'id']}, function(result, headers) {
-                    $scope.links = ParseLinks.parse(headers('link'));
-                    for (var i = 0; i < result.length; i++) {
-                        $scope.songs.push(result[i]);
-                    }
-                });
             }
 
         };

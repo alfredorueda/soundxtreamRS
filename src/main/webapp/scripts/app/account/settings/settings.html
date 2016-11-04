@@ -1,4 +1,4 @@
-<md-content>
+<div>
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <h2 translate="settings.title" translate-values="{username: '{{settingsAccount.login}}'}">User settings for
@@ -100,6 +100,7 @@
                 </div>
                 <div class="form-group col-sx-12 col-sm-12">
                     <h5 class="h5-title-info">Your profile picture</h5>
+
                     <div class="form-group image-group" style="position: relative;" >
                         <img src="{{settingsAccount.user_image}}" height="200px" width="200px"/>
                         <label ng-show="picFile != undefined"><input type="checkbox" ng-model="cropped"/>Crop image?</label>
@@ -108,7 +109,7 @@
                             <img-crop ng-show="cropped" area-type="square" image="picFile | ngfDataUrl"
                                       result-image="croppedArtwork" ng-init="croppedArtwork=''">
                             </img-crop>
-                            <button style="z-index: 200;" ngf-select ng-model="picFile"
+                            <button style="position: relative;z-index: 200;" ngf-select ng-model="picFile"
                                     class="btn-upload-over sx__button sx__button__primary" accept="image/*">
                                 Update profile picture
                             </button>
@@ -117,11 +118,23 @@
                     </div>
 
                 </div>
-                <button type="submit" ng-disabled="form.$invalid" class="sx__button sx__button__primary"
-                        translate="settings.form.button">Save
-                </button>
+                <button type="submit" class="sx__button sx__button__primary ng-scope" translate="settings.form.button" aria-disabled="false">Save</button>
             </form>
         </div>
     </div>
 
-</md-content>
+</div>
+
+<style>
+    .cropArea {
+        background: #E4E4E4;
+        overflow: hidden;
+        width: 400px;
+        height: 250px;
+        max-width: 100%;
+        display: inline-block;
+    }
+    .image-group * {
+        vertical-align: top;
+    }
+</style>

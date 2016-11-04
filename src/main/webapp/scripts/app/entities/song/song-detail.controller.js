@@ -31,8 +31,6 @@ angular.module('soundxtreamappApp')
             });
         });
 
-
-
         $scope.follow = function(user){
             $scope.seguimiento = {
                 id: null,
@@ -128,6 +126,22 @@ angular.module('soundxtreamappApp')
             Song_user.addLike({id: id},{},successLike);
         };
 
+        $rootScope.$on('soundxtreamappApp:playlistUpdated', function(event, res){
+            console.log(res);
+            var exist = false;
+            for(var i = 0; i < $scope.playlistWithSong.length; i++){
+                if($scope.playlistWithSong[i] == res.id){
+                    exist = true;
+                }
+                if(exist){
+                    return
+                }
+            }
+            if(!exist){
+               $scope.playlistWithSong.push(res);
+            }
+        });
+
         var successLike = function(result){
             $scope.songDTO.liked = result.liked;
             if($scope.songDTO.liked){
@@ -143,6 +157,27 @@ angular.module('soundxtreamappApp')
                 toaster.pop('success',"Success","Song removed from your favorites");
             }
         };
+
+        $scope.share = function(id){
+            Song_user.share({id: id},{},successShare);
+        };
+
+        function successShare(result) {
+            $scope.songDTO.shared = result.shared;
+            if($scope.songDTO.shared){
+                $scope.songDTO.totalShares += 1;
+            }
+            else{
+                $scope.songDTO.totalShares -= 1;
+            }
+            if(result.shared == true){
+                toaster.pop('success',"Success","Song shared to your followers");
+            }
+            else{
+                toaster.pop('success',"Success","Song removed from your favorites");
+            }
+        }
+
         //<img style='padding: 10px;' src='"+$scope.songDTO.song.artwork+"' height='100%' width='100%'/>
         $scope.openModal = function (){
             var modalInstance = $modal.open({

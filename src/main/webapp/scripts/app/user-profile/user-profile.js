@@ -5,7 +5,7 @@ angular.module('soundxtreamappApp')
         $stateProvider
             .state('user-profile', {
                 parent: 'site',
-                url: '/profile/{login}',
+                url: '/u/{login}',
                 data: {
                     authorities: [],
                     pageTitle: "Profile"

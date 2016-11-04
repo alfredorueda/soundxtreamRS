@@ -1,31 +1,30 @@
 package com.xavierpandis.soundxtream.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import com.xavierpandis.soundxtream.domain.Seguimiento;
+import com.xavierpandis.soundxtream.domain.Playlist;
 import com.xavierpandis.soundxtream.domain.Song;
 import com.xavierpandis.soundxtream.domain.Song_user;
 import com.xavierpandis.soundxtream.domain.User;
 import com.xavierpandis.soundxtream.repository.*;
 import com.xavierpandis.soundxtream.repository.search.SongSearchRepository;
 import com.xavierpandis.soundxtream.security.SecurityUtils;
-import com.xavierpandis.soundxtream.web.rest.dto.ActivityDTO;
+import com.xavierpandis.soundxtream.service.DateDiffService;
 import com.xavierpandis.soundxtream.web.rest.dto.SongDTO;
 import com.xavierpandis.soundxtream.web.rest.util.HeaderUtil;
 import com.xavierpandis.soundxtream.web.rest.util.PaginationUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -34,9 +33,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -69,6 +66,12 @@ public class SongResource {
     @Inject
     private StyleRepository styleRepository;
 
+    @Inject
+    private DateDiffService dateDiffService;
+
+    @Inject
+    private PlaylistRepository playlistRepository;
+
     /**
      * POST  /songs -> Create a new song.
      */
@@ -82,6 +85,16 @@ public class SongResource {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("song", "idexists", "A new song cannot already have an ID")).body(null);
         }
         User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).get();
+
+
+        String nameFinal = checkAccessURL(song.getAccess_url(), song);
+
+        song.setAccess_url(nameFinal);
+
+        if(song.getArtwork() == null){
+            song.setArtwork("/assets/images/default_image.jpg");
+        }
+
         song.setUser(user);
         ZonedDateTime today = ZonedDateTime.now();
         song.setDate_posted(today);
@@ -93,6 +106,19 @@ public class SongResource {
         return ResponseEntity.created(new URI("/api/songs/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert("song", result.getId().toString()))
             .body(result);
+    }
+
+    public String checkAccessURL(String name,Song song){
+        User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).get();
+
+        Song exist = songRepository.findOneByAccessUrl(song.getAccess_url(), user.getLogin());
+
+        if(exist != null){
+            String nextCheck = song.getAccess_url()+"1";
+            song.setAccess_url(nextCheck);
+            checkAccessURL(nextCheck,song);
+        }
+        return song.getAccess_url();
     }
 
     /**
@@ -155,10 +181,13 @@ public class SongResource {
 
         List<SongDTO> listSongDTO = new ArrayList<>();
         User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).get();
+        ZonedDateTime now = ZonedDateTime.now();
 
         for(Song song:page.getContent()){
             Song_user song_user = song_userRepository.findExistUserLiked(song.getId(),user.getLogin());
             SongDTO songDTO = new SongDTO();
+
+            songDTO.setTimeAfterUpload(dateDiffService.diffDatesMap(now, song.getDate_posted()));
 
             songDTO.setSong(song);
 
@@ -265,6 +294,24 @@ public class SongResource {
 
         }
 
+        List<Playlist> playlists = playlistRepository.findAllWithEagerRelationships();
+        List<Playlist> playlistWithSong = new ArrayList<>();
+
+        for(Playlist playlist:playlists){
+
+            Set<Song> songsPlaylist = playlist.getSongs();
+
+            songsPlaylist.removeIf(song1 -> song.getId().equals(id));
+            for(Song song2:playlist.getSongs()){
+                if(song.getId() == id){
+                    playlistWithSong.add(playlist);
+                }
+            }
+
+            playlist.setSongs(songsPlaylist);
+            playlistRepository.save(playlist);
+        }
+
         songRepository.delete(id);
         songSearchRepository.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("song", id.toString())).build();
@@ -369,116 +416,50 @@ public class SongResource {
         return songDTO;
     }
 
-    /*@RequestMapping(value = "/activityFollowing/tracks",
+    @RequestMapping(value = "/songs/newest/user/{login}",
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<List<SongDTO>> getActivityFollowing(Pageable pageable) throws URISyntaxException {
-
-        User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).get();
-
-        Page<Song> page = seguimientoRepository.findAllTracksFollowing(user.getLogin(),pageable);
+    public ResponseEntity<List<SongDTO>> firstNineSongs(@PathVariable String login)
+        throws URISyntaxException {
+        log.debug("REST request to get a page of Songs");
+        Pageable topTen = new PageRequest(0, 9);
+        Page<Song> page = songRepository.findByUserTracks(login,topTen);
 
         List<SongDTO> listSongDTO = new ArrayList<>();
-
-        for(Song song:page.getContent()){
-            listSongDTO.add(getInfoSong(song,user));
-        }
-
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/songs");
-        return new ResponseEntity<>(listSongDTO, headers, HttpStatus.OK);
-    }*/
-
-
-    @RequestMapping(value = "/songs/duration-more/{seconds}",
-        method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
-    public ResponseEntity<List<SongDTO>> getSongMore5Duration(@PathVariable Double seconds,Pageable pageable) throws URISyntaxException {
-        Page<Song> page = songRepository.findAll(pageable);
-        List<SongDTO> listSongDTO = new ArrayList<>();
         User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).get();
+
         for(Song song:page.getContent()){
-            if(song.getDuration() >= seconds){
-                Song_user song_user = song_userRepository.findExistUserLiked(song.getId(),user.getLogin());
-                SongDTO songDTO = new SongDTO();
+            Song_user song_user = song_userRepository.findExistUserLiked(song.getId(),user.getLogin());
+            SongDTO songDTO = new SongDTO();
 
-                songDTO.setSong(song);
+            songDTO.setSong(song);
 
-                if(song_user == null || song_user.getLiked() == null || !song_user.getLiked()){
-                    songDTO.setLiked(false);
-                }
-                else{
-                    songDTO.setLiked(true);
-                }
-
-                if(song_user == null || song_user.getShared() == null || !song_user.getShared()){
-                    songDTO.setShared(false);
-                }
-                else{
-                    songDTO.setShared(true);
-                }
-
-                listSongDTO.add(songDTO);
-
-                int countLikes = song_userRepository.findTotalLikes(song.getId());
-                int countShares = song_userRepository.findTotalShares(song.getId());
-                songDTO.setTotalLikes(countLikes);
-                songDTO.setTotalShares(countShares);
+            if(song_user == null || song_user.getLiked() == null || !song_user.getLiked()){
+                songDTO.setLiked(false);
             }
+            else{
+                songDTO.setLiked(true);
+            }
+
+            if(song_user == null || song_user.getShared() == null || !song_user.getShared()){
+                songDTO.setShared(false);
+            }
+            else{
+                songDTO.setShared(true);
+            }
+
+            listSongDTO.add(songDTO);
+
+            int countLikes = song_userRepository.findTotalLikes(song.getId());
+            int countShares = song_userRepository.findTotalShares(song.getId());
+            songDTO.setTotalLikes(countLikes);
+            songDTO.setTotalShares(countShares);
         }
 
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/songs");
         return new ResponseEntity<>(listSongDTO, headers, HttpStatus.OK);
     }
-
-
-
-    @RequestMapping(value = "/songs/duration-less/{seconds}",
-        method = RequestMethod.GET,
-        produces = MediaType.APPLICATION_JSON_VALUE)
-    @Timed
-    public ResponseEntity<List<SongDTO>> getSongLess5Duration(@PathVariable Double seconds,Pageable pageable) throws URISyntaxException {
-        Page<Song> page = songRepository.findAll(pageable);
-        List<SongDTO> listSongDTO = new ArrayList<>();
-        User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).get();
-
-        for(Song song:page.getContent()){
-            if(song.getDuration() <= seconds){
-
-                Song_user song_user = song_userRepository.findExistUserLiked(song.getId(),user.getLogin());
-                SongDTO songDTO = new SongDTO();
-
-                songDTO.setSong(song);
-
-                if(song_user == null || song_user.getLiked() == null || !song_user.getLiked()){
-                    songDTO.setLiked(false);
-                }
-                else{
-                    songDTO.setLiked(true);
-                }
-
-                if(song_user == null || song_user.getShared() == null || !song_user.getShared()){
-                    songDTO.setShared(false);
-                }
-                else{
-                    songDTO.setShared(true);
-                }
-
-
-                listSongDTO.add(songDTO);
-
-                int countLikes = song_userRepository.findTotalLikes(song.getId());
-                int countShares = song_userRepository.findTotalShares(song.getId());
-                songDTO.setTotalLikes(countLikes);
-                songDTO.setTotalShares(countShares);
-            }
-        }
-
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/songs");
-        return new ResponseEntity<>(listSongDTO, headers, HttpStatus.OK);
-    }
-
 
     /**
      * GET  /songs/{login} -> get all the songs of user.
@@ -577,4 +558,50 @@ public class SongResource {
         List<Song> page = songRepository.findByUserIsCurrentUser();
         return new ResponseEntity<>(page, HttpStatus.OK);
     }
+
+    @RequestMapping(value = "/tracksPlayer/user/logged",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<List<SongDTO>> tracksPlayerUser(){
+        List<Song> listPlayer = songRepository.findByUserIsCurrentUser();
+
+        List<SongDTO> listSongDTO = new ArrayList<>();
+        User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).get();
+        ZonedDateTime now = ZonedDateTime.now();
+
+        for(Song song:listPlayer){
+            Song_user song_user = song_userRepository.findExistUserLiked(song.getId(),user.getLogin());
+            SongDTO songDTO = new SongDTO();
+
+            songDTO.setTimeAfterUpload(dateDiffService.diffDatesMap(now, song.getDate_posted()));
+
+            songDTO.setSong(song);
+
+            if(song_user == null || song_user.getLiked() == null || !song_user.getLiked()){
+                songDTO.setLiked(false);
+            }
+            else{
+                songDTO.setLiked(true);
+            }
+
+            if(song_user == null || song_user.getShared() == null || !song_user.getShared()){
+                songDTO.setShared(false);
+            }
+            else{
+                songDTO.setShared(true);
+            }
+
+            listSongDTO.add(songDTO);
+
+            int countLikes = song_userRepository.findTotalLikes(song.getId());
+            int countShares = song_userRepository.findTotalShares(song.getId());
+            songDTO.setTotalLikes(countLikes);
+            songDTO.setTotalShares(countShares);
+        }
+
+        return new ResponseEntity<>(listSongDTO, HttpStatus.OK);
+    }
+
+
 }

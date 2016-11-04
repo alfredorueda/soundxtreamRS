@@ -10,12 +10,6 @@ angular.module('soundxtreamappApp')
             playlist: false
         }
 
-        /*$scope.logout = function () {
-            Auth.logout();
-            $rootScope.account = {};
-            $state.go('login');
-        };*/
-
         $scope.SwitchToMenu = function () {
             $scope.navigationState.menu = true;
             $scope.navigationState.playlist = false;

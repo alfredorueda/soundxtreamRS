@@ -8,7 +8,7 @@ angular.module('soundxtreamappApp')
                 url: '/songs',
                 data: {
                     authorities: ['ROLE_USER'],
-                    pageTitle: 'soundxtreamappApp.song.home.title'
+                    pageTitle: 'soundxtreamappApp.playlist.home.title'
                 },
                 views: {
                     'content@': {
@@ -122,7 +122,7 @@ angular.module('soundxtreamappApp')
                         size: 'md',
                         resolve: {
                             entity: ['Song', function(Song) {
-                                return Song.get({id : $stateParams.id});
+                                return Song.getAccessUrl({accessUrl : $stateParams.accessUrl, user: $stateParams.user});
                             }]
                         }
                     }).result.then(function(result) {

@@ -2,16 +2,15 @@ package com.xavierpandis.soundxtream.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
 import com.sun.org.apache.xpath.internal.operations.Bool;
-import com.xavierpandis.soundxtream.domain.Playlist;
-import com.xavierpandis.soundxtream.domain.Song;
-import com.xavierpandis.soundxtream.domain.Song_user;
-import com.xavierpandis.soundxtream.domain.User;
+import com.xavierpandis.soundxtream.domain.*;
 import com.xavierpandis.soundxtream.repository.PlaylistRepository;
+import com.xavierpandis.soundxtream.repository.Playlist_userRepository;
 import com.xavierpandis.soundxtream.repository.SeguimientoRepository;
 import com.xavierpandis.soundxtream.repository.UserRepository;
 import com.xavierpandis.soundxtream.repository.search.PlaylistSearchRepository;
 import com.xavierpandis.soundxtream.security.SecurityUtils;
 import com.xavierpandis.soundxtream.web.rest.dto.ActivityDTO;
+import com.xavierpandis.soundxtream.web.rest.dto.PlaylistDTO;
 import com.xavierpandis.soundxtream.web.rest.dto.SongDTO;
 import com.xavierpandis.soundxtream.web.rest.util.HeaderUtil;
 import com.xavierpandis.soundxtream.web.rest.util.PaginationUtil;
@@ -27,12 +26,21 @@ import org.springframework.security.access.method.P;
 import org.springframework.social.google.api.plus.Activity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.imageio.ImageIO;
 import javax.inject.Inject;
+import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.validation.Valid;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
+import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.ZonedDateTime;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -59,6 +67,9 @@ public class PlaylistResource {
     @Inject
     private SeguimientoRepository seguimientoRepository;
 
+    @Inject
+    private Playlist_userRepository playlist_userRepository;
+
     /**
      * POST  /playlists -> Create a new playlist.
      */
@@ -74,6 +85,9 @@ public class PlaylistResource {
         User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).get();
         playlist.setUser(user);
         ZonedDateTime today = ZonedDateTime.now();
+        if(playlist.getArtwork() == null){
+            playlist.setArtwork(user.getUser_image());
+        }
         playlist.setDateCreated(today);
         Playlist result = playlistRepository.save(playlist);
         playlistSearchRepository.save(result);
@@ -98,6 +112,66 @@ public class PlaylistResource {
         playlist.setUser(user);
         ZonedDateTime today = ZonedDateTime.now();
         playlist.setDateCreated(today);
+
+        List<Song> songsList = new ArrayList<>(playlist.getSongs());
+
+        if(songsList.size() >= 4){
+
+            List<Image> images = new ArrayList<>();
+
+            BufferedImage bImage = new BufferedImage(280, 280,
+                BufferedImage.TYPE_INT_RGB);
+
+            try{
+                for(Song song1:songsList){
+                    File sourceimage = new File("./src/main/webapp/"+ song1.getArtwork());
+                    images.add(ImageIO.read(sourceimage));
+                }
+            }catch (Exception e){
+
+            }
+
+            Canvas cnvs = new Canvas();
+            cnvs.setSize(280,280);
+
+            Graphics2D graphics = bImage.createGraphics();
+
+            int i = 0;
+            for(Image image:images){
+                int x = 0,
+                    y = 0;
+
+                if(i == 1){
+                    x = (cnvs.getWidth()/ 2);
+                    y= 0;
+                }
+                if(i == 2){
+                    x = 0;
+                    y = (cnvs.getHeight() / 2 );
+                }
+                if(i == 3){
+                    x = (cnvs.getWidth()/ 2);
+                    y = (cnvs.getHeight() / 2 );
+                }
+
+                graphics.drawImage(image,x,y,(cnvs.getWidth() / 2),(cnvs.getHeight() / 2), cnvs);
+                i++;
+            }
+
+            graphics.dispose();
+
+            try{
+                if (ImageIO.write(bImage, "png", new File("./src/main/webapp/uploads/"+playlist.getName()+"-"+playlist.getId()+".jpg"))){
+                    System.out.println("-- saved");
+                }
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+
+            playlist.setArtwork("uploads/"+playlist.getName()+"-"+playlist.getId()+".jpg");
+
+        }
+
         Playlist result = playlistRepository.save(playlist);
         playlistSearchRepository.save(result);
         return ResponseEntity.ok()
@@ -112,12 +186,47 @@ public class PlaylistResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<List<Playlist>> getAllPlaylists(Pageable pageable)
+    public ResponseEntity<List<PlaylistDTO>> getAllPlaylists(Pageable pageable)
         throws URISyntaxException {
         log.debug("REST request to get a page of Playlists");
-        Page<Playlist> page = playlistRepository.findAll(pageable);
+        Page<Playlist> page = playlistRepository.findByUserIsCurrentUser(pageable);
+
+        List<PlaylistDTO> listPlaylistDTO = new ArrayList<>();
+        User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).get();
+        ZonedDateTime now = ZonedDateTime.now();
+
+        for(Playlist playlist:page.getContent()){
+
+            Playlist_user playlist_user = playlist_userRepository.findExistUserLiked(playlist.getId(),user.getLogin());
+            PlaylistDTO playlistDTO = new PlaylistDTO();
+
+            playlistDTO.setPlaylist(playlist);
+
+            if(playlist_user == null || playlist_user.getLiked() == null || !playlist_user.getLiked()){
+                playlistDTO.setLiked(false);
+            }
+            else{
+                playlistDTO.setLiked(true);
+            }
+
+            if(playlist_user == null || playlist_user.getShared() == null || !playlist_user.getShared()){
+                playlistDTO.setShared(false);
+            }
+            else{
+                playlistDTO.setShared(true);
+            }
+
+            int countLikes = playlist_userRepository.findTotalLikes(playlist.getId());
+            int countShares = playlist_userRepository.findTotalShares(playlist.getId());
+            playlistDTO.setTotalLikes(countLikes);
+            playlistDTO.setTotalShares(countShares);
+
+            listPlaylistDTO.add(playlistDTO);
+
+        }
+
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/playlists");
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
+        return new ResponseEntity<>(listPlaylistDTO, headers, HttpStatus.OK);
     }
 
     /**
@@ -130,6 +239,7 @@ public class PlaylistResource {
     public ResponseEntity<Playlist> getPlaylist(@PathVariable Long id) {
         log.debug("REST request to get Playlist : {}", id);
         Playlist playlist = playlistRepository.findOneWithEagerRelationships(id);
+
         return Optional.ofNullable(playlist)
             .map(result -> new ResponseEntity<>(
                 result,
@@ -298,6 +408,9 @@ public class PlaylistResource {
     public ResponseEntity<List<Playlist>> getPlaylistsUser(@PathVariable String login, Pageable pageable) throws URISyntaxException {
 
         Page<Playlist> page = playlistRepository.findPlaylistsUser(login,pageable);
+
+
+
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/playlistUser");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }

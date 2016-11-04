@@ -3,8 +3,80 @@
  */
 angular.module('soundxtreamappApp')
     .controller('playerPlaylistController', ['$scope','Principal','$rootScope','Song','Auth','$state',
-        '$cookies', '$http', '$q',
-        function ($scope,Principal,$rootScope,Song,Auth,$state,$cookies, $http, $q) {
+        '$cookies', '$http', '$q', '$cookies',
+        function ($scope,Principal,$rootScope,Song,Auth,$state,$cookies, $http, $q, $cookies) {
+
+            var volumeCookie = $cookies.get("volume");
+
+            var myEl = $('.volume-button' );
+
+            var opened = false;
+
+            myEl.click(function (event) {
+
+                if(opened){
+                    $('#volume-slider').animate({
+                        height: "0px"
+                    })
+                    opened = false;
+                }else{
+                    $('#volume-slider').animate({
+                        height: "120px"
+                    })
+                    opened = true;
+                }
+                event.stopPropagation()
+            });
+
+            /*myEl.on("tap",function(){
+                if(!tapped){
+                    tapped = true;
+                    $('#volume-slider').animate({
+                        height: "120px"
+                    })
+                }else{
+                    tapped = false;
+                    $('#volume-slider').animate({
+                        height: "0px"
+                    })
+                }
+
+            });*/
+
+            $('.ui-slider-handle').draggable();
+
+            $(window).click(function(event){
+                var target = $(event.target);
+                if(target.not('.volume-button') && target.not('.volume-button') && target.not('#volume-slider')){
+                    $('#volume-slider').animate({
+                        height: "0px"
+                    })
+                    opened = false;
+                }
+            })
+
+            $("#volume").slider({
+                orientation: "vertical",
+                min: 0,
+                max: 100,
+                value: 0,
+                range: "min",
+                create: function() {
+                    if(volumeCookie == undefined){
+                        $( this ).slider( "value", 100 );
+                        mediaPlayer.volume = 1;
+                    }
+                    else{
+                        $( this ).slider( "value", volumeCookie );
+                        mediaPlayer.volume = volumeCookie / 100;
+                    }
+                },
+                slide: function(event, ui) {
+                    mediaPlayer.volume = ui.value / 100;
+                    $cookies.put("volume",ui.value);
+                }
+            });
+
             this.audioPlaylist = [];
             //De donde esta sonando( playlist, cancion solo)
             this.playlistCurrent = null;
@@ -24,6 +96,9 @@ angular.module('soundxtreamappApp')
             };
 
             $scope.logout = function () {
+                this.audioPlaylist = [];
+                this.playlistCurrent = null;
+                mediaPlayer.pause();
                 Auth.logout();
                 $rootScope.account = {};
                 $state.go('login');
@@ -352,6 +427,7 @@ angular.module('soundxtreamappApp')
             $(document).mouseup(function (e) {
                 if (timeDrag) {
                     timeDrag = false;
+                    mediaPlayer.play();
                 }
             });
 
@@ -367,17 +443,20 @@ angular.module('soundxtreamappApp')
                     }
 
                     seekDrag(e);
+                    mediaPlayer.pause();
                 }
             });
             $('.timeline').mousemove(function (e) {
                 if (timeDrag) {
                     e.preventDefault();
                     seekDrag(e);
+                    mediaPlayer.pause();
                 }
             });
             $(document).mouseleave(function(){
                 if (timeDrag) {
                     timeDrag = false;
+                    mediaPlayer.play();
                 }
             });
 

@@ -1,8 +1,8 @@
 'use strict';
 
 angular.module('soundxtreamappApp', ['LocalStorageModule', 'tmh.dynamicLocale', 'pascalprecht.translate',
-    'ngResource', 'ngCookies', 'ngAria', 'ngCacheBuster', 'ngFileUpload', 'ngImgCrop','mediaPlayer','ngMaterial','ngAnimate',
-    'toaster', 'ui.select','ngSanitize','angularTrix','ngMessages','720kb.socialshare','hm.readmore','ui.mention',
+    'ngResource', 'ngCookies', 'ngAria', 'ngCacheBuster', 'ngFileUpload','mediaPlayer','ngMaterial','ngAnimate',
+    'toaster', 'ui.select','ngSanitize','angularTrix','ngMessages','720kb.socialshare','hm.readmore','ui.mention', 'uiCropper',
     // jhipster-needle-angularjs-add-module JHipster will add new module here
     'ui.bootstrap', 'ui.router',  'infinite-scroll', 'angular-loading-bar'])
     .run(function ($log, $rootScope, $location, $window, $http, $state, $translate, Language, Auth, Principal, ENV, VERSION) {
@@ -28,6 +28,7 @@ angular.module('soundxtreamappApp', ['LocalStorageModule', 'tmh.dynamicLocale', 
                 $('.load_circle_wrapper').addClass("loaded");
 
                 //loggit.logSuccess("Welcome to Groovy! Navigate and add songs to your playlists.");
+
 
             },1500);
 
@@ -123,6 +124,7 @@ angular.module('soundxtreamappApp', ['LocalStorageModule', 'tmh.dynamicLocale', 
 
 
         //cfpLoadingBarProvider.spinnerTemplate = '<div><span class="fa fa-spinner">Loading...</div>';
+        cfpLoadingBarProvider.includeBar = false;
         cfpLoadingBarProvider.includeSpinner = false;
         //enable CSRF
         $httpProvider.defaults.xsrfCookieName = 'CSRF-TOKEN';

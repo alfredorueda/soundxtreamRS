@@ -14,18 +14,19 @@
         <link rel="stylesheet" href="bower_components/angular-loading-bar/build/loading-bar.css" />
         <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="bower_components/Ionicons/css/ionicons.css" />
-        <link rel="stylesheet" href="bower_components/ng-img-crop/compile/minified/ng-img-crop.css" />
         <link rel="stylesheet" href="bower_components/AngularJS-Toaster/toaster.css" />
         <link rel="stylesheet" href="bower_components/ui-select/dist/select.css" />
         <link rel="stylesheet" href="bower_components/angular-material/angular-material.css" />
         <link rel="stylesheet" href="bower_components/trix/dist/trix.css" />
-        <link rel="stylesheet" href="bower_components/ng-img-crop-full-extended/compile/minified/ng-img-crop.css" />
+        <link rel="stylesheet" href="bower_components/ui-cropper/compile/minified/ui-cropper.css" />
+        <link rel="stylesheet" href="bower_components/angular-xeditable/dist/css/xeditable.css" />
         <!-- endbower -->
         <!-- endbuild -->
         <link rel="stylesheet" href="assets/font-awesome-4.5.0/css/font-awesome.css">
         <link rel="stylesheet" href="bower_components/material-design-icons/iconfont/material-icons.css">
+        <link rel="stylesheet" href="bower_components/mdi/css/materialdesignicons.min.css">
+        <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
         <link rel="stylesheet" href="assets/styles/main.css">
-        <link rel="stylesheet" href="assets/styles/styles.css">
         <link rel="stylesheet" href="assets/styles/style-sx.css">
         <!-- endbuild -->
     </head>
@@ -34,14 +35,15 @@
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
         <toaster-container toaster-options="{'close-button':true, 'position-class': 'toast-bottom-right'}"></toaster-container>
-        <aside ui-view="navbar" style="overflow: hidden;" id="nav-container" ng-show="isAuthenticated()"></aside>
-        <section data-ng-include=" 'scripts/components/navbar/header.html' " id="header" class="top-header"></section>
 
-        <section id="content">
-            <div ui-view="content" class="app-content"></div>
-        </section>
 
-        <div class="player-wrapper" ng-cloak="" ng-show="mediaPlayer.currentTrack">
+        <div id="app-container">
+            <aside ui-view="navbar" style="/* overflow: hidden; */" id="nav-container" ng-show="isAuthenticated()"></aside>
+
+            <div id="content" ui-view="content"></div>
+        </div>
+
+        <div class="player-wrapper" id="player" ng-cloak="" ng-show="mediaPlayer.currentTrack">
             <audio id="mediaPlayer" media-player="mediaPlayer" playlist="playerPlaylist.audioPlaylist"></audio>
             <div class="player-controls">
                 <div class="prev-track-button" ng-click="mediaPlayer.prev()">
@@ -71,6 +73,9 @@
                 </div>
                 <div class="volume-button">
                     <i class="material-icons">volume_up</i>
+                    <div id="volume-slider" style="background-image: url({{playerPlaylist.getSongImage(mediaPlayer.currentTrack)}});">
+                        <div id="volume"></div>
+                    </div>
                 </div>
                 <!--<div class="playlist-button">
                     <md-switch tooltip-placement="top" uib-tooltip="Show playlist" tooltip-append-to-body="true" ng-model="playerPlaylist.showPlaylist" md-no-ink class="sx-switch md-primary" aria-label="Show playlist">
@@ -92,42 +97,6 @@
                 <div style="background-image: url({{playerPlaylist.getSongImage(mediaPlayer.currentTrack)}});" class="artist__blur image_bg_player"></div>
             </div>
         </div>
-        <div class="page-loading-overlay">
-            <div class="loader-2"></div>
-        </div>
-        <div class="load_circle_wrapper">
-            <div class="loading_spinner">
-                <div id="wrap_spinner">
-                    <div id="loader">
-                        <ul>
-                            <li></li>
-                            <li></li>
-                            <li></li>
-                            <li></li>
-                            <li></li>
-                            <li></li>
-                        </ul>
-                    </div>
-                    <div class="text_loading">
-                        <span>S</span>
-                        <span>O</span>
-                        <span>U</span>
-                        <span>N</span>
-                        <span>D</span>
-                        <span>X</span>
-                        <span>T</span>
-                        <span>R</span>
-                        <span>E</span>
-                        <span>A</span>
-                        <span>M</span>
-                    </div>
-                </div>
-                <br/>
-
-            </div>
-        </div>
-
-
         <div ui-view="login"></div>
 
         <!-- Google Analytics: uncomment and change UA-XXXXX-X to be your site's ID.
@@ -166,7 +135,7 @@
         <script src="bower_components/sockjs-client/dist/sockjs.js"></script>
         <script src="bower_components/stomp-websocket/lib/stomp.min.js"></script>
         <script src="bower_components/jquery-ui/jquery-ui.js"></script>
-        <script src="bower_components/ng-img-crop/compile/minified/ng-img-crop.js"></script>
+        <!--<script src="bower_components/ng-img-crop/compile/minified/ng-img-crop.js"></script>-->
         <script src="bower_components/angular-media-player/dist/angular-media-player.min.js"></script>
         <script src="bower_components/angular-dragdrop/src/angular-dragdrop.js"></script>
         <script src="bower_components/angular-animate/angular-animate.js"></script>
@@ -177,10 +146,13 @@
         <script src="bower_components/angular-timeago/src/timeAgo.js"></script>
         <script src="bower_components/trix/dist/trix.js"></script>
         <script src="bower_components/angular-trix/dist/angular-trix.js"></script>
-        <script src="bower_components/ng-img-crop-full-extended/compile/minified/ng-img-crop.js"></script>
+        <!--<script src="bower_components/ng-img-crop-full-extended/compile/minified/ng-img-crop.js"></script>-->
         <script src="bower_components/angular-socialshare/dist/angular-socialshare.min.js"></script>
         <script src="bower_components/angular-read-more/dist/readmore.min.js"></script>
         <script src="bower_components/angular-ui-mention/dist/mention.js"></script>
+        <script src="bower_components/angular-xeditable/dist/js/xeditable.js"></script>
+        <script src="assets/js/jquery.ui.touch-punch.min.js"></script>
+        <script src="bower_components/ui-cropper/compile/minified/ui-cropper.js"></script>
         <!-- endbower -->
         <!-- endbuild -->
 
@@ -332,6 +304,15 @@
     <script src="scripts/components/entities/samples/samples.service.js"></script>
     <script src="scripts/components/entities/samples/samples.search.service.js"></script>
     <script src="scripts/app/main/stream.controller.js"></script>
+    <script src="scripts/app/library-page/library.js"></script>
+    <script src="scripts/app/library-page/library.controller.js"></script>
+    <script src="scripts/app/entities/playlist_user/playlist_user.js"></script>
+    <script src="scripts/app/entities/playlist_user/playlist_user.controller.js"></script>
+    <script src="scripts/app/entities/playlist_user/playlist_user-dialog.controller.js"></script>
+    <script src="scripts/app/entities/playlist_user/playlist_user-delete-dialog.controller.js"></script>
+    <script src="scripts/app/entities/playlist_user/playlist_user-detail.controller.js"></script>
+    <script src="scripts/components/entities/playlist_user/playlist_user.service.js"></script>
+    <script src="scripts/components/entities/playlist_user/playlist_user.search.service.js"></script>
     <!-- endbuild -->
 </body>
 </html>

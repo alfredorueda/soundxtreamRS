@@ -14,6 +14,7 @@
                 "comments": "Comments",
                 "seguimiento": "Seguimiento",
                 "samples": "Samples",
+                "playlist_user": "Playlist_user",
                 "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
             },
             "account": {

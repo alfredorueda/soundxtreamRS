@@ -1,0 +1,82 @@
+<div>
+    <h2 translate="soundxtreamappApp.playlist_user.home.title">Playlist_users</h2>
+    <jh-alert></jh-alert>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-4 no-padding-left">
+                <button class="btn btn-primary" ui-sref="playlist_user.new" >
+                    <span class="glyphicon glyphicon-plus"></span>
+                    <span 
+class="hidden-xs"                        translate="soundxtreamappApp.playlist_user.home.createLabel">Create new Playlist_user
+                    </span>
+                </button>
+            </div>
+            <div class="col-xs-8 no-padding-right">
+                <form name="searchForm" class="form-inline">
+                    <div class="input-group pull-right" >
+                        <input type="text" class="form-control" ng-model="searchQuery" id="searchQuery" placeholder="{{ 'soundxtreamappApp.playlist_user.home.search' | translate }}">
+                        <span  class="input-group-btn width-min" >
+                            <button class="btn btn-info" ng-click="search()">
+                                <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                        </span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <div class="table-responsive">
+        <table class="jh-table table table-striped">
+            <thead>
+                <tr jh-sort="predicate" ascending="reverse" callback="reset()">
+                    <th jh-sort-by="id"><span translate="global.field.id">ID</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="liked"><span translate="soundxtreamappApp.playlist_user.liked">Liked</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="shared"><span translate="soundxtreamappApp.playlist_user.shared">Shared</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="likedDate"><span translate="soundxtreamappApp.playlist_user.likedDate">LikedDate</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="sharedDate"><span translate="soundxtreamappApp.playlist_user.sharedDate">SharedDate</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="user.login"><span translate="soundxtreamappApp.playlist_user.user">user</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th jh-sort-by="playlist.login"><span translate="soundxtreamappApp.playlist_user.playlist">playlist</span> <span class="glyphicon glyphicon-sort"></span></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody infinite-scroll="loadPage(page + 1)" infinite-scroll-disabled="links['last'] == page">
+                <tr ng-repeat="playlist_user in playlist_users track by playlist_user.id">
+                    <td><a ui-sref="playlist_user.detail({id:playlist_user.id})">{{playlist_user.id}}</a></td>
+                    <td>{{playlist_user.liked}}</td>
+                    <td>{{playlist_user.shared}}</td>
+                    <td>{{playlist_user.likedDate | date:'medium'}}</td>
+                    <td>{{playlist_user.sharedDate | date:'medium'}}</td>
+                    <td>
+                        {{playlist_user.user.login}}
+                    </td>
+                    <td>
+                        <a ui-sref="playlist.detail({id:playlist_user.playlist.id})">{{playlist_user.playlist.login}}</a>
+                    </td>
+                    <td class="text-right">
+                        <div class="btn-group flex-btn-group-container">
+                            <button type="submit"
+                                    ui-sref="playlist_user.detail({id:playlist_user.id})"
+                                    class="btn btn-info btn-sm"> 
+                                <span class="glyphicon glyphicon-eye-open"></span>
+                                <span class="hidden-xs hidden-sm" translate="entity.action.view"></span>
+                            </button>
+                            <button type="submit"
+                                    ui-sref="playlist_user.edit({id:playlist_user.id})"
+                                    class="btn btn-primary btn-sm">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                                <span class="hidden-xs hidden-sm" translate="entity.action.edit"></span>
+                            </button>
+                            <button type="submit"
+                                    ui-sref="playlist_user.delete({id:playlist_user.id})"
+                                    class="btn btn-danger btn-sm">                                    
+                                <span class="glyphicon glyphicon-remove-circle"></span>
+                                <span class="hidden-xs hidden-sm" translate="entity.action.delete"></span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

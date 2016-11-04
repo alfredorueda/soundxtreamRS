@@ -64,7 +64,7 @@
         </md-content>
     </div>
 </div>-->
-<md-content>
+<div>
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-top: 20px;margin-bottom: 20px;">
             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="width: 19%;">
@@ -85,56 +85,116 @@
                     <h5>{{user.login}}</h5>
                     <h6>{{user.firstName}}, {{user.lastName}}</h6>
                 </div>
-                <button ng-if="account.login != user.login" type="button"
-                        ng-class="{true:'like__button active',false:'like__button'}[user.followedByUser]"
+                <button ng-if="account.login != user.login || isAuthenticated" type="button" ng-class="{true:'like__button active',false:'like__button'}[user.followedByUser]"
                         ng-click="follow(user)" class="sx__button like__button">
-                    {{user.followedByUser ? 'Following' : 'Follow'}}
+                    <span ng-if="user.followedByUser"><i class="mdi mdi-check"></i> Following</span>
+                    <span ng-if="!user.followedByUser"><i class="mdi mdi-plus"></i> Follow</span>
+                </button>
+
+                <button ng-if="!isAuthenticated" type="button"class="sx__button sx_button_locked" ng-click="follow(user)">
+                    <i class="mdi mdi-lock-outline"></i> Login to follow {{user.login}}
                 </button>
             </div>
         </div>
     </div>
     <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-bottom: 10px;">
-            <ul class="nav nav-tabs">
-                <li role="presentation" class="active" ui-sref="user-profile({login:user.login})"
-                    ui-sref-active-eq="active">
-                    <a>About {{user.login}}</a>
-                </li>
-                <li role="presentation" class="active" ui-sref="user-profile.likes({login:user.login})"
-                    ui-sref-active-eq="active">
-                    <a>Likes
-                        <small>{{totalLikes}}</small>
-                    </a>
-                </li>
-                <li role="presentation" class="active" ui-sref="user-profile.playlists({login:user.login})"
-                    ui-sref-active-eq="active">
-                    <a>Playlists</a>
-                </li>
-                <li role="presentation" class="active" ui-sref="user-profile.tracks({login:user.login})"
-                    ui-sref-active-eq="active">
-                    <a>Tracks</a>
-                </li>
-            </ul>
-        </div>
-        <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8" ui-view="user-view">
-            <div>
-                {{user.description}}
-            </div>
-        </div>
-        <div class="col-md-4">
+        <div class="col-md-12">
             <div class="row">
-                    <div class="col-md-4" ui-sref="user-profile.followers">
-                        <p><span><i class="fa fa-users" aria-hidden="true"></i> Followers</span></p>
-                        <p style="font-size: 17px;margin-top: -9px;">{{user.totalFollowers}}</p>
-                    </div>
-                    <div class="col-md-4" ui-sref="user-profile.following">
-                        <p><span><i class="fa fa-users" aria-hidden="true"></i> Following</span></p>
-                        <p style="font-size: 17px;margin-top: -9px;">{{user.totalFollowings}}</p>
-                    </div>
+                <div class="col-md-4" ui-sref="user-profile.followers">
+                    <p><span><i class="fa fa-users" aria-hidden="true"></i> Followers</span></p>
+                    <p style="font-size: 17px;margin-top: -9px;">{{user.totalFollowers}}</p>
+                </div>
+                <div class="col-md-4" ui-sref="user-profile.following">
+                    <p><span><i class="fa fa-users" aria-hidden="true"></i> Following</span></p>
+                    <p style="font-size: 17px;margin-top: -9px;">{{user.totalFollowings}}</p>
+                </div>
             </div>
         </div>
     </div>
-</md-content>
+    <div ui-view="user-view">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <button class="sx__button sx_button_floated to-left" ui-sref="user-profile.tracks">View all</button>
+                <h3 class="h3_title">
+                    <i class="mdi mdi-bookmark-music mdi-36px mdi-sx-orange" aria-hidden="true"></i>
+                    <span style="display: inline-flex;vertical-align: text-top;margin-top: -8px;" class="titles">{{user.login}}'S TRACKS</span>
+                </h3>
+                <div ng-repeat="songDTO in tracksUser track by songDTO.song.id" class="track-wrapper" style="background-image: url({{songDTO.song.artwork}});">
+                    <div class="track-container">
+                        <h5 style="cursor: pointer;text-align: center;"
+                            ui-sref="song.detail({accessUrl: songDTO.song.access_url,user: songDTO.song.user.login, id: songDTO.song.id})">
+                            <div class="blur">
+                                <div class="background" style="background-image: url({{songDTO.song.artwork}});"></div>
+                            </div>
+                            <span>{{songDTO.song.name}}</span>
+                        </h5>
+                        <div class="badge latest_badge" ng-if="$index == 0">Newest</div>
+                        <!--<div class="sx__button sx_button_bottom"
+                             ng-if="playerPlaylist.getSongId(mediaPlayer.currentTrack) == songDTO.song.id && playerPlaylist.playlistCurrent == 'fromTracks'+user.login"
+                             ng-click="mediaPlayer.playPause()">
+                            {{ mediaPlayer.playing ? 'Pause' : 'Play' }}
+                        </div>
+                        <div class="sx__button sx_button_bottom" ng-if="playerPlaylist.getSongId(mediaPlayer.currentTrack) != songDTO.song.id || playerPlaylist.playlistCurrent != 'fromTracks'+user.login"
+                             ng-click="playerPlaylist.addSongAll(tracksUser,mediaPlayer,$index,'fromTracks'+user.login)">
+                            Play
+                        </div>-->
+
+                        <button class="sx__button sx_button_player" ng-if="playerPlaylist.getSongId(mediaPlayer.currentTrack) == songDTO.song.id && playerPlaylist.playlistCurrent == 'fromTracks'+user.login"
+                                ng-click="mediaPlayer.playPause()">
+                            <i ng-if="!mediaPlayer.playing" class="mdi mdi-play mdi-24px"></i>
+                            <i ng-if="mediaPlayer.playing" class="mdi mdi-pause mdi-24px"></i>
+                        </button>
+                        <button class="sx__button sx_button_player" ng-if="playerPlaylist.getSongId(mediaPlayer.currentTrack) != songDTO.song.id || playerPlaylist.playlistCurrent != 'fromTracks'+user.login"
+                                ng-click="playerPlaylist.addSongAll(tracksUser,mediaPlayer,$index,'fromTracks'+user.login)">
+                            <i class="mdi mdi-play mdi-24px"></i>
+                        </button>
+                        <div class="stats">
+                            <button class="sx__button like__button"
+                                    ng-class="{true:'like__button active',false:'like__button'}[songDTO.liked]"
+                                    ng-click="like(songDTO.song.id)">
+                                <i class="fa fa-heart-o fa-lg"></i>{{songDTO.totalLikes}}
+                            </button>
+                            <button class="sx__button like__button"
+                                    ng-class="{true:'like__button active',false:'like__button'}[songDTO.shared]"
+                                    ng-click="share(songDTO.song.id)">
+                                <i class="fa fa-retweet fa-lg" aria-hidden="true"></i>{{songDTO.totalShares}}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <h3 class="h3_title">
+                    <i class="mdi mdi-bookmark-music mdi-36px mdi-sx-orange" aria-hidden="true"></i>
+                    <span style="display: inline-flex;vertical-align: text-top;margin-top: -8px;" class="titles">{{user.login}}'S PLAYLISTS</span>
+                </h3>
+                <div ng-repeat="songDTO in tracksUser track by songDTO.song.id" class="track-wrapper" style="background-image: url({{songDTO.song.artwork}});">
+                    <div class="track-container">
+                        <h5 style="cursor: pointer;text-align: center;"
+                            ui-sref="song.detail({accessUrl: songDTO.song.access_url,user: songDTO.song.user.login, id: songDTO.song.id})">
+                            <div class="blur">
+                                <div class="background" style="background-image: url({{songDTO.song.artwork}});"></div>
+                            </div>
+                            <span>{{songDTO.song.name}}</span>
+                        </h5>
+                        <div class="badge latest_badge" ng-if="$index == 0">LATEST</div>
+                        <div class="sx__button sx_button_bottom"
+                             ng-if="playerPlaylist.getSongId(mediaPlayer.currentTrack) == songDTO.song.id && playerPlaylist.playlistCurrent == 'fromTracks'+user.login"
+                             ng-click="mediaPlayer.playPause()">
+                            {{ mediaPlayer.playing ? 'Pause' : 'Play' }}
+                        </div>
+                        <div class="sx__button sx_button_bottom" ng-if="playerPlaylist.getSongId(mediaPlayer.currentTrack) != songDTO.song.id || playerPlaylist.playlistCurrent != 'fromTracks'+user.login"
+                             ng-click="playerPlaylist.addSongAll(tracksUser,mediaPlayer,$index,'fromTracks'+user.login)">
+                            Play
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <style>
     .btn-upload-over {
         position: absolute;
@@ -151,4 +211,152 @@
         width: 400px;
         border-radius: 0px 2px 62px 0px;
     }
+
+    .track-container .blur > .background {
+        top: 0!important;
+        bottom: 0!important;
+    }
+
+
+
+    @media (max-width: 1368px){
+        .track-wrapper {
+            //width: 350px;
+            /*width: 175px;
+            height: 175px;*/
+            width: 185px!important;
+            height: 185px;
+        }
+    }
+
+    @media (min-width: 1280px){
+        .h3_title+.track-wrapper{
+            /*width: 350px;
+            height: 350px;*/
+            width: 370px!important;;
+            height: 370px!important;;
+            float: left!important;
+        }
+
+        .h3_title+.track-wrapper:before {
+            display: block;
+            content: "";
+            width: 100%;
+            padding-top: 50.1%;
+        }
+    }
+
+    .track-wrapper:before {
+        display: block;
+        content: "";
+        width: 100%;
+        padding-top: 0;
+    }
+
+    .track-container > h5 {
+        width: 100%;
+        //margin-top: -100%;
+        transition: all 0.4s ease;
+    }
+
+    .track-container{
+        overflow: hidden;
+    }
+
+    .latest_badge{
+        background: #ff5d29;
+        font-size: 22px;
+        position: absolute;
+        bottom: 10px;
+       // box-shadow: 0px 5px #d23b0b;
+        border-radius: 3px;
+        text-transform: capitalize;
+    }
+
+    /*.track-container:hover > h5{
+        margin-top: 0px;
+        transition: all 0.4s ease;
+    }*/
+    .sx_button_bottom{
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        background: #ff5d29;
+        color: white;
+        border-color: #ff5d29;
+    }
+
+    @media (max-width: 768px){
+        .track-wrapper{
+            width: 100%;
+            height: auto;
+        }
+        .track-wrapper:before{
+            display: block;
+            content: "";
+            width: 100%;
+            padding-top: 56.25%!important;
+        }
+    }
+
+    .sx__button.sx_button_floated.to-left{
+        left: 1053px;
+    }
+
+    button.sx__button.sx_button_player {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-45%, -45%);
+        background: #ff5d29;
+        color: white;
+        border-color: #ff5d29;
+        border-radius: 100%;
+        height: 42px;
+        width: 42px;
+        padding-top: 6px;
+        padding-left: 8.5px;
+    }
+
+    button.sx__button.sx_button_player:hover{
+        border-radius: 100%!important;
+        height: 42px;
+        width: 42px;
+        padding-top: 6px!important;
+        padding-left: 8.5px!important;
+    }
+
+    .stats{
+        position: absolute;
+        bottom: 0px;
+        background: rgba(0,0,0,.78);
+        left: -100%;
+        transition: left .4s ease;
+        width: 100%;
+        padding: 10px;
+    }
+
+    .track-container:hover .stats{
+        left: 0px;
+        padding: 10px;
+        transition: left .4s ease;
+
+        bottom: 0px;
+        background: rgba(0,0,0,.78);
+        width: 100%;
+    }
+
+    button.sx__button.sx_button_locked {
+        background: #989898;
+        color: #fff;
+        border: 1px solid rgba(0,0,0,.2);
+    }
+
+    button.sx__button.sx_button_locked:hover {
+        background: #808080!important;
+        color: #fff!important;
+        border: 1px solid rgba(0,0,0,.2)!important;
+    }
+
 </style>
+

@@ -26,6 +26,4 @@ public interface PlaylistRepository extends JpaRepository<Playlist,Long> {
     @Query("select playlist from Playlist playlist where playlist.user.login = :login")
     Page<Playlist> findPlaylistsUser(@Param("login") String login,Pageable pageable);
 
-
-
 }

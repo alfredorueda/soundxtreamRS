@@ -35,11 +35,11 @@
                 <div class="form-group">
                     <div ngf-drop ng-model="picFile" ngf-pattern="image/*" accept="image/*"
                          class="cropArea">
-                        <img-crop area-type="square" image="picFile  | ngfDataUrl"
+                        <ui-cropper area-type="square" image="picFile  | ngfDataUrl"
                                   result-image="croppedArtwork" result-image-size="500"
                                   ng-init="croppedArtwork=''"
                                   result-image-quality="1.0">
-                        </img-crop>
+                        </ui-cropper>
                         <button type="button" ngf-select ng-model="picFile" class="btn-upload-over sx__button sx__button__primary"
                                 accept="image/*">
                             Select Picture
@@ -91,9 +91,11 @@
 
                 .track-playlist {
                     padding: 10px;
-                    background: #6F00F8;
+                    background: rgb(49, 49, 49);
                     color: #fff;
                 }
+
+
 
                 md-divider {
                     color: #fff;
@@ -112,10 +114,10 @@
                         <div style="position: relative;" ngf-max-total-size="'10MB'" ngf-drop
                              ng-model="bannerFile" ngf-pattern="image/*" accept="image/*"
                              class="cropAreaBanner">
-                            <img-crop area-type="rectangle" aspect-ratio="3" image="bannerFile  | ngfDataUrl"
+                            <ui-cropper area-type="rectangle" aspect-ratio="3" image="bannerFile  | ngfDataUrl"
                                       result-image="croppedBanner" result-image-size='{w: 2480,h: 800}'
                                       ng-init="croppedBanner=''" result-image-quality="1.0">
-                            </img-crop>
+                            </ui-cropper>
                             <button type="button" ngf-select ng-model="bannerFile"
                                     class="btn-upload-over sx__button sx__button__primary"
                                     accept="image/*">

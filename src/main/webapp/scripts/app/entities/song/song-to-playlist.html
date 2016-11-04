@@ -26,7 +26,7 @@
     <div flex-gt-sm="50" flex>
         <div class="playlist-items">
             <md-list>
-                <md-subheader class="md-header-sx md-no-sticky">Your playlists</md-subheader>
+                <md-subheader class="md-header-sx md-no-sticky header_add_track">Your playlists</md-subheader>
                 <md-divider></md-divider>
                 <md-list-item ng-repeat="playlist in playlists" ng-click="add(playlist.id)" class="noright">
                     <img alt="{{ playlist.artwork }}" ng-src="{{ playlist.artwork }}" class="md-avatar"/>
@@ -39,14 +39,14 @@
     <div flex-gt-sm="50" flex>
         <div class="playlist-create">
             <md-list>
-                <md-subheader class="md-header-sx md-header">No playlist?</md-subheader>
+                <md-subheader class="md-header-sx md-header header_add_track">No playlist?</md-subheader>
                 <md-divider></md-divider>
                 <input type="text" required class="form-control input_sx_mat" ng-change="checkName()" ng-model="playlistNew.name"
                        placeholder="Create a playlist">
                 <div ng-show="errorName" class="sx__padding_button">
                     <span class="error_span" ng-show="errorName">Error: Ya existe una playlist con el nombre {{playlistNew.name}}</span>
                 </div>
-                <button class="sx__button sx__padding_button" ng-click="create()">Create</button>
+                <button style="margin-left: 10px;margin-top: 3px;margin-bottom: 3px;" class="sx__button" ng-click="create()">Create</button>
             </md-list>
         </div>
     </div>
@@ -63,5 +63,13 @@
         margin-left: 10px;
         //width: 97%;
         width: 93%;
+    }
+    md-list {
+        display: block;
+        padding: 0px 0px 0px 0px;
+    }
+    .header_add_track{
+        background: #f50;
+        color: #fff;
     }
 </style>

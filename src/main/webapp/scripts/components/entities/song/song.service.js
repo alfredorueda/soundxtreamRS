@@ -12,6 +12,11 @@ angular.module('soundxtreamappApp')
                     return data;
                 }
             },
+            'queryForPlayer': {
+                method: 'GET',
+                isArray: true,
+                url: 'api/tracksPlayer/user/logged'
+            },
             'update': { method:'PUT' },
             'getComments': {
                 method: 'GET',

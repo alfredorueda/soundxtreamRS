@@ -26,7 +26,7 @@ angular.module('soundxtreamappApp')
             })
             .state('playlist.detail', {
                 parent: 'playlist',
-                url: '/playlists/{id}',
+                url: '/{id}',
                 data: {
                     authorities: [],
                     pageTitle: 'soundxtreamappApp.playlist.detail.title'

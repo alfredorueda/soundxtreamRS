@@ -1,0 +1,66 @@
+
+<form name="editForm" role="form" novalidate ng-submit="save()">
+
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
+                ng-click="clear()">&times;</button>
+        <h4 class="modal-title" id="myPlaylist_userLabel" translate="soundxtreamappApp.playlist_user.home.createOrEditLabel">Create or edit a Playlist_user</h4>
+    </div>
+    <div class="modal-body">
+        <jh-alert-error></jh-alert-error>
+        <div class="form-group">
+            <label for="id" translate="global.field.id">ID</label>
+            <input type="text" class="form-control" id="id" name="id"
+                    ng-model="playlist_user.id" readonly />
+        </div>
+        <div class="form-group">
+            <label class="control-label" translate="soundxtreamappApp.playlist_user.liked" for="field_liked">Liked</label>
+            <input type="checkbox" class="form-control" name="liked" id="field_liked"
+                    ng-model="playlist_user.liked"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" translate="soundxtreamappApp.playlist_user.shared" for="field_shared">Shared</label>
+            <input type="checkbox" class="form-control" name="shared" id="field_shared"
+                    ng-model="playlist_user.shared"
+                     />
+        </div>
+        <div class="form-group">
+            <label class="control-label" translate="soundxtreamappApp.playlist_user.likedDate" for="field_likedDate">LikedDate</label>
+            <input id="field_likedDate" type="text" class="form-control" uib-datepicker-popup="{{dateformat}}" ng-model="playlist_user.likedDate" is-open="datePickerForLikedDate.status.opened"
+            />
+            <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="datePickerForLikedDateOpen($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+            </span>
+        </div>
+        <div class="form-group">
+            <label class="control-label" translate="soundxtreamappApp.playlist_user.sharedDate" for="field_sharedDate">SharedDate</label>
+            <input id="field_sharedDate" type="text" class="form-control" uib-datepicker-popup="{{dateformat}}" ng-model="playlist_user.sharedDate" is-open="datePickerForSharedDate.status.opened"
+            />
+            <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="datePickerForSharedDateOpen($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+            </span>
+        </div>
+
+        <div class="form-group">
+            <label translate="soundxtreamappApp.playlist_user.user" for="field_user">user</label>
+            <select class="form-control" id="field_user" name="user" ng-model="playlist_user.user" ng-options="user as user.login for user in users track by user.id">
+                <option value=""></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label translate="soundxtreamappApp.playlist_user.playlist" for="field_playlist">playlist</label>
+            <select class="form-control" id="field_playlist" name="playlist" ng-model="playlist_user.playlist" ng-options="playlist as playlist.name for playlist in playlists track by playlist.id">
+                <option value=""></option>
+            </select>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-click="clear()">
+            <span class="glyphicon glyphicon-ban-circle"></span>&nbsp;<span translate="entity.action.cancel">Cancel</span>
+        </button>
+        <button type="submit" ng-disabled="editForm.$invalid || isSaving" class="btn btn-primary">
+            <span class="glyphicon glyphicon-save"></span>&nbsp;<span translate="entity.action.save">Save</span>
+        </button>
+    </div>
+</form>

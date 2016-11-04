@@ -17,7 +17,7 @@ public interface SongRepository extends JpaRepository<Song,Long> {
     @Query("select song from Song song where song.user.login = ?#{principal.username}")
     Page<Song> findByUserIsCurrentUser(Pageable pageable);
 
-    @Query("select song from Song song where song.user.login = :login")
+    @Query("select song from Song song where song.user.login = :login ORDER BY song.id desc")
     Page<Song> findByUserTracks(@Param("login") String login, Pageable pageable);
 
     @Query("select distinct song from Song song left join fetch song.styles")
@@ -29,7 +29,9 @@ public interface SongRepository extends JpaRepository<Song,Long> {
     @Query("select song from Song song left join fetch song.styles where song.access_url =:url and song.user.login =:user")
     Song findOneByAccessUrl(@Param("url") String url,@Param("user") String user);
 
-    @Query("select song from Song song where song.user.login = ?#{principal.username}")
+    @Query("select song from Song song where song.user.login = ?#{principal.username} ORDER BY song.id DESC")
     List<Song> findByUserIsCurrentUser();
 
+    @Query("select song from Song song where song.user.login = :login")
+    List<Song> findUserTrack(@Param("login") String login);
 }

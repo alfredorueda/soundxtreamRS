@@ -108,6 +108,7 @@ public class UserResource {
     @Secured(AuthoritiesConstants.ADMIN)
     public ResponseEntity<?> createUser(@RequestBody ManagedUserDTO managedUserDTO, HttpServletRequest request) throws URISyntaxException {
         log.debug("REST request to save User : {}", managedUserDTO);
+        managedUserDTO.setUser_image("/assets/images/default-image.jpg");
         if (userRepository.findOneByLogin(managedUserDTO.getLogin()).isPresent()) {
             return ResponseEntity.badRequest()
                 .headers(HeaderUtil.createFailureAlert("user-management", "userexists", "Login already in use"))

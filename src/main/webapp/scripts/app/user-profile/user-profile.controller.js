@@ -8,9 +8,9 @@ angular.module('soundxtreamappApp')
 
         Principal.identity().then(function(account) {
             $scope.account = account;
-            console.log(account);
-            $scope.isAuthenticated = Principal.isAuthenticated;
         });
+
+        $scope.isAuthenticated = Principal.isAuthenticated;
 
         $scope.isCollapsed = true;
         $scope.user = userInfo;
@@ -20,6 +20,7 @@ angular.module('soundxtreamappApp')
         $scope.page = 0;
         $scope.totalLikes = 0;
         $scope.tracksUser = [];
+        $scope.allTracksUser = [];
 
         $scope.user.$promise.then(function(){
             $http({
@@ -31,6 +32,12 @@ angular.module('soundxtreamappApp')
             $http({
                 method: 'GET',
                 url: 'api/songs/user/'+$scope.user.login
+            }).then(function successCallback(response) {
+                $scope.allTracksUser = response.data;
+            });
+            $http({
+                method: 'GET',
+                url: 'api/songs/newest/user/'+$scope.user.login
             }).then(function successCallback(response) {
                 $scope.tracksUser = response.data;
             });

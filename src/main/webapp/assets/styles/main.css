@@ -1,9 +1,6 @@
 body {
-    //font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    /*background: #fafafa;
-    color: #333;*/
-    font-family: "Interstate","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Garuda,Verdana,Tahoma,sans-serif;
-    font-size: 12px;
+    //font-family: "Interstate","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Garuda,Verdana,Tahoma,sans-serif;
+    font-family: 'Roboto', sans-serif;
     line-height: 1.42857;
 
     overflow-x: hidden;

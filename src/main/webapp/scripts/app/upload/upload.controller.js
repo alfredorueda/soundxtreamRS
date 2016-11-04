@@ -13,6 +13,10 @@ angular.module('soundxtreamappApp').controller('UploadController',
                 $scope.account = account;
             });
 
+            $scope.stepOne = false;
+            $scope.stepTwo = false;
+            $scope.stepThree = false;
+
             $scope.processing = false;
             $scope.uploadType = "track";
             $scope.styles = Style.query({});
@@ -34,9 +38,52 @@ angular.module('soundxtreamappApp').controller('UploadController',
                 bpm: null
             };
 
+            function jumpToThirdStep(percent) {
+                $('.lines-two > .lines-two-current').animate({
+                    width: percent+"%"
+                },{
+                    duration: 400,
+                    step: function( width ){
+                        if(width > 99){
+                            $('.step.second_step').removeClass("current_step");
+                            $('.step.third_step').addClass("current_step");
+                        }
+                        if(width < 1){
+                            $('.step.third_step').removeClass("current_step");
+                            $('.step.second_step').addClass("current_step");
+                        }
+                    }
+                });
+            }
+
+            function jumpToSecondStep() {
+                $('.lines-one > .lines-one-current').animate({
+                    width: "100%"
+                },{
+                    duration: 400,
+                    step: function( width ){
+                        if(width > 99){
+                            $('.step.first_step').removeClass("current_step");
+                            $('.step.second_step').addClass("current_step");
+                        }
+                    }
+                });
+            }
+
             $scope.$watch('files', function () {
                 $scope.uploadSong($scope.files);
             });
+
+            $scope.toThreeStep = function(){
+                jumpToThirdStep(100)
+                $scope.stepThree = true;
+                $scope.stepTwo = false;
+            }
+
+            $scope.backToSecondStep = function(){
+                jumpToThirdStep(0)
+                $scope.stepThree = false;
+            }
 
             $scope.load = function (id) {
                 Song.get({id: id}, function (result) {
@@ -185,10 +232,6 @@ angular.module('soundxtreamappApp').controller('UploadController',
             $scope.uploadSong = function (files) {
                 $scope.filesUpload = files;
                 if (files != null) {
-                    /*for (var k = 0; k < files.length; k++) {
-                        uploadUsingUpload(files[k]);
-                    }*/
-
                     uploadUsingUpload(files[0]);
                     var accURL = (files[0].name.replace(/\s/g,"")).replace("(","-");
                     accURL = accURL.replace(")","").toLowerCase();
@@ -211,23 +254,11 @@ angular.module('soundxtreamappApp').controller('UploadController',
                         if (ex)
                             accURL = accURL + "" + i;
 
-
                         $scope.song.access_url = accURL;
                     });
                 }
             };
-            $scope.uploadSuccess = false;
             var upload;
-
-            /*$scope.$on('$stateChangeStart', function(event, next, current){
-             if($scope.uploadStart){
-             var result = confirm("Are you sure you want leave without save?");
-             if(!result){
-             event.preventDefault();
-             }
-             }
-
-             });*/
 
             function uploadUsingUpload(file) {
                 var songLocationName = "";
@@ -255,9 +286,8 @@ angular.module('soundxtreamappApp').controller('UploadController',
                         }
                     });
                     $scope.song.url = "uploads/" + songLocationName;
-                    $timeout(function () {
-                        $scope.uploadSuccess = !$scope.uploadSuccess;
-                    }, 1500);
+                    jumpToSecondStep();
+                    $scope.stepOne = true;
                 }, function (resp) {
                     console.log('Error status: ' + resp.status);
                 }, function (evt) {
@@ -411,7 +441,7 @@ angular.module('soundxtreamappApp').controller('UploadController',
                 items.forEach(function (item) {
                     var itemMatches = false;
 
-                    var keys = Object.keys(props); 
+                    var keys = Object.keys(props);
                     for (var i = 0; i < keys.length; i++) {
                         var prop = keys[i];
                         var text = props[prop].toLowerCase();
