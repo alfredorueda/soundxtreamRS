@@ -115,7 +115,15 @@ public class PlaylistResource {
 
         List<Song> songsList = new ArrayList<>(playlist.getSongs());
 
-        if(songsList.size() >= 4){
+        double new_duration = 0;
+
+        for(Song song:songsList){
+            new_duration += song.getDuration();
+        }
+
+        playlist.setFull_duration(new_duration);
+
+        /*if(songsList.size() >= 4){
 
             List<Image> images = new ArrayList<>();
 
@@ -170,7 +178,7 @@ public class PlaylistResource {
 
             playlist.setArtwork("uploads/"+playlist.getName()+"-"+playlist.getId()+".jpg");
 
-        }
+        }*/
 
         Playlist result = playlistRepository.save(playlist);
         playlistSearchRepository.save(result);

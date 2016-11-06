@@ -1,4 +1,4 @@
-<div class="image-background" ng-if="playlist.banner_playlist != null && playlist.artwork != null" style="position: absolute;
+<!--<div class="image-background" ng-if="playlist.banner_playlist != null && playlist.artwork != null" style="position: absolute;
     z-index: 1;
     background: rgba(0,0,0,.5);overflow:hidden;top: -15px; left: -15px; width: 110%;min-height:920px;height: 100%;
     max-height: 1080px;">
@@ -14,6 +14,10 @@
     <div style="background-image: url('{{playlist.artwork}}');filter: blur(12px);width: 100%;    height: 200%;background-attachment: fixed;background-repeat: no-repeat;
     background-size: cover;
     position: relative;"></div>
+</div>-->
+
+<div class="background">
+    <img src="{{playlist.artwork}}" alt="" height="100%" width="100%"  style="object-fit: cover; filter: blur(22px);width: 102%;margin-top: -45px;height: 112%;position: fixed;">
 </div>
 
 <div class="sx-primary-banner" ng-if="playlist.banner_playlist != null">
@@ -71,23 +75,16 @@
                     </button>
                     <button class="sx__button" ng-class="{true:'active',false:''}[songDTO.shared]"
                             ng-click="share(songDTO.song.id)">
-                        <i class="fa fa-heart-o fa-lg"></i>&nbsp;<span>Share</span>
+                        <i class="fa fa-share-square-o fa-lg"></i>&nbsp;<span>Share</span>
                     </button>
-                    <button tooltip-placement="bottom" uib-tooltip="Add in playlist" tooltip-append-to-body="true"
-                            class="sx__button" ui-sref="song.detail.addPlaylist">
-                        <i class="fa fa-plus-square-o fa-lg"></i>&nbsp;<span>Add to playlist</span>
-                    </button>
-                    <button ng-if="account.login == songDTO.song.user.login" class="sx__button"
-                            ui-sref="song.edit"><!-- ui-sref="song.edit({id:songDTO.song.id})" -->
+                    <button ng-if="account.login == playlist.user.login" class="sx__button"
+                            ui-sref="playlist.edit({id: playlist.id})">
                         <i class="fa fa-pencil-square-o fa-lg"></i>&nbsp;<span>Edit</span>
                     </button>
-                    <button ng-if="account.login == songDTO.song.user.login" class="sx__button"
-                            ui-sref="song.delete">
+                    <button ng-if="account.login == playlist.user.login" class="sx__button"
+                            ui-sref="playlist.delete({id: playlist.id})">
                         <i class="fa fa-trash fa-lg"></i>&nbsp;<span>Delete</span>
                     </button>
-
-                    <span class="badge-detail-shares">{{songDTO.totalShares | counter}} shares</span>
-                    <span class="badge-detail-likes">{{songDTO.totalLikes | counter}} likes</span>
                 </div>
             </div>
             <hr style="margin-bottom: 5px; margin-top: 5px;"/>
@@ -106,44 +103,18 @@
                         <i class="fa fa-play fa-lg"></i>&nbsp;<span>Shuffle</span>
                     </p>
                 </h5>
-                <div class="music-listing">
-                    <div class="music-listing__songs">
-                        <div class="music-listing__row trackPlaylist" style="margin-right: -10px;height: 50px;" ng-repeat="song in playlist.songs" ng-class="{true: 'trackPlaylistPlaying', false: 'trackPlaylist'}[playerPlaylist.getSongId(mediaPlayer.currentTrack) == song.id && playerPlaylist.playlistCurrent == 'playingFromPlaylist'+playlist.id]">
-                            <div class="music-listing__number">
-                                {{ $index+1 }}
+                <div class="tracks-playlist">
+                    <div class="tracks">
+                        <div class="track" ng-repeat="song in playlist.songs">
+                            <div class="track-cover">
+                                <div class="cover" style="background-image: url({{song.artwork}});"></div>
                             </div>
-                            <div style="margin-top: -5px;width: auto;display: inline-block;vertical-align: middle;line-height: 37px;">
-                                <md-button style="min-width: 0px;" class="md-play-playlistTrack" ng-if="playerPlaylist.getSongId(mediaPlayer.currentTrack) != song.id || playerPlaylist.playlistCurrent != 'playingFromPlaylist'+playlist.id"
-                                           ng-click="playerPlaylist.playTrackFromPlaylist(playlist,mediaPlayer,$index,'playingFromPlaylist'+playlist.id)"
-                                           aria-label="play">
-                                    <md-icon>
-                                        <i class="material-icons">play_arrow</i>
-                                    </md-icon>
-                                </md-button>
-                                <md-button style="min-width: 0px;" class="md-play-playlistTrack" ng-if="playerPlaylist.getSongId(mediaPlayer.currentTrack) == song.id && playerPlaylist.playlistCurrent == 'playingFromPlaylist'+playlist.id"
-                                           ng-click="mediaPlayer.playPause()" aria-label="play">
-                                    <md-icon>
-                                        <i ng-if="!mediaPlayer.playing" class="material-icons">play_arrow</i>
-                                        <i ng-if="mediaPlayer.playing" class="material-icons">pause</i>
-                                    </md-icon>
-                                </md-button>
+                            <div class="track-name">
+                                <span ui-sref="song.detail({accessUrl: song.access_url,user: song.user.login, id: song.id})">{{song.name}}</span> <small ui-sref="user-profile({login: song.user.login})">{{song.user.login}}</small>
                             </div>
-                            <div style="margin-top: -5px;width: auto;display: inline-block;vertical-align: middle;line-height: 37px;">
-                                <img style="border-radius:100%;" src="{{song.artwork}}" width="35px" height="35px"/>
-                            </div>
-                            <div class="music-listing__name" style="margin-top: 13px;margin-left: 13px;display: inline-block;vertical-align: top;">
-                                <div class="comment_text">
-                                    {{ song.name }}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="empty-comments" ng-if="playlist.songs.length == 0">
-                            <div class="empty-icon">
-                                <i class="musicicon-dj4">
-                                </i>
-                            </div>
-                            <div class="empty-message">
-                                This playlist don't have any tracks
+                            <div class="track-duration">
+                                {{song.duration | toMinSecNum}}
+                                <small style="color: darkgray;" ng-if="playlist.user.login == account.login" ng-click="removeTrack($index)">Remove</small>
                             </div>
                         </div>
                     </div>
@@ -173,6 +144,26 @@
                             <span> {{playlist.user.totalFollowers}} followers</span>
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class="col-pad">
+                <h5>Playlists from {{playlist.user.login}}</h5>
+                <ul id="user-playlists">
+                    <li class="user-playlist" ng-repeat="userPlaylist in playlistsUser" ui-sref="playlist.detail({id: userPlaylist.id})">
+                        <div class="user-playlist-cover">
+                            <img src="{{userPlaylist.artwork}}" width="100%" height="100%">
+                        </div>
+                        <div class="user-playlist-name">
+                            {{userPlaylist.name}}
+                        </div>
+                        <div class="user-playlist-numtracks">
+                            {{userPlaylist.songs.length}}
+                        </div>
+                    </li>
+                </ul>
+                <div class="empty-data" ng-if="playlistsUser.length == 0 && readyUserPlaylists">
+                    <span class="mdi mdi-eye-off mdi-48px"></span>
+                    <span>This user doesn't have more playlists</span>
                 </div>
             </div>
         </div>
@@ -219,7 +210,8 @@
         overflow: hidden;
     //right: 0px;
     //bottom: 0px;
-        max-width: 1080px;
+        //max-width: 1080px;
+        max-width:1130px;
     }
 
     .sx-primary-banner .artwork-vs-blur{
@@ -238,7 +230,8 @@
     .sx-primary-artwork{
         height: 350px;
         padding: 10px 0;
-        max-width: 1080px;
+        //max-width: 1080px;
+        max-width:1130px;
         margin: 0 auto 5px auto;
         position: relative;
         overflow: hidden;
@@ -288,7 +281,8 @@
 
     .row-track{
         height: 100%;
-        max-width: 1080px;
+       // max-width: 1080px;
+        max-width:1130px;
         margin-right: auto;
         margin-left: auto;
         position: relative;
@@ -386,6 +380,7 @@
     .track-user-noimg > .user-image > img{
         height: 100%;
         width: 100%;
+
     }
 
     .track-user-noimg > .user-image{
@@ -448,6 +443,16 @@
     }
     .music-listing__number {
         display: inline-block;
+    }
+    .background{
+        width: 100%;
+        height: 107%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        overflow: hidden;
     }
 </style>
 

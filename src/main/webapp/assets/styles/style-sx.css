@@ -1,6 +1,6 @@
 @font-face {
     font-family: bebas;
-    src: url(../font/BebasNeue_Bold.otf);
+    src: url('../font/BebasNeue_Bold.otf');
 }
 
 /* LEFT MENU */
@@ -1491,13 +1491,16 @@ ul.submenu-sx > li > a{
     min-height: 500px;
     overflow: hidden;
     background: #fff;
+    border-radius: 5px;
+    border: 1px solid #ffbda7;
 }
 
 .select_track {
     display: block;
     width: 100%;
-    height: 350px;
-    background: #fff;
+    //height: 350px;
+    //background: #fff;
+    height: 500px;
 }
 
 .edit_track {
@@ -1505,8 +1508,9 @@ ul.submenu-sx > li > a{
     width: 100%;
     height: auto;
     min-height: 200px;
-    background: #fff;
+    //background: #fff;
     overflow: hidden;
+    padding: 30px;
 }
 
 .select_images{
@@ -1514,7 +1518,7 @@ ul.submenu-sx > li > a{
     width: 100%;
     height: auto;
     min-height: 200px;
-    background: #fff;
+    //background: #fff;
     overflow: hidden;
 }
 
@@ -1658,7 +1662,12 @@ ul.submenu-sx > li > a{
 
 @media (min-width: 1400px) and (max-width: 2560px){
     .track-wrapper{
-        width: 378px!important;
+        //width: 378px!important;
+        width: 368px;
+    }
+    .player-wrapper{
+        padding-left: 90px;
+        padding-right: 90px;
     }
 }
 
@@ -1669,4 +1678,101 @@ img{
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
+
+.track > div{
+    display: inline-block;
+    height: 40px;
+    //width: auto;
+    vertical-align: top;
+}
+
+.track > div.track-cover {
+    position: relative;
+    height: 40px;
+    width: 40px;
+}
+
+.track-cover .cover{
+    height: 100%;
+    width: 100%;
+    background-size: contain;
+    background-repeat: no-repeat;
+    border-radius: 5px;
+}
+
+.track-duration {
+    float: right;
+}
+
+.track > div:not(.track-cover){
+    padding: 12px 0px 12px 0px;
+}
+
+.track:not(:last-child) {
+    padding-bottom: 2px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+    margin-top: 2px;
+}
+
+.track:last-child{
+    margin-top: 2px;
+}
+
+.track-name span, .track-name small{
+    cursor: pointer;
+}
+
+.track-name small{
+    color: darkgray;
+}
+
+.track-duration small{
+    color: darkgray;
+}
+
+.empty-data span{
+    color: darkgray;
+}
+
+.empty-data span:not(.mdi){
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+    margin-top: 14px;
+    font-size: 14px;
+}
+
+#user-playlists{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+#user-playlists .user-playlist{
+    height: 40px;
+}
+
+.user-playlist > div{
+    display: inline-block;
+    vertical-align: top;
+}
+
+.user-playlist-cover {
+    height: 40px;
+    width: 40px;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.user-playlist > div:not(.user-playlist-cover){
+    padding: 12px 0px 12px 0px;
+}
+
+.user-playlist > .user-playlist-numtracks{
+    float: right;
+}
+
+.list-playlist-item img{
+    border-radius: 5px!important;
 }

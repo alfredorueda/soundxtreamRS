@@ -4,22 +4,26 @@
     </div>
 </div>-->
 
-<div class="image-background" ng-if="songDTO.song.banner_song != null" style="position: absolute;
+<!--<div class="image-background" ng-if="songDTO.song.banner_song != null" style="position: absolute;
     z-index: 1;
     background: rgba(0,0,0,.5);overflow:hidden;top: -15px; left: -15px; width: 110%;min-height:920px;height: 100%;
     max-height: 1080px;">
     <div style="background-image: url('{{songDTO.song.artwork}}');filter: blur(12px);width: 100%;    height: 200%;background-attachment: fixed;background-repeat: no-repeat;
     background-size: cover;
     position: relative;"></div>
-</div>
+</div>-->
 
-<div class="image-background" ng-if="songDTO.song.banner_song == null" style="position: absolute;
+<!--<div class="image-background" ng-if="songDTO.song.banner_song == null" style="position: absolute;
     z-index: 1;
     background: rgba(0,0,0,.5);overflow:hidden;top: -15px; left: -15px; width: 110%;min-height:770px;height: 100%;
     max-height: 1080px;">
     <div style="background-image: url('{{songDTO.song.artwork}}');filter: blur(12px);width: 100%;    height: 200%;background-attachment: fixed;background-repeat: no-repeat;
     background-size: cover;
     position: relative;"></div>
+</div>-->
+
+<div class="background">
+    <img src="{{songDTO.song.artwork}}" alt="" height="100%" width="100%"  style="object-fit: cover; filter: blur(22px);width: 102%;margin-top: -45px;height: 112%;position: fixed;">
 </div>
 
 <div class="sx-primary-banner" ng-if="songDTO.song.banner_song != null">
@@ -279,7 +283,8 @@
         overflow: hidden;
         //right: 0px;
         //bottom: 0px;
-        max-width: 1080px;
+        //max-width: 1080px;
+        max-width: 1280px;
     }
 
     .sx-primary-banner .artwork-vs-blur{
@@ -298,7 +303,8 @@
     .sx-primary-artwork{
         height: 350px;
         padding: 10px 0;
-        max-width: 1080px;
+        //max-width: 1080px;
+        max-width:1130px;
         margin: 0 auto 5px auto;
         position: relative;
         overflow: hidden;
@@ -348,7 +354,8 @@
 
     .row-track{
         height: 100%;
-        max-width: 1080px;
+        //max-width: 1080px;
+        max-width: 1130px;
         margin-right: auto;
         margin-left: auto;
         position: relative;
@@ -365,9 +372,9 @@
         min-height: 150px;
         height: 100%;
         width: 100%;
-        border-radius: 3px;
+        /*border-radius: 3px;
         -moz-border-radius: 3px;
-        -webkit-border-radius: 3px;
+        -webkit-border-radius: 3px;*/
     }
 
     #watch-track-content{
@@ -388,8 +395,8 @@
     .image-track{
         /*height: 150px;
         width: 150px;*/
-        height: 200px;
-        width: 200px;
+        height: 180px;
+        width: 180px;
         position: relative;
         display: inline-block;
         vertical-align: top;
@@ -446,6 +453,7 @@
     .track-user-noimg > .user-image > img{
         height: 100%;
         width: 100%;
+        border-radius: 5px;
     }
 
     .track-user-noimg > .user-image{
@@ -505,5 +513,28 @@
         float: right;
         padding: 2px 0px 2px 8px;
         color: #878481;
+    }
+    .background{
+        width: 100%;
+        height: 107%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        overflow: hidden;
+    }
+    @media (min-width: 1400px) and (max-width: 2500px){
+        .row-track {
+            height: 100%;
+            max-width: 1280px;
+            margin-right: auto;
+            margin-left: auto;
+            position: relative;
+            z-index: 22;
+        }
+        .sx-primary-artwork{
+            max-width: 1280px;
+        }
     }
 </style>

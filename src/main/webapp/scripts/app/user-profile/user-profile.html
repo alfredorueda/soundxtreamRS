@@ -64,36 +64,34 @@
         </md-content>
     </div>
 </div>-->
+<style>
+    .profile-image span{
+        height: 200px;
+        width: 200px;
+        position: relative;
+        display: block;
+    }
+    .visual-profile{
+        height: 100%;
+        width: 100%;
+    }
+    .profile-image{
+        height: 100%;
+        width: 200px;
+        margin: 0 auto;
+    }
+</style>
 <div>
     <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="margin-top: 20px;margin-bottom: 20px;">
-            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="width: 19%;">
-                <div class="user-image" style="border-radius: 2%;">
-                    <img class="artist__blur" ng-if="user.user_image != null" src="{{user.user_image}}" height="161px"/>
-                    <img class="artist__blur" ng-if="user.user_image == null" src="/assets/images/gradient.jpg" height="161px"/>
-                    <img ng-if="user.user_image != null" class="user-image-focus" style="height: 150px;width: 150px;" src="{{user.user_image}}"/>
-                    <img ng-if="user.user_image == null" class="user-image-focus" style="height: 150px;width: 150px;" src="/assets/images/gradient.jpg"/>
-                </div>
-                <button id="btn-filter" type="button"  ng-show="account.login == user.login" class="sx__button sx__button__primary"
-                        style="z-index: 2;position: absolute;margin: -21px auto;width: 180px;;display: block; sbox-shadow: 0px 12px 10px -7px rgba(0,0,0,.4);" ui-sref="settings">
-                    <i class="fa fa-camera" aria-hidden="true"></i>
-                    Update image
-                </button>
+        <div class="visual-profile">
+            <div class="profile-image">
+                <span style="background-image: url('{{user.user_image}}');"></span>
             </div>
-            <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-                <div>
-                    <h5>{{user.login}}</h5>
-                    <h6>{{user.firstName}}, {{user.lastName}}</h6>
-                </div>
-                <button ng-if="account.login != user.login || isAuthenticated" type="button" ng-class="{true:'like__button active',false:'like__button'}[user.followedByUser]"
-                        ng-click="follow(user)" class="sx__button like__button">
-                    <span ng-if="user.followedByUser"><i class="mdi mdi-check"></i> Following</span>
-                    <span ng-if="!user.followedByUser"><i class="mdi mdi-plus"></i> Follow</span>
-                </button>
-
-                <button ng-if="!isAuthenticated" type="button"class="sx__button sx_button_locked" ng-click="follow(user)">
-                    <i class="mdi mdi-lock-outline"></i> Login to follow {{user.login}}
-                </button>
+        </div>
+        <div class="user-info">
+            <div style=" width: 300px; margin: 0 auto;">
+                <span>{{user.login}}</span>
+                <span>{{user.firstName}},{{user.lastName}}</span>
             </div>
         </div>
     </div>
@@ -356,6 +354,11 @@
         background: #808080!important;
         color: #fff!important;
         border: 1px solid rgba(0,0,0,.2)!important;
+    }
+
+    .track-wrapper:not(:first-child){
+        height: 185px;
+        width: 185px;
     }
 
 </style>

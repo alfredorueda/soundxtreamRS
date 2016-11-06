@@ -106,9 +106,9 @@
                         <label ng-show="picFile != undefined"><input type="checkbox" ng-model="cropped"/>Crop image?</label>
                         <div ngf-drop ng-model="picFile" ngf-pattern="image/*" accept="image/*"
                              class="cropArea" style="position: relative;">
-                            <img-crop ng-show="cropped" area-type="square" image="picFile | ngfDataUrl"
+                            <ui-cropper ng-show="cropped" area-type="square" image="picFile | ngfDataUrl"
                                       result-image="croppedArtwork" ng-init="croppedArtwork=''">
-                            </img-crop>
+                            </ui-cropper>
                             <button style="position: relative;z-index: 200;" ngf-select ng-model="picFile"
                                     class="btn-upload-over sx__button sx__button__primary" accept="image/*">
                                 Update profile picture

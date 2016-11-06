@@ -62,10 +62,10 @@ angular.module('soundxtreamappApp')
         }
 
         function uploadUsingUploadArtwork(file) {
-            var pictureName = $scope.settingsAccount.login.toLowerCase()+""+$scope.settingsAccount;
+            var pictureName = "profilepic-"+$scope.settingsAccount.login.toLowerCase()+"-"+$scope.settingsAccount.firstName;
             var ext = file.name.split('.').pop();
 
-            pictureName = pictureName.concat(ext);
+            pictureName = pictureName.concat("."+ext);
 
             console.log(pictureName);
 

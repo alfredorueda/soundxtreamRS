@@ -117,6 +117,14 @@ angular.module('soundxtreamappApp', ['LocalStorageModule', 'tmh.dynamicLocale', 
             return minutes+' minutes'+(seconds ? ' and '+seconds+' seconds' : '');
         }
     })
+    .filter('toMinSecNum', function(){
+        return function(input){
+            var minutes = parseInt(input/60, 10);
+            var seconds = Math.round(input%60);
+
+            return minutes+''+(seconds ? ':'+seconds+'' : '');
+        }
+    })
     .config(function (cfpLoadingBarProvider,$stateProvider, $urlRouterProvider, $httpProvider, $locationProvider, $translateProvider, tmhDynamicLocaleProvider, httpRequestInterceptorCacheBusterProvider, AlertServiceProvider) {
         // uncomment below to make alerts look like toast
         //AlertServiceProvider.showAsToast(true);

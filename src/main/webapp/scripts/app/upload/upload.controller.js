@@ -16,6 +16,7 @@ angular.module('soundxtreamappApp').controller('UploadController',
             $scope.stepOne = false;
             $scope.stepTwo = false;
             $scope.stepThree = false;
+            $scope.percentage = 0;
 
             $scope.processing = false;
             $scope.uploadType = "track";
@@ -286,8 +287,8 @@ angular.module('soundxtreamappApp').controller('UploadController',
                         }
                     });
                     $scope.song.url = "uploads/" + songLocationName;
-                    jumpToSecondStep();
-                    $scope.stepOne = true;
+
+
                 }, function (resp) {
                     console.log('Error status: ' + resp.status);
                 }, function (evt) {
@@ -296,6 +297,12 @@ angular.module('soundxtreamappApp').controller('UploadController',
                     file.progress = Math.min(100, parseInt(100.0 *
                         evt.loaded / evt.total));
                     $scope.percentage = progressPercentage;
+                    if(progressPercentage == 100){
+                        $timeout(function(){
+                            jumpToSecondStep();
+                            $scope.stepOne = true;
+                        },1000);
+                    }
                 });
             }
 
