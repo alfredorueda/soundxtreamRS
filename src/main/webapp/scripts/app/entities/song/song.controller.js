@@ -12,7 +12,7 @@ angular.module('soundxtreamappApp')
 
         $scope.searchQuery;
         $scope.loadAll = function() {
-            Song.query({page: $scope.page, size: 10, sort: ['id,desc', 'id']}, function (result, headers) {
+            Song.query({page: $scope.page, size:6, sort: [$scope.predicate + ',' + ($scope.reverse ? 'asc' : 'desc')]}, function (result, headers) {
                 $scope.links = ParseLinks.parse(headers('link'));
                 for (var i = 0; i < result.length; i++) {
                     $scope.songs.push(result[i]);

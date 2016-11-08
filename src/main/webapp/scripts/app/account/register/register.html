@@ -125,7 +125,7 @@
     <!-- jhipster-needle-add-social-button -->
 </div>
 <style>
-    @keyframes border-pulsate {
+    /*@keyframes border-pulsate {
         0%   {
             color: rgba(0, 85, 255, 1);
             border-bottom-color: rgb(0, 93, 255);
@@ -154,7 +154,7 @@
         box-shadow: none;
         animation: border-pulsate 2s infinite;
     }
-    /*.login-page {
+    !*.login-page {
         //background: #EBEBEB;
         z-index: 210;
         width: 100%;
@@ -164,8 +164,8 @@
         padding-top: 70px;
         background: url('assets/images/background.jpg');
         background-size: auto auto;
-    }*/
-    /*.login-page:before{
+    }*!
+    !*.login-page:before{
         content: '';
         top: 0;
         left: 0;
@@ -178,7 +178,7 @@
         filter: grayscale(100%);
         background: url('assets/images/background.jpg');
         background-size: auto auto;
-    }*/
+    }*!
     .login-page h1{
         color: #fff;
         text-shadow: 0px 1px 0px rgba(0,0,0,.55),0px 2px 0px rgba(0,0,0,.45),0px 3px 0px rgba(0,0,0,.4)
@@ -197,10 +197,10 @@
         height: 100%;
         top: 0;
         padding-top: 70px;
-        /*background-image: -webkit-linear-gradient(bottom left, rgba(0, 0, 255, 0.5), rgba(255, 0, 0, 0.75)),
+        !*background-image: -webkit-linear-gradient(bottom left, rgba(0, 0, 255, 0.5), rgba(255, 0, 0, 0.75)),
             -webkit-linear-gradient(rgba(0, 0, 255, 0.25) 100 %, transparent),
             url("assets/images/background.jpg");
-        background-size: cover;*/
+        background-size: cover;*!
         background-image: -webkit-linear-gradient(bottom left, rgba(0, 0, 255, 0.5), rgba(111, 0, 248, 0.75)), -webkit-linear-gradient(rgba(0, 0, 255, 0.25) 100%, transparent), url("/assets/images/background.jpg");
         background-image: linear-gradient(to top right, rgba(13, 13, 13, 0.5), rgba(208, 208, 208, 0.75)), linear-gradient(rgba(0, 0, 255, 0.25) 100%, transparent), url("/assets/images/background.jpg");
         background-size: cover;
@@ -210,5 +210,134 @@
     .form-control::-webkit-input-placeholder { color: white; }
     .form-control:-moz-placeholder { color: white; }
     .form-control::-moz-placeholder { color: white; }
-    .form-control:-ms-input-placeholder { color: white; }
+    .form-control:-ms-input-placeholder { color: white; }*/
+
+    @keyframes border-pulsate {
+        0% {
+            color: rgba(0, 85, 255, 1);
+            border-bottom-color: rgb(0, 93, 255);
+        }
+        50% {
+            color: #333;
+            border-bottom-color: rgba(0, 255, 255, 0);
+        }
+        100% {
+            color: rgba(0, 85, 255, 1);
+            border-bottom-color: rgb(0, 93, 255);
+        }
+    }
+
+    .input_sx_mat {
+        border-width: 0px 0px 1px 0px;
+        border-radius: 0px;
+    / / background: #EBEBEB;
+        background: transparent;
+        color: #fff!important;
+        transition: 0.5s linear;
+    }
+
+    .input_sx_mat:focus {
+        border-bottom-color: blue;
+        outline: 0;
+        transition: 0.5s linear;
+        box-shadow: none;
+    //animation: border-pulsate 2s infinite;
+    }
+
+    .login-page {
+    / / background: #EBEBEB;
+    //z-index: 210;
+        width: 100%;
+        position: absolute;
+        height: 100%;
+        top: 0;
+        padding-top: 70px;
+    //background-image: -webkit-linear-gradient(bottom left, rgba(0, 0, 255, 0.5), rgba(111, 0, 248, 0.75)), -webkit-linear-gradient(rgba(0, 0, 255, 0.25) 100%, transparent), url("/assets/images/background.jpg");
+    //background-image: linear-gradient(to top right, rgba(13, 13, 13, 0.5), rgba(208, 208, 208, 0.75)), linear-gradient(rgba(0, 0, 255, 0.25) 100%, transparent), url("/assets/images/background.jpg");
+
+        background-image: linear-gradient(to top right, rgba(13, 13, 13, 0.5), rgba(208, 208, 208, 0.75)), linear-gradient(rgba(221, 126, 28, 0.57) 100%, transparent), url(/assets/images/background.jpg);
+        background-image: -webkit-linear-gradient(to top right, rgba(13, 13, 13, 0.5), rgba(208, 208, 208, 0.75)), -webkit-linear-gradient(rgba(221, 126, 28, 0.57) 100%, transparent), url(/assets/images/background.jpg);
+        background-size: cover;
+        background-position: center;
+        bottom: 0;
+    }
+
+    .login-page:before {
+        content: '';
+        top: 0;
+        left: 0;
+        width: 100%;
+        position: absolute;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.128);
+        z-index: -10;
+    }
+
+    .login-page h1 {
+        color: #fff;
+        text-shadow: 0px 1px 0px rgba(0, 0, 0, .55), 0px 2px 0px rgba(0, 0, 0, .45), 0px 3px 0px rgba(0, 0, 0, .4), 0px 4px 0px rgba(0, 0, 0, .35), 0px 5px 0px rgba(0, 0, 0, .3);
+    }
+
+    .login-page label {
+        color: #fff;
+        text-transform: uppercase;
+        text-shadow: 0px 0px 6px black;
+    }
+
+    .form-control::-webkit-input-placeholder {
+        color: white;
+    }
+
+    .form-control:-moz-placeholder {
+        color: white;
+    }
+
+    .form-control::-moz-placeholder {
+        color: white;
+    }
+
+    .form-control:-ms-input-placeholder {
+        color: white;
+    }
+
+    svg {
+        width: 370px;
+        height: auto;
+        position: relative;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 15px;
+        filter: drop-shadow(8px 8px 4px rgba(255, 107, 6, 0.7));
+    }
+
+    path {
+        /*#2eff7d*/
+        stroke: #ff8800;
+    //stroke-width: 0.5px;
+        stroke-width: 0.8px;
+        fill: transparent;
+        transition: 2s cubic-bezier(0.4,0.0,1,1);
+    }
+
+    input.inputs-soundxtream {
+        /* border-radius: 0px; */
+        background: rgba(0,0,0,.7);
+        border: 1px solid #ff8800;
+        color: #ff8800;
+        outline: 0;
+    }
+
+    input.inputs-soundxtream {
+        /* border-radius: 0px; */
+        background: rgba(0,0,0,.7);
+        border: 1px solid #ff8800;
+        color: #ff8800;
+        outline: 0;
+    }
+
+    html, body {
+        background: #f3f3f3 !important;
+        height: 100% !important;
+    }
 </style>

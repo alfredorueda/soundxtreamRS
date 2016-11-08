@@ -1,12 +1,10 @@
 <div class="row" style="margin-bottom: 15px;">
     <div class="col-md-12">
-        <div>
-            <h5 class="h5-title-info">{{user.totalFollowings}} Following</h5>
-        </div>
+        <h4><span ui-sref="user-profile"><i class="mdi mdi-keyboard-backspace"></i> Back</span></h4>
         <div ng-repeat="following in user.followingUsers" class="user-box" style="margin-left: 13px;">
             <div class="user-image">
-                <img class="artist__blur" ng-if="following.user_image != null" src="{{following.user_image}}" height="161px"/>
-                <img class="artist__blur" ng-if="following.user_image == null" src="/assets/images/gradient.jpg" height="161px"/>
+                <!--<img class="artist__blur" ng-if="following.user_image != null" src="{{following.user_image}}" height="161px"/>
+                <img class="artist__blur" ng-if="following.user_image == null" src="/assets/images/gradient.jpg" height="161px"/>-->
                 <img ng-if="following.user_image != null" class="user-image-focus" src="{{following.user_image}}"/>
                 <img ng-if="following.user_image == null" class="user-image-focus" src="/assets/images/gradient.jpg"/>
             </div>

@@ -1,0 +1,201 @@
+<div class="row">
+    <div class="col-xs-12">
+        <h4>Latest activity from the people you’re following:</h4>
+    </div>
+    <div class="col-md-10 col-sx-12" id="list_main_songs" infinite-scroll="loadPage(page+ 1)" infinite-scroll-disabled="links['last'] == page" infinite-scroll-distance='2'
+         infinite-scroll-container="'#content'">
+        <div class="media" ng-repeat="songDTO in tracks">
+            <div ng-if="songDTO.type == 'song'">
+                <p><img ng-src="{{songDTO.song.user.user_image}}" height="30px" width="30px"/><a href="#/profile/{{songDTO.song.user.login}}">{{songDTO.song.user.login}}</a> upload a <a href="#/song/{{songDTO.song.id}}">track</a></p>
+                <div class="media-left" style="position: relative;">
+                    <a ui-sref="song.detail({id:songDTO.song.id})">
+                        <img ng-if="songDTO.song.artwork != null" style="height: 160px;width: 160px;" class="media-object" ng-src="{{songDTO.song.artwork}}" alt="...">
+                        <img ng-if="songDTO.song.artwork == null" style="height: 160px;width: 160px;" ng-src="/assets/images/gradient.jpg"/>
+                    </a>
+                    <div class="controls-main">
+                        <md-button ng-if="playerPlaylist.getSongId(mediaPlayer.currentTrack) != songDTO.song.id || playerPlaylist.playlistCurrent != 'fromActivity'"
+                                   ng-click="playerPlaylist.addSongAll(tracks,mediaPlayer,$index,'fromActivity')" class="md-play" aria-label="play">
+                            <md-icon>
+                                <i class="material-icons">play_arrow</i>
+                            </md-icon>
+                        </md-button>
+                        <md-button ng-if="playerPlaylist.getSongId(mediaPlayer.currentTrack) == songDTO.song.id && playerPlaylist.playlistCurrent == 'fromActivity'"
+                                   ng-click="mediaPlayer.playPause()" class="md-play" aria-label="play">
+                            <md-icon>
+                                <i ng-if="!mediaPlayer.playing" class="material-icons">play_arrow</i>
+                                <i ng-if="mediaPlayer.playing" class="material-icons">pause</i>
+                            </md-icon>
+                        </md-button>
+                    </div>
+                </div>
+                <div class="media-body">
+                    <h6 ng-class="{true: 'user-heading-pro',false: 'user-heading'}[songDTO.song.banner_song != null]"
+                        class="user-heading">{{songDTO.song.user.login}}</h6>
+                    <div class="clear"></div>
+                    <h4 ng-class="{true: 'media-heading-pro',false: 'media-heading'}[songDTO.song.banner_song != null]"
+                        class="media-heading">{{songDTO.song.name}}</h4>
+                    <div ng-if="songDTO.song.banner_song != null" class="banner-background">
+                        <img ng-src="{{songDTO.song.banner_song}}" class="banner" height="auto" width="100%"/>
+                    </div>
+                </div>
+            </div>
+            <div ng-if="songDTO.type == 'playlist'">
+                <p><img ng-src="{{songDTO.playlist.user.user_image}}" height="30px" width="30px"/><a href="#/profile/{{songDTO.playlist.user.login}}">{{songDTO.playlist.user.login}}</a> created a <a href="#/song/{{songDTO.playlist.id}}">playlist</a></p>
+                <div class="media-left" style="position: relative;">
+                    <a ui-sref="playlist.detail({id:songDTO.playlist.id})">
+                        <img ng-if="songDTO.playlist.artwork != null" style="height: 160px;width: 160px;" class="media-object" ng-src="{{songDTO.playlist.artwork}}" alt="...">
+                        <img ng-if="songDTO.playlist.artwork == null" style="height: 160px;width: 160px;" ng-src="/assets/images/gradient.jpg"/>
+                    </a>
+                    <div class="controls-main">
+                        <md-button ng-if="playerPlaylist.getSongId(mediaPlayer.currentTrack) != songDTO.song.id || playerPlaylist.playlistCurrent != 'fromActivity'" ng-click="playerPlaylist.addSongAll(tracks,mediaPlayer,$index,'fromActivity')" class="md-play" aria-label="play">
+                            <md-icon>
+                                <i class="material-icons">play_arrow</i>
+                            </md-icon>
+                        </md-button>
+                        <md-button ng-if="playerPlaylist.getSongId(mediaPlayer.currentTrack) == songDTO.song.id && playerPlaylist.playlistCurrent == 'fromActivity'" ng-click="mediaPlayer.playPause()" class="md-play" aria-label="play">
+                            <md-icon>
+                                <i ng-if="!mediaPlayer.playing" class="material-icons">play_arrow</i>
+                                <i ng-if="mediaPlayer.playing" class="material-icons">pause</i>
+                            </md-icon>
+                        </md-button>
+                    </div>
+                </div>
+                <div class="media-body">
+                    <h6 ng-class="{true: 'user-heading-pro',false: 'user-heading'}[songDTO.playlist.banner_playlist != null]"
+                        class="user-heading">{{songDTO.playlist.user.login}}</h6>
+                    <div class="clear"></div>
+                    <h4 ng-class="{true: 'media-heading-pro',false: 'media-heading'}[songDTO.playlist.banner_playlist != null]"
+                        class="media-heading">{{songDTO.playlist.name}}</h4>
+                    <div ng-if="songDTO.playlist.banner_playlist != null" class="banner-background">
+                        <img ng-src="{{songDTO.playlist.banner_playlist}}" class="banner" height="auto" width="100%"/>
+                    </div>
+                </div>
+            </div>
+            <div ng-if="songDTO.type == 'share'">
+                <p><img ng-src="{{songDTO.shareTrack.user.user_image}}" height="30px" width="30px"/><a href="#/profile/{{songDTO.shareTrack.user.login}}">{{songDTO.shareTrack.user.login}}</a> shared a <a href="#/song/{{songDTO.shareTrack.song.id}}">track</a></p>
+                <div class="media-left" style="position: relative;">
+                    <a ui-sref="song.detail({id:songDTO.song.id})">
+                        <img ng-if="songDTO.shareTrack.song.artwork != null" style="height: 160px;width: 160px;" class="media-object" ng-src="{{songDTO.shareTrack.song.artwork}}" alt="...">
+                        <img ng-if="songDTO.shareTrack.song.artwork == null" style="height: 160px;width: 160px;" ng-src="/assets/images/gradient.jpg"/>
+                    </a>
+                    <div class="controls-main">
+                        <md-button ng-if="playerPlaylist.getSongId(mediaPlayer.currentTrack) != songDTO.song.id || playerPlaylist.playlistCurrent != 'fromActivity'" ng-click="playerPlaylist.addSongAll(tracks,mediaPlayer,$index,'fromActivity')" class="md-play" aria-label="play">
+                            <md-icon>
+                                <i class="material-icons">play_arrow</i>
+                            </md-icon>
+                        </md-button>
+                        <md-button ng-if="playerPlaylist.getSongId(mediaPlayer.currentTrack) == songDTO.song.id && playerPlaylist.playlistCurrent == 'fromActivity'" ng-click="mediaPlayer.playPause()" class="md-play" aria-label="play">
+                            <md-icon>
+                                <i ng-if="!mediaPlayer.playing" class="material-icons">play_arrow</i>
+                                <i ng-if="mediaPlayer.playing" class="material-icons">pause</i>
+                            </md-icon>
+                        </md-button>
+                    </div>
+                </div>
+                <div class="media-body">
+                    <h6 ng-class="{true: 'user-heading-pro',false: 'user-heading'}[songDTO.shareTrack.song.banner_song != null]"
+                        class="user-heading">{{songDTO.shareTrack.song.user.login}}</h6>
+                    <div class="clear"></div>
+                    <h4 ng-class="{true: 'media-heading-pro',false: 'media-heading'}[songDTO.shareTrack.song.banner_song != null]"
+                        class="media-heading">{{songDTO.shareTrack.song.name}}</h4>
+                    <div ng-if="songDTO.shareTrack.song.banner_song != null" class="banner-background">
+                        <img ng-src="{{songDTO.shareTrack.song.banner_song}}" class="banner" height="auto" width="100%"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div ng-if="tracks.length < 1 || tracks == null" class="col-md-12 col-sx-12">
+        <div>
+            <div class="alert alert-warning">
+                Nothing to show!
+            </div>
+        </div>
+    </div>
+    <div class="col-md-2 col-sx-12">
+
+    </div>
+</div>
+
+<style>
+    .header-image {
+        background-image: url('/assets/images/logo_home.jpg');
+        background-position: center;
+        background-size: cover;
+        height: 320px;
+        /*margin-left: -15px;
+        margin-right: -15px;*/
+    }
+    .controls-main{
+        height: auto;
+        width: auto;
+        position: absolute;
+        bottom: 50%;
+        left: 43%;
+        transform: translate(-50%,50%);
+        padding: 2px;
+    }
+    .media-body{
+        overflow: hidden;position: relative;
+    }
+    .banner-background{
+        position: absolute;
+        width: 100%;
+        z-index: 0;
+        top:0;
+        margin-top: -50px;
+        left: 0;
+    }
+    .media-heading{
+        position: relative;
+        z-index: 1;
+        display: inline-block;
+        padding: 5px;
+    }
+    .user-heading{
+        position: relative;
+        z-index: 1;
+        display: inline-block;
+        padding: 5px;
+        margin-bottom: 1px;
+        margin-top: 2px;
+    }
+    .media-body{
+        padding: 5px;
+        margin-bottom: 1px;
+        margin-top: 2px;
+    }
+    .user-heading-pro{
+        position: relative;
+        z-index: 1;
+        color: #fff;
+        background: rgba(0,0,0,.8);
+        display: inline-block;
+        padding: 5px;
+        margin-bottom: 1px;
+        margin-top: 2px;
+    }
+    .media-heading-pro{
+        position: relative;
+        z-index: 1;
+        color: #fff;
+        background: rgba(0,0,0,.8);
+        display: inline-block;
+        padding: 5px;
+    }
+    .banner-background{
+        background: rgba(40, 40, 40, 1);
+    }
+    .banner{
+        -webkit-filter: blur(5px);
+        filter: blur(5px);
+    }
+    .media > div > p > img{
+        border-radius: 100%;
+        margin-right: 2px;
+        padding-right: 2px;
+    }
+    .media > div > p{
+        font-size: 13px;
+    }
+</style>

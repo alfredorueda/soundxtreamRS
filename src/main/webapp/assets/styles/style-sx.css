@@ -94,7 +94,8 @@ div#menu-container > div#logo-container > div#logo > a#logo-link {
 }
 
 div#menu-container > div#logo-container > div#logo > a#logo-link:before{
-    content: '\F4C3';
+    //content: '\F4C3';
+    content: '\F5DC';
     font-family: "Material Design Icons";
     position: absolute;
     top:0;
@@ -1127,7 +1128,9 @@ button.button-play span{
 }
 
 .button-play > span {
-    padding-top: 10px;
+    //padding-top: 10px;
+    padding-top: 12px;
+    padding-left: 2px;
     display: block;
 }
 
@@ -1749,8 +1752,18 @@ img{
     padding: 0;
 }
 
-#user-playlists .user-playlist{
-    height: 40px;
+#user-playlists .user-playlist:not(:last-child){
+    height: 44px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+    margin-top: 2px;
+    padding-bottom: 2px;
+}
+
+#user-playlists .user-playlist:last-child{
+    height: 44px;
+    border-bottom: 0;
+    margin-top: 2px;
+    padding-bottom: 2px;
 }
 
 .user-playlist > div{
@@ -1769,10 +1782,72 @@ img{
     padding: 12px 0px 12px 0px;
 }
 
+div.playPause-btn{
+    padding: 0px!important;
+}
+
 .user-playlist > .user-playlist-numtracks{
-    float: right;
+    right: 20px;
+    margin-right: 0;
+    position: absolute;
 }
 
 .list-playlist-item img{
     border-radius: 5px!important;
+}
+
+.track:hover > *{
+    color: #f50;
+}
+
+button.button-next {
+    outline: none;
+    height: 60px;
+    border-radius: 100%;
+    width: 60px;
+
+    position: absolute;
+    background: rgba(255, 93, 41, 0.9);
+    top: 50.5%;
+    left: 57%;
+    transform: translate(-60%,-45%);
+}
+
+button.button-next span{
+    outline: none;
+}
+
+.options button.button-next span{
+    outline: none;
+}
+
+.button-next > span {
+    padding-top: 7px;
+    display: block;
+}
+
+button.button-prev {
+    outline: none;
+    height: 60px;
+    border-radius: 100%;
+    width: 60px;
+
+    position: absolute;
+    background: rgba(255, 93, 41, 0.9);
+    top: 50.5%;
+    left: 43%;
+    transform: translate(-60%,-45%);
+}
+
+button.button-prev span{
+    outline: none;
+}
+
+.options button.button-prev span{
+    outline: none;
+}
+
+.button-prev > span {
+    padding-top: 7px;
+    display: block;
 }

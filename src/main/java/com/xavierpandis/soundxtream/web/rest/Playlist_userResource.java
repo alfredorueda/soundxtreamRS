@@ -1,9 +1,7 @@
 package com.xavierpandis.soundxtream.web.rest;
 
 import com.codahale.metrics.annotation.Timed;
-import com.xavierpandis.soundxtream.domain.Playlist;
-import com.xavierpandis.soundxtream.domain.Playlist_user;
-import com.xavierpandis.soundxtream.domain.User;
+import com.xavierpandis.soundxtream.domain.*;
 import com.xavierpandis.soundxtream.repository.PlaylistRepository;
 import com.xavierpandis.soundxtream.repository.Playlist_userRepository;
 import com.xavierpandis.soundxtream.repository.UserRepository;
@@ -25,6 +23,7 @@ import javax.inject.Inject;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -101,7 +100,8 @@ public class Playlist_userResource {
     public ResponseEntity<List<Playlist_user>> getAllPlaylist_users(Pageable pageable)
         throws URISyntaxException {
         log.debug("REST request to get a page of Playlist_users");
-        Page<Playlist_user> page = playlist_userRepository.findAll(pageable);
+        //Page<Playlist_user> page = playlist_userRepository.findAll(pageable);
+        Page<Playlist_user> page = playlist_userRepository.findByUserIsCurrentUser(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/playlist_users");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
@@ -152,6 +152,40 @@ public class Playlist_userResource {
             .collect(Collectors.toList());
     }
 
+    @RequestMapping(value = "/playlist_users/{id}/share",
+        method = RequestMethod.POST,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<Playlist_user> sharePlaylist(@PathVariable Long id) throws URISyntaxException {
+        User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).get();
+        Playlist_user exist = playlist_userRepository.findExistUserLiked(id,user.getLogin());
+
+        if(exist != null){
+            ZonedDateTime today = ZonedDateTime.now();
+            exist.setSharedDate(today);
+            if(exist.getShared() == null || exist.getShared() == false){
+                exist.setShared(true);
+            }else{
+                exist.setShared(false);
+            }
+            return updatePlaylist_user(exist);
+        }
+
+        Playlist playlist = playlistRepository.findOne(id);
+
+        ZonedDateTime today = ZonedDateTime.now();
+        Playlist_user playlist_user = new Playlist_user();
+        playlist_user.setSharedDate(today);
+        playlist_user.setUser(user);
+        playlist_user.setPlaylist(playlist);
+        playlist_user.setShared(true);
+
+        Playlist_user result = playlist_userRepository.save(playlist_user);
+        return ResponseEntity.created(new URI("/api/playlist_users/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert("playlist_users", result.getId().toString()))
+            .body(result);
+    }
+
     @RequestMapping(value = "/playlist_users/{id}/like",
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
@@ -186,37 +220,23 @@ public class Playlist_userResource {
             .body(result);
     }
 
-    @RequestMapping(value = "/playlist_users/{id}/share",
-        method = RequestMethod.POST,
+    @RequestMapping(value = "/playlist/likesUser/{login}",
+        method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Playlist_user> sharePlaylist(@PathVariable Long id) throws URISyntaxException {
-        User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).get();
-        Playlist_user exist = playlist_userRepository.findExistUserLiked(id,user.getLogin());
+    public ResponseEntity<List<Playlist_user>> getPlaylistsLikesUser(@PathVariable String login,Pageable pageable)
+        throws URISyntaxException {
+        log.debug("REST request to get a page of Song_users");
+        Page<Playlist_user> page = playlist_userRepository.findLikesUser(login, pageable);
+        List<Playlist_user> likes = new ArrayList<>();
 
-        if(exist != null){
-            ZonedDateTime today = ZonedDateTime.now();
-            exist.setSharedDate(today);
-            if(exist.getShared() == null || exist.getShared() == false){
-                exist.setShared(true);
-            }else{
-                exist.setShared(false);
+        for(Playlist_user playlist_user:page.getContent()){
+            if(playlist_user.getLiked() == true){
+                likes.add(playlist_user);
             }
-            return updatePlaylist_user(exist);
         }
 
-        Playlist playlist = playlistRepository.findOne(id);
-
-        ZonedDateTime today = ZonedDateTime.now();
-        Playlist_user playlist_user = new Playlist_user();
-        playlist_user.setSharedDate(today);
-        playlist_user.setUser(user);
-        playlist_user.setPlaylist(playlist);
-        playlist_user.setShared(true);
-
-        Playlist_user result = playlist_userRepository.save(playlist_user);
-        return ResponseEntity.created(new URI("/api/playlist_users/" + result.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert("playlist_users", result.getId().toString()))
-            .body(result);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/likesUser");
+        return new ResponseEntity<>(likes, headers, HttpStatus.OK);
     }
 }

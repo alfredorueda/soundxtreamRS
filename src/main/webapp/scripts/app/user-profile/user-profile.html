@@ -74,11 +74,24 @@
     .visual-profile{
         height: 100%;
         width: 100%;
+        padding: 22px 0px;
     }
     .profile-image{
         height: 100%;
         width: 200px;
         margin: 0 auto;
+        position: relative;
+    }
+    .profile-image:before{
+        content: '';
+        position: absolute;
+        //background: white;
+        background: linear-gradient(rgba(0,0,0,0) 31%, #fff 102%);
+        top: -10px;
+        left: -10px;
+        bottom: -10px;
+        right: -10px;
+        box-shadow: 0px 13px 16px -12px rgba(0,0,0,.5);
     }
 </style>
 <div>
@@ -89,24 +102,37 @@
             </div>
         </div>
         <div class="user-info">
-            <div style=" width: 300px; margin: 0 auto;">
-                <span>{{user.login}}</span>
-                <span>{{user.firstName}},{{user.lastName}}</span>
+            <div style=" text-align: center;box-shadow: 0px 13px 16px -12px rgba(0,0,0,.5); width: 300px; margin: 0 auto;padding: 16px;
+        background: linear-gradient(rgba(0,0,0,0) 31%, #fff 102%);margin-bottom: 10px;">
+                <div><span><b>{{user.login}}</b></span></div>
+                <div><span>{{user.firstName}} {{user.lastName}}</span></div>
+                <div style="margin-top: 2px;margin-bottom: 2px; ">
+                    <span>
+                        <button class="sx__button sx_button_follow" ng-class="{true:'active',false:''}[user.followedByUser]" ng-click="follow(user)">
+                            <i class="mdi mdi-check" ng-if="user.followedByUser"></i>
+                            <i class="mdi mdi-plus" ng-if="!user.followedByUser"></i>
+                            {{ user.followedByUser ? 'Following' : 'Follow' }}
+                        </button>
+                    </span>
+                </div>
+                <div style="width: 45%;    padding-top: 10px; border-right: 1px solid rgba(128, 128, 128, 0.43);display: inline-block;" ui-sref="user-profile.followers">
+                    <p><span><i class="fa fa-users" aria-hidden="true"></i> Followers</span></p>
+                    <p style="font-size: 17px;margin-top: -9px;">{{user.totalFollowers}}</p>
+                </div>
+                <div style="width: 45%;    padding-top: 10px;display: inline-block;" ui-sref="user-profile.following">
+                    <p><span><i class="fa fa-users" aria-hidden="true"></i> Following</span></p>
+                    <p style="font-size: 17px;margin-top: -9px;">{{user.totalFollowings}}</p>
+                </div>
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-md-12">
-            <div class="row">
-                <div class="col-md-4" ui-sref="user-profile.followers">
-                    <p><span><i class="fa fa-users" aria-hidden="true"></i> Followers</span></p>
-                    <p style="font-size: 17px;margin-top: -9px;">{{user.totalFollowers}}</p>
-                </div>
-                <div class="col-md-4" ui-sref="user-profile.following">
-                    <p><span><i class="fa fa-users" aria-hidden="true"></i> Following</span></p>
-                    <p style="font-size: 17px;margin-top: -9px;">{{user.totalFollowings}}</p>
-                </div>
-            </div>
+            <ul class="menu-library">
+                <li ui-sref-active="active"><a ui-sref="user-profile.likes">Likes</a></li>
+                <li ui-sref-active="active"><a ui-sref="user-profile.followers">Followers</a></li>
+                <li ui-sref-active="active"><a ui-sref="user-profile.following">Following</a></li>
+            </ul>
         </div>
     </div>
     <div ui-view="user-view">
@@ -162,31 +188,24 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row" style="margin-top: 5px;">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <h3 class="h3_title">
                     <i class="mdi mdi-bookmark-music mdi-36px mdi-sx-orange" aria-hidden="true"></i>
                     <span style="display: inline-flex;vertical-align: text-top;margin-top: -8px;" class="titles">{{user.login}}'S PLAYLISTS</span>
                 </h3>
-                <div ng-repeat="songDTO in tracksUser track by songDTO.song.id" class="track-wrapper" style="background-image: url({{songDTO.song.artwork}});">
-                    <div class="track-container">
-                        <h5 style="cursor: pointer;text-align: center;"
-                            ui-sref="song.detail({accessUrl: songDTO.song.access_url,user: songDTO.song.user.login, id: songDTO.song.id})">
-                            <div class="blur">
-                                <div class="background" style="background-image: url({{songDTO.song.artwork}});"></div>
-                            </div>
-                            <span>{{songDTO.song.name}}</span>
-                        </h5>
-                        <div class="badge latest_badge" ng-if="$index == 0">LATEST</div>
-                        <div class="sx__button sx_button_bottom"
-                             ng-if="playerPlaylist.getSongId(mediaPlayer.currentTrack) == songDTO.song.id && playerPlaylist.playlistCurrent == 'fromTracks'+user.login"
-                             ng-click="mediaPlayer.playPause()">
-                            {{ mediaPlayer.playing ? 'Pause' : 'Play' }}
-                        </div>
-                        <div class="sx__button sx_button_bottom" ng-if="playerPlaylist.getSongId(mediaPlayer.currentTrack) != songDTO.song.id || playerPlaylist.playlistCurrent != 'fromTracks'+user.login"
-                             ng-click="playerPlaylist.addSongAll(tracksUser,mediaPlayer,$index,'fromTracks'+user.login)">
-                            Play
-                        </div>
+                <div style="position:relative; margin-right: 12px; display: inline-block; height: 180px; width: 180px;" ng-repeat="playlistDTO in playlistsUser">
+                    <img src="{{playlistDTO.playlist.artwork}}"
+                         style="height: 100%; position: relative; width: 100%;display: block;
+                        background: -webkit-linear-gradient(-45deg, rgb(85, 147, 255) 0%, rgb(150, 27, 255) 100%);"/>
+                    <p style="position: absolute; top: 0px; margin: 10px; font-size: 15px;
+                        background: rgba(0,0,0,.7); padding: 3px; color: #fff;">
+                        {{playlistDTO.playlist.name}}
+                    </p>
+                    <div class="stats" style="left: 0%;">
+                        <button class="sx__button like__button" ng-class="{true: 'active',false:''}[playlistDTO.liked]" ng-click="unlike(playlistDTO.playlist.id)">
+                            <i class="fa fa-heart-o fa-lg"></i>{{playlistDTO.totalLikes}}
+                        </button>
                     </div>
                 </div>
             </div>

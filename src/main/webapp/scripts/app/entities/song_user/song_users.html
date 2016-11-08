@@ -4,13 +4,13 @@
          infinite-scroll-container="'#content'">
         <h3 class="h3_title">
             <i class="mdi mdi-bookmark-music mdi-36px mdi-sx-orange" aria-hidden="true"></i>
-            <span style="display: inline-flex;vertical-align: text-top;margin-top: -8px;" class="titles">YOUR LIKES</span>
+            <span style="display: inline-flex;vertical-align: text-top;margin-top: -8px;" class="titles">YOUR TRACKS LIKES</span>
         </h3>
         <div ng-repeat="song_user in song_users" class="track-box" style="margin-left: 13px;">
             <div class="track-image">
-                <img src="{{song_user.song.artwork}}"
+                <img ng-src="{{song_user.song.artwork}}" img-preload
                      style="background: -webkit-linear-gradient(-45deg, rgb(85, 147, 255) 0%, rgb(150, 27, 255) 100%);"/>
-                <div class="controls">
+                <!--<div class="controls">
                     <md-button
                         ng-if="playerPlaylist.getSongId(mediaPlayer.currentTrack) != song_user.song.id || playerPlaylist.playlistCurrent != 'fromYourLikes'"
                         ng-click="playerPlaylist.addSongAll(song_users,mediaPlayer,$index,'fromYourLikes')"
@@ -27,7 +27,18 @@
                             <i ng-if="mediaPlayer.playing" class="material-icons">pause</i>
                         </md-icon>
                     </md-button>
-                </div>
+                </div>-->
+                <button class="button-options button-play">
+                    <span ng-if="playerPlaylist.getSongId(mediaPlayer.currentTrack) == song_user.song.id && playerPlaylist.playlistCurrent == 'fromYourLikes'"
+                          ng-click="mediaPlayer.playPause()">
+                        <i style="font-size: 44px!important;" ng-if="!mediaPlayer.playing" class="material-icons">play_arrow</i>
+                        <i style="font-size: 44px!important;" ng-if="mediaPlayer.playing" class="material-icons">pause</i>
+                    </span>
+                    <span ng-if="playerPlaylist.getSongId(mediaPlayer.currentTrack) != song_user.song.id || playerPlaylist.playlistCurrent != 'fromYourLikes'"
+                          ng-click="playerPlaylist.addSongAll(song_users,mediaPlayer,$index,'fromYourLikes')">
+                        <i style="font-size: 44px!important;" class="material-icons">play_arrow</i>
+                    </span>
+                </button>
                 <div class="stats">
                     <button class="sx__button like__button active" ng-click="unlike(song_user.song.id)">
                         <i class="fa fa-heart-o fa-lg"></i>

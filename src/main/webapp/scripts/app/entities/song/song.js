@@ -145,7 +145,7 @@ angular.module('soundxtreamappApp')
                         size: 'md',
                         resolve: {
                             entity: ['Playlist', function(Playlist) {
-                                return Playlist.getPlaylistUser({});
+                                return Playlist.getPlaylistUserLogged();
                             }],
                             entity_song: ['Song',function(Song){
                                 return Song.get({id:$stateParams.id});
@@ -171,7 +171,7 @@ angular.module('soundxtreamappApp')
                         size: 'md',
                         resolve: {
                             entity: ['Playlist', function(Playlist) {
-                                return Playlist.getPlaylistUser({});
+                                return Playlist.getPlaylistUserLogged();
                             }],
                             entity_song: ['Song',function(Song){
                                 return Song.getAccessUrl({accessUrl : $stateParams.accessUrl, user: $stateParams.user});

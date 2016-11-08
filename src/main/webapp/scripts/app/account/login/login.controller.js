@@ -16,10 +16,10 @@ angular.module('soundxtreamappApp')
             }).then(function () {
                 $scope.authenticationError = false;
                 if ($rootScope.previousStateName === 'register') {
-                    $state.go('home');
+                    $state.go('login');
                 } else {
                     if($rootScope.previousStateName === 'login'){
-                        $state.go('home');
+                        $state.go('library.tracks');
                     }else{
                         $rootScope.back();
                     }

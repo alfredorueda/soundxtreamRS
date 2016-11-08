@@ -1,90 +1,91 @@
-<!--<div class="image-background" ng-if="playlist.banner_playlist != null && playlist.artwork != null" style="position: absolute;
-    z-index: 1;
-    background: rgba(0,0,0,.5);overflow:hidden;top: -15px; left: -15px; width: 110%;min-height:920px;height: 100%;
-    max-height: 1080px;">
-    <div style="background-image: url('{{playlist.artwork}}');filter: blur(12px);width: 100%;    height: 200%;background-attachment: fixed;background-repeat: no-repeat;
-    background-size: cover;
-    position: relative;"></div>
-</div>
-
-<div class="image-background" ng-if="playlist.banner_playlist == null && playlist.artwork != null" style="position: absolute;
-    z-index: 1;
-    background: rgba(0,0,0,.5);overflow:hidden;top: -15px; left: -15px; width: 110%;min-height:770px;height: 100%;
-    max-height: 1080px;">
-    <div style="background-image: url('{{playlist.artwork}}');filter: blur(12px);width: 100%;    height: 200%;background-attachment: fixed;background-repeat: no-repeat;
-    background-size: cover;
-    position: relative;"></div>
-</div>-->
-
 <div class="background">
-    <img src="{{playlist.artwork}}" alt="" height="100%" width="100%"  style="object-fit: cover; filter: blur(22px);width: 102%;margin-top: -45px;height: 112%;position: fixed;">
+    <img src="{{playlistDTO.playlist.artwork}}" alt="" height="100%" width="100%"  style="object-fit: cover; filter: blur(22px);width: 102%;margin-top: -45px;height: 112%;position: fixed;">
 </div>
 
-<div class="sx-primary-banner" ng-if="playlist.banner_playlist != null">
+<div class="sx-primary-banner" ng-if="playlistDTO.playlist.banner_playlist != null">
     <div class="artwork-vs">
-        <div class="artwork-vs-blur" style="background-image: url('{{playlist.banner_playlist}}')"></div>
+        <div class="artwork-vs-blur" style="background-image: url('{{playlistDTO.playlist.banner_playlist}}')"></div>
     </div>
 </div>
-<div class="sx-primary-artwork" ng-if="playlist.banner_playlist == null">
-    <!--<div class="artwork-vs">
-        <div class="artwork-vs-blur" style="background-image: url('{{songDTO.song.artwork}}')"></div>
-    </div>-->
-<!--
-    <canvas ng-if="playlist.songs.length >= 4 && playlist.banner_playlist == null" id="image-render" width="280px" height="280px" style="margin-top: 2.5%;z-index: 22;position: relative;"></canvas>
--->
-    <img src="{{playlist.artwork}}" alt="{{playlist.name}}">
+<div class="sx-primary-artwork" ng-if="playlistDTO.playlist.banner_playlist == null">
+    <img ng-src="{{playlistDTO.playlist.artwork}}" img-preload alt="{{playlistDTO.playlist.name}}">
+    <div style="width: 280px;height: 280px;position: absolute;top: 2.5%;left: 0;z-index: 222;margin-top: 2.5%;"></div>
+        <button class="button-options button-play">
+            <span ng-if="playerPlaylist.playlistCurrent == 'playingFromPlaylist'+playlistDTO.playlist.id"
+                  ng-click="mediaPlayer.playPause()">
+                <i style="font-size: 44px!important;" ng-if="!mediaPlayer.playing" class="material-icons">play_arrow</i>
+                <i style="font-size: 44px!important;" ng-if="mediaPlayer.playing" class="material-icons">pause</i>
+            </span>
+            <span ng-if="playerPlaylist.playlistCurrent != 'playingFromPlaylist'+playlistDTO.playlist.id" ng-click="playerPlaylist.playTrackFromPlaylist(playlistDTO.playlist,mediaPlayer,0,'playingFromPlaylist'+playlistDTO.playlist.id)">
+                <i style="font-size: 44px!important;" class="material-icons">play_arrow</i>
+            </span>
+        </button>
+        <button class="button-options button-next" ng-if="playerPlaylist.playlistCurrent == 'playingFromPlaylist'+playlistDTO.playlist.id">
+            <span ng-click="mediaPlayer.next()">
+                <i style="font-size: 44px!important;" class="material-icons">skip_next</i>
+            </span>
+        </button>
+        <button class="button-options button-prev" ng-if="playerPlaylist.playlistCurrent == 'playingFromPlaylist'+playlistDTO.playlist.id">
+            <span ng-click="mediaPlayer.prev()">
+                <i style="font-size: 44px!important;" class="material-icons">skip_previous</i>
+            </span>
+        </button>
+
 </div>
-<div class="row-track" ng-class="{true: 'track-no-image', false:''}[songDTO.song.banner_song == null]">
+<div class="row-track" ng-class="{true: 'track-no-image', false:''}[playlistDTO.playlist.banner_playlist == null]">
     <div id="watch-track-content">
         <div class="sx-row">
             <div class="col-pad">
                 <div class="track-info-container clearfix">
-                    <div class="image-track" ng-if="playlist.banner_playlist != null">
-                        <img src="{{playlist.artwork}}" alt="{{songDTO.song.name}}">
+                    <div class="image-track" ng-if="playlistDTO.playlist.banner_playlist != null">
+                        <img ng-src="{{playlistDTO.playlist.artwork}}" img-preload alt="{{playlistDTO.playlist.name}}">
                     </div>
-                    <div class="track-info-data" ng-if="playlist.banner_playlist != null">
-                        <h1>{{playlist.name}}</h1>
+                    <div class="track-info-data" ng-if="playlistDTO.playlist.banner_playlist != null">
+                        <h1>{{playlistDTO.playlist.name}}</h1>
                         <div class="more-info">
                             <span>Duration:</span>
-                            <p><b>{{playlist.full_duration | toMinSec}}</b></p>
+                            <p><b>{{playlistDTO.playlist.full_duration | toMinSec}}</b></p>
                         </div>
                     </div>
-                    <div class="track-info-data" ng-if="playlist.banner_playlist == null">
-                        <h1>{{playlist.name}}</h1>
+                    <div class="track-info-data" ng-if="playlistDTO.playlist.banner_playlist == null">
+                        <h1>{{playlistDTO.playlist.name}}</h1>
                         <div class="track-user-noimg">
                             <div class="user-image">
-                                <img src="{{playlist.user.user_image}}" alt="User image">
+                                <img ng-src="{{playlistDTO.playlist.user.user_image}}"  alt="User image">
                             </div>
                             <div class="user-info">
-                                <p class="user-login"><a ui-sref="user-profile({login:playlist.user.login})">{{playlist.user.login}}</a></p>
-                                <button class="sx__button sx_button_follow" ng-click="follow(playlist.user)"
-                                        ng-class="{true:'active',false:''}[playlist.user.followedByUser]">
-                                    <i class="mdi mdi-check" ng-if="playlist.user.followedByUser"></i>
-                                    <i class="mdi mdi-plus" ng-if="!playlist.user.followedByUser"></i>
-                                    {{ playlist.user.followedByUser ? 'Following' : 'Follow' }}
+                                <p class="user-login"><a ui-sref="user-profile({login:playlistDTO.playlist.user.login})">{{playlistDTO.playlist.user.login}}</a></p>
+                                <button class="sx__button sx_button_follow" ng-click="follow(playlistDTO.playlist.user)"
+                                        ng-class="{true:'active',false:''}[playlistDTO.playlist.user.followedByUser]">
+                                    <i class="mdi mdi-check" ng-if="playlistDTO.playlist.user.followedByUser"></i>
+                                    <i class="mdi mdi-plus" ng-if="!playlistDTO.playlist.user.followedByUser"></i>
+                                    {{ playlistDTO.playlist.user.followedByUser ? 'Following' : 'Follow' }}
                                 </button>
-                                <span> {{playlist.user.totalFollowers}} followers</span>
+                                <span> {{playlistDTO.playlist.user.totalFollowers}} followers</span>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="action-buttons">
-                    <button class="sx__button" ng-class="{true:'active',false:''}[songDTO.liked]"
-                            ng-click="like(songDTO.song.id)">
-                        <i class="fa fa-heart-o fa-lg"></i>&nbsp;<span>Like</span>
+                    <button class="sx__button" ng-class="{true:'active',false:''}[playlistDTO.liked]"
+                            ng-click="like(playlistDTO.playlist.id)">
+                        <i class="fa fa-heart-o fa-lg"></i>&nbsp;<span>{{playlistDTO.liked ? 'Liked':'Like'}}</span>
                     </button>
-                    <button class="sx__button" ng-class="{true:'active',false:''}[songDTO.shared]"
-                            ng-click="share(songDTO.song.id)">
-                        <i class="fa fa-share-square-o fa-lg"></i>&nbsp;<span>Share</span>
+                    <button class="sx__button" ng-class="{true:'active',false:''}[playlistDTO.shared]"
+                            ng-click="share(playlistDTO.playlist.id)">
+                        <i class="fa fa-share-square-o fa-lg"></i>&nbsp;<span>{{playlistDTO.shared ? 'Shared':'Share'}}</span>
                     </button>
-                    <button ng-if="account.login == playlist.user.login" class="sx__button"
-                            ui-sref="playlist.edit({id: playlist.id})">
+                    <button ng-if="account.login == playlistDTO.playlist.user.login" class="sx__button"
+                            ui-sref="playlist.edit({id: playlistDTO.playlist.id})">
                         <i class="fa fa-pencil-square-o fa-lg"></i>&nbsp;<span>Edit</span>
                     </button>
                     <button ng-if="account.login == playlist.user.login" class="sx__button"
-                            ui-sref="playlist.delete({id: playlist.id})">
+                            ui-sref="playlist.delete({id: playlistDTO.playlist.id})">
                         <i class="fa fa-trash fa-lg"></i>&nbsp;<span>Delete</span>
                     </button>
+
+                    <span class="badge-detail-shares">{{playlistDTO.totalShares | counter}} shares</span>
+                    <span class="badge-detail-likes">{{playlistDTO.totalLikes | counter}} likes</span>
                 </div>
             </div>
             <hr style="margin-bottom: 5px; margin-top: 5px;"/>
@@ -93,19 +94,35 @@
             <div class="col-pad">
                 <h5>
                     Tracks
-                    <p class="badge badge-black" ng-click="playerPlaylist.playTrackFromPlaylist(playlist,mediaPlayer,0,'playingFromPlaylist'+playlist.id)">
+                    <p class="badge badge-black" ng-click="playerPlaylist.playTrackFromPlaylist(playlistDTO.playlist,mediaPlayer,0,'playingFromPlaylist'+playlistDTO.playlist.id)">
                         <i class="fa fa-play fa-lg"></i>&nbsp;<span>PLAY ALL</span>
                     </p>
-                    <p ng-show="playlist.songs.length > 1 && shuffleState == 'off'" class="badge badge-unabled" ng-click="shuffleSongsPlaylist()">
+                    <p ng-show="playlistDTO.playlist.songs.length > 1 && shuffleState == 'off'" class="badge badge-unabled" ng-click="shuffleSongsPlaylist()">
                         <i class="fa fa-play fa-lg"></i>&nbsp;<span>Shuffle</span>
                     </p>
-                    <p ng-show="playlist.songs.length > 1 && shuffleState == 'on'" class="badge badge-enabled" ng-click="restoreOriginalSongs()">
+                    <p ng-show="playlistDTO.playlist.songs.length > 1 && shuffleState == 'on'" class="badge badge-enabled" ng-click="restoreOriginalSongs()">
                         <i class="fa fa-play fa-lg"></i>&nbsp;<span>Shuffle</span>
                     </p>
                 </h5>
                 <div class="tracks-playlist">
                     <div class="tracks">
-                        <div class="track" ng-repeat="song in playlist.songs">
+                        <div class="track" ng-repeat="song in playlistDTO.playlist.songs">
+                            <div class="playPause-btn" style="margin-top: -5px;width: auto;display: inline-block;vertical-align: middle;line-height: 37px;">
+                                <md-button style="min-width: 0px;" class="md-play-playlistTrack" ng-if="playerPlaylist.getSongId(mediaPlayer.currentTrack) != song.id || playerPlaylist.playlistCurrent != 'playingFromPlaylist'+playlistDTO.playlist.id"
+                                           ng-click="playerPlaylist.playTrackFromPlaylist(playlistDTO.playlist,mediaPlayer,$index,'playingFromPlaylist'+playlistDTO.playlist.id)"
+                                           aria-label="play">
+                                    <md-icon>
+                                        <i class="material-icons">play_arrow</i>
+                                    </md-icon>
+                                </md-button>
+                                <md-button style="min-width: 0px;" class="md-play-playlistTrack" ng-if="playerPlaylist.getSongId(mediaPlayer.currentTrack) == song.id && playerPlaylist.playlistCurrent == 'playingFromPlaylist'+playlistDTO.playlist.id"
+                                           ng-click="mediaPlayer.playPause()" aria-label="play">
+                                    <md-icon>
+                                        <i ng-if="!mediaPlayer.playing" class="material-icons">play_arrow</i>
+                                        <i ng-if="mediaPlayer.playing" class="material-icons">pause</i>
+                                    </md-icon>
+                                </md-button>
+                            </div>
                             <div class="track-cover">
                                 <div class="cover" style="background-image: url({{song.artwork}});"></div>
                             </div>
@@ -113,8 +130,8 @@
                                 <span ui-sref="song.detail({accessUrl: song.access_url,user: song.user.login, id: song.id})">{{song.name}}</span> <small ui-sref="user-profile({login: song.user.login})">{{song.user.login}}</small>
                             </div>
                             <div class="track-duration">
-                                {{song.duration | toMinSecNum}}
-                                <small style="color: darkgray;" ng-if="playlist.user.login == account.login" ng-click="removeTrack($index)">Remove</small>
+                                <i class="fa fa-clock-o" aria-hidden="true"></i> {{song.duration | toMinSecNum}}
+                                <small style="color: darkgray;" ng-if="playlistDTO.playlist.user.login == account.login" ng-click="removeTrack($index)">Remove</small>
                             </div>
                         </div>
                     </div>
@@ -126,38 +143,38 @@
         <div class="sx-row">
             <div class="col-pad">
                 <div class="more-info" ng-if="playlist.banner_playlist == null">
-                    <p class="badge badge-black">{{playlist.full_duration | toMinSec}}</p>
+                    <p class="badge badge-black">{{playlistDTO.playlist.full_duration | toMinSec}}</p>
                 </div>
                 <div ng-if="playlist.banner_playlist != null">
                     <div class="track-user-noimg">
                         <div class="user-image">
-                            <img src="{{playlist.user.user_image}}" alt="User image">
+                            <img ng-src="{{playlist.user.user_image}}" img-preload alt="User image">
                         </div>
                         <div class="user-info">
-                            <p class="user-login"><a ui-sref="user-profile({login:playlist.user.login})">{{playlist.user.login}}</a></p>
-                            <button class="sx__button sx_button_follow" ng-click="follow(playlist.user)"
-                                    ng-class="{true:'active',false:''}[playlist.user.followedByUser]">
-                                <i class="mdi mdi-check" ng-if="playlist.user.followedByUser"></i>
-                                <i class="mdi mdi-plus" ng-if="!playlist.user.followedByUser"></i>
-                                {{ playlist.user.followedByUser ? 'Following' : 'Follow' }}
+                            <p class="user-login"><a ui-sref="user-profile({login:playlistDTO.playlist.user.login})">{{playlistDTO.playlist.user.login}}</a></p>
+                            <button class="sx__button sx_button_follow" ng-click="follow(playlistDTO.playlist.user)"
+                                    ng-class="{true:'active',false:''}[playlistDTO.playlist.user.followedByUser]">
+                                <i class="mdi mdi-check" ng-if="playlistDTO.playlist.user.followedByUser"></i>
+                                <i class="mdi mdi-plus" ng-if="!playlistDTO.playlist.user.followedByUser"></i>
+                                {{ playlistDTO.playlist.user.followedByUser ? 'Following' : 'Follow' }}
                             </button>
-                            <span> {{playlist.user.totalFollowers}} followers</span>
+                            <span> {{playlistDTO.playlist.user.totalFollowers}} followers</span>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="col-pad">
-                <h5>Playlists from {{playlist.user.login}}</h5>
+                <h5><i class="fa fa-list" aria-hidden="true"></i> Playlists from {{playlistDTO.playlist.user.login}}</h5>
                 <ul id="user-playlists">
-                    <li class="user-playlist" ng-repeat="userPlaylist in playlistsUser" ui-sref="playlist.detail({id: userPlaylist.id})">
+                    <li class="user-playlist" ng-repeat="userPlaylistDTO in playlistsUser" ui-sref="playlist.detail({id: userPlaylistDTO.playlist.id})">
                         <div class="user-playlist-cover">
-                            <img src="{{userPlaylist.artwork}}" width="100%" height="100%">
+                            <img ng-src="{{userPlaylistDTO.playlist.artwork}}" img-preload width="100%" height="100%">
                         </div>
                         <div class="user-playlist-name">
-                            {{userPlaylist.name}}
+                            {{userPlaylistDTO.playlist.name}}
                         </div>
                         <div class="user-playlist-numtracks">
-                            {{userPlaylist.songs.length}}
+                            <span class="mdi mdi-music-circle" style="font-size: 17px;"></span><span>{{userPlaylistDTO.playlist.songs.length}}</span>
                         </div>
                     </li>
                 </ul>
@@ -166,11 +183,54 @@
                     <span>This user doesn't have more playlists</span>
                 </div>
             </div>
+            <div class="col-pad">
+                <h5><i class="fa fa-heart" aria-hidden="true"></i> Likes {{playlistDTO.totalLikes}}</h5>
+                <ul id="likes-list">
+                    <li class="like-user" ng-repeat="users in playlistDTO.usersLiked">
+                        <div class="user-like-cover">
+                            <div class="cover" style="background-image: url({{users.user_image}});"></div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </div>
 
 <style>
+
+    .like-user{
+        display: inline-block;
+    }
+
+    .like-user > div:not(.user-like-cover) {
+        padding: 12px 0px 12px 0px;
+    }
+
+    #likes-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .like-user > div {
+        display: inline-block;
+        vertical-align: top;
+    }
+    .like-user > .user-like-cover {
+        height: 40px;
+        width: 40px;
+        border-radius: 5px;
+        overflow: hidden;
+    }
+
+    .user-like-cover > .cover {
+        height: 100%;
+        width: 100%;
+        background-size: contain;
+        background-repeat: no-repeat;
+        border-radius: 5px;
+    }
 
     .list-playlist{
         padding-left: 0px;

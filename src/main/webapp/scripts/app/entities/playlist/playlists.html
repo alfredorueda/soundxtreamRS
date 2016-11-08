@@ -20,7 +20,7 @@
              infinite-scroll-container="'#content'">
             <div ng-repeat="playlist in playlists | filter:searchSong.name" class="playlist-box" style="margin-left: 13px;">
                 <div class="playlist-image">
-                    <img src="{{playlist.artwork}}" style="background: -webkit-linear-gradient(-45deg, rgb(85, 147, 255) 0%, rgb(150, 27, 255) 100%);"/>
+                    <img ng-src="{{playlist.artwork}}" style="background: -webkit-linear-gradient(-45deg, rgb(85, 147, 255) 0%, rgb(150, 27, 255) 100%);"/>
                     <div class="number-songs">{{playlist.songs.length}}</div>
                 </div>
                 <div class="info">
@@ -84,25 +84,25 @@
             <i class="fa fa-plus"></i>&nbsp;&nbsp;New playlist
         </button>
         <div class="clear"></div>
-        <div ng-repeat="playlist in playlists track by playlist.id" class="allList">
-            <div context-menu="menuOptions" class="firstImages" style="background-color: black;" ui-sref="playlist.detail({id: playlist.id})">
+        <div ng-repeat="playlistDTO in playlists track by playlistDTO.playlist.id" class="allList">
+            <div context-menu="menuOptions" class="firstImages" style="background-color: black;" ui-sref="playlist.detail({id: playlistDTO.playlist.id})">
                 <div class="blur">
-                    <div ng-if="playlist.artwork == null" class="background" style="background-image: url({{playlist.songs[0].artwork}});"></div>
-                    <div ng-if="playlist.artwork != null" class="background" style="background-image: url({{playlist.artwork}});"></div>
+                    <div ng-if="playlistDTO.playlist.artwork == null" class="background" style="background-image: url({{playlistDTO.playlist.songs[0].artwork}});"></div>
+                    <div ng-if="playlistDTO.playlist.artwork != null" class="background" style="background-image: url({{playlistDTO.playlist.artwork}});"></div>
                 </div>
-                <div ng-if="playlist.artwork == null">
-                    <img src="{{playlist.songs[1].artwork}}" class="secondArt" alt="" ng-hide="playlist.songs.length == 0 || playlist.songs.length < 1 || playlist.songs[1].artwork == null">
-                    <img src="{{playlist.songs[2].artwork}}" class="thirdArt" alt="" ng-hide="playlist.songs.length == 0 || playlist.songs.length < 3 || playlist.songs[2].artwork == null">
-                    <img src="{{playlist.songs[0].artwork}}" class="firstArt" alt="" ng-hide="playlist.songs.length == 0 || playlist.songs[0].artwork == null">
+                <div ng-if="playlistDTO.playlist.artwork == null">
+                    <img ng-src="{{playlistDTO.playlist.songs[1].artwork}}" ng-if="playlistDTO.playlist.songs.length >= 2" img-preload class="secondArt" alt="">
+                    <img ng-src="{{playlistDTO.playlist.songs[2].artwork}}" ng-if="playlistDTO.playlist.songs.length >= 3" img-preload class="thirdArt" alt="">
+                    <img ng-src="{{playlistDTO.playlist.songs[0].artwork}}" ng-if="playlistDTO.playlist.songs.length >= 1" img-preload class="firstArt" alt="">
                 </div>
-                <div ng-if="playlist.artwork != null">
-                    <img src="{{playlist.songs[0].artwork}}" class="secondArt" alt="" ng-hide="playlist.songs.length == 0 || playlist.songs.length < 1 || playlist.songs[1].artwork == null">
-                    <img src="{{playlist.songs[1].artwork}}" class="thirdArt" alt="" ng-hide="playlist.songs.length == 0 || playlist.songs.length < 3 || playlist.songs[2].artwork == null">
-                    <img src="{{playlist.artwork}}" class="firstArt" alt="" ng-hide="playlist.songs.length == 0 || playlist.songs[0].artwork == null">
+                <div ng-if="playlistDTO.playlist.artwork != null">
+                    <img ng-src="{{playlistDTO.playlist.songs[0].artwork}}" ng-if="playlistDTO.playlist.songs.length >= 1" img-preload class="secondArt" alt="">
+                    <img ng-src="{{playlistDTO.playlist.songs[1].artwork}}" ng-if="playlistDTO.playlist.songs.length >= 2" img-preload class="thirdArt" alt="">
+                    <img ng-src="{{playlistDTO.playlist.artwork}}" img-preload class="firstArt" alt="">
                 </div>
                 <div class="infoList">
-                    <p style="font-size: 17px;"><b>{{playlist.name}}</b></p>
-                    <p style="font-size: 11px;">{{playlist.songs.length}} TRACKS </p>
+                    <p style="font-size: 17px;"><b>{{playlistDTO.playlist.name}}</b></p>
+                    <p style="font-size: 11px;">{{playlistDTO.playlist.songs.length}} TRACKS </p>
                 </div>
                 <div class="listControls">
 
@@ -118,3 +118,15 @@
         display: inline-block;
     }
 </style>
+<!--
+<div ng-if="playlistDTO.playlist.artwork == null">
+                    <img ng-src="{{playlistDTO.playlist.songs[1].artwork}}" class="secondArt" alt="" ng-hide="playlistDTO.playlist.songs.length == 0 || playlistDTO.playlist.songs.length < 1 || playlistDTO.playlist.songs[1].artwork == null">
+                    <img ng-src="{{playlistDTO.playlist.songs[2].artwork}}" class="thirdArt" alt="" ng-hide="playlistDTO.playlist.songs.length == 0 || playlistDTO.playlist.songs.length < 3 || playlistDTO.playlist.songs[2].artwork == null">
+                    <img ng-src="{{playlistDTO.playlist.songs[0].artwork}}" class="firstArt" alt="" ng-hide="playlistDTO.playlist.songs.length == 0 || playlistDTO.playlist.songs[0].artwork == null">
+                </div>
+                <div ng-if="playlistDTO.playlist.artwork != null">
+                    <img ng-src="{{playlistDTO.playlist.songs[0].artwork}}" class="secondArt" alt="" ng-hide="playlistDTO.playlist.songs.length == 0 || playlistDTO.playlist.songs.length < 1 || playlistDTO.playlist.songs[1].artwork == null">
+                    <img ng-src="{{playlistDTO.playlist.songs[1].artwork}}" class="thirdArt" alt="" ng-hide="playlistDTO.playlist.songs.length == 0 || playlistDTO.playlist.songs.length < 3 || playlistDTO.playlist.songs[2].artwork == null">
+                    <img ng-src="{{playlistDTO.playlist.artwork}}" class="firstArt" alt="" ng-hide="playlistDTO.playlist.songs.length == 0 || playlistDTO.playlist.songs[0].artwork == null">
+                </div>
+                -->

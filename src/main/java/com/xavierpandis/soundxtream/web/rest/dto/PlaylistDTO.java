@@ -2,6 +2,10 @@ package com.xavierpandis.soundxtream.web.rest.dto;
 
 import com.xavierpandis.soundxtream.domain.Playlist;
 import com.xavierpandis.soundxtream.domain.Song;
+import com.xavierpandis.soundxtream.domain.User;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Xavi on 30/10/2016.
@@ -9,6 +13,8 @@ import com.xavierpandis.soundxtream.domain.Song;
 public class PlaylistDTO {
 
     private Playlist playlist;
+    private Set<User> usersLiked;
+    private Set<User> usersShared;
     private Boolean liked;
     private int totalLikes;
     private Boolean shared;
@@ -52,5 +58,21 @@ public class PlaylistDTO {
 
     public void setTotalShares(int totalShares) {
         this.totalShares = totalShares;
+    }
+
+    public Set<User> getUsersLiked() {
+        return usersLiked;
+    }
+
+    public void setUsersLiked(Set<User> usersLiked) {
+        this.usersLiked = usersLiked;
+    }
+
+    public Set<User> getUsersShared() {
+        return usersShared;
+    }
+
+    public void setUsersShared(Set<User> usersShared) {
+        this.usersShared = usersShared;
     }
 }

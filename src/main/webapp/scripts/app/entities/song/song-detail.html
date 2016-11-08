@@ -35,7 +35,7 @@
     <!--<div class="artwork-vs">
         <div class="artwork-vs-blur" style="background-image: url('{{songDTO.song.artwork}}')"></div>
     </div>-->
-    <img src="{{songDTO.song.artwork}}" alt="{{songDTO.song.name}}">
+    <img ng-src="{{songDTO.song.artwork}}" img-preload alt="{{songDTO.song.name}}">
 </div>
 <div class="row-track" ng-class="{true: 'track-no-image', false:''}[songDTO.song.banner_song == null]">
     <div id="watch-track-content">
@@ -46,7 +46,7 @@
                 </div>
                 <div class="track-info-container clearfix">
                     <div class="image-track" ng-if="songDTO.song.banner_song != null">
-                        <img src="{{songDTO.song.artwork}}" alt="{{songDTO.song.name}}">
+                        <img img-preload ng-src="{{songDTO.song.artwork}}" alt="{{songDTO.song.name}}">
                     </div>
                     <div class="track-info-data" ng-if="songDTO.song.banner_song != null">
                         <h1>{{songDTO.song.name}}</h1>
@@ -63,7 +63,7 @@
                         <h1>{{songDTO.song.name}}</h1>
                         <div class="track-user-noimg">
                             <div class="user-image">
-                                <img src="{{songDTO.song.user.user_image}}" alt="User image">
+                                <img ng-src="{{songDTO.song.user.user_image}}" img-preload alt="User image">
                             </div>
                             <div class="user-info">
                                 <p class="user-login"><a ui-sref="user-profile({login:songDTO.song.user.login})">{{songDTO.song.user.login}}</a></p>
@@ -81,11 +81,11 @@
                 <div class="action-buttons">
                     <button class="sx__button" ng-class="{true:'active',false:''}[songDTO.liked]"
                             ng-click="like(songDTO.song.id)">
-                        <i class="fa fa-heart-o fa-lg"></i>&nbsp;<span>Like</span>
+                        <i class="fa fa-heart-o fa-lg"></i>&nbsp;<span>{{songDTO.liked ? 'Liked':'Like'}}</span>
                     </button>
                     <button class="sx__button" ng-class="{true:'active',false:''}[songDTO.shared]"
                             ng-click="share(songDTO.song.id)">
-                        <i class="fa fa-heart-o fa-lg"></i>&nbsp;<span>Share</span>
+                        <i class="fa fa-share-square-o fa-lg"></i>&nbsp;<span>{{songDTO.shared ? 'Shared':'Share'}}</span>
                     </button>
                     <button tooltip-placement="bottom" uib-tooltip="Add in playlist" tooltip-append-to-body="true"
                             class="sx__button" ui-sref="song.detail.addPlaylist">
@@ -155,7 +155,7 @@
                             {{ $index+1 }}
                         </div>
                         <div style="width: auto;display: inline-block;vertical-align: middle;line-height: 37px;">
-                            <img style="border-radius:100%;" src="{{comment.user.user_image}}" width="35px"
+                            <img style="border-radius:100%;" ng-src="{{comment.user.user_image}}" img-preload width="35px"
                                  height="35px"/>
                         </div>
                         <div class="user-comment__name" style="display: inline-block;vertical-align: top;">
@@ -191,7 +191,7 @@
                 <div ng-if="songDTO.song.banner_song != null">
                     <div class="track-user-noimg">
                         <div class="user-image">
-                            <img src="{{songDTO.song.user.user_image}}" alt="User image">
+                            <img ng-src="{{songDTO.song.user.user_image}}" img-preload alt="User image">
                         </div>
                         <div class="user-info">
                             <p class="user-login"><a ui-sref="user-profile({login:songDTO.song.user.login})">{{songDTO.song.user.login}}</a></p>
@@ -216,7 +216,7 @@
                     <h5><i class="fa fa-user"></i> In playlists</h5>
                     <ul ng-if="playlistWithSong.length > 0" class="list-playlist">
                         <li class="list-playlist-item" ng-repeat="playlistSong in playlistWithSong | limitTo:10">
-                            <img src="{{playlistSong.artwork}}" alt="{{playlistSong.artwork}}" class="img-circle">
+                            <img ng-src="{{playlistSong.artwork}}" alt="{{playlistSong.artwork}}" img-preload class="img-circle">
                             <!--<img ng-src="{{playlistSong.artwork}}" class="md-avatar image-responsive"/>-->
                             <div>
                                 <h4 ui-sref="playlist.detail({id:playlistSong.id})"
@@ -284,7 +284,7 @@
         //right: 0px;
         //bottom: 0px;
         //max-width: 1080px;
-        max-width: 1280px;
+        max-width: 1130px;
     }
 
     .sx-primary-banner .artwork-vs-blur{

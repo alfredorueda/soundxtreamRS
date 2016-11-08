@@ -46,7 +46,7 @@ angular.module('soundxtreamappApp', ['LocalStorageModule', 'tmh.dynamicLocale', 
 
             if(toState.name == "home"){
                 if(Principal.isAuthenticated()){
-                    $state.go("stream");
+                    //$state.go("stream");
                 }
             }
 
@@ -66,7 +66,7 @@ angular.module('soundxtreamappApp', ['LocalStorageModule', 'tmh.dynamicLocale', 
 
             if(toState.name == "home"){
                 if(Principal.isAuthenticated()){
-                    $state.go("stream");
+                    //$state.go("stream");
                 }
             }
 
@@ -93,8 +93,8 @@ angular.module('soundxtreamappApp', ['LocalStorageModule', 'tmh.dynamicLocale', 
         $rootScope.back = function() {
             // If previous state is 'activate' or do not exist go to 'home'
             if ($rootScope.previousStateName === 'activate' || $state.get($rootScope.previousStateName) === null) {
-                //$state.go('home');
-                $state.go("stream");
+                //$state.go("stream");
+                $state.go("library.tracks")
             } else {
                 $state.go($rootScope.previousStateName, $rootScope.previousStateParams);
             }
@@ -122,9 +122,28 @@ angular.module('soundxtreamappApp', ['LocalStorageModule', 'tmh.dynamicLocale', 
             var minutes = parseInt(input/60, 10);
             var seconds = Math.round(input%60);
 
+            if(seconds < 10){
+                seconds = "0"+seconds;
+            }
+
             return minutes+''+(seconds ? ':'+seconds+'' : '');
         }
     })
+    .directive('imgPreload', [function spinnerLoad() {
+        return {
+            restrict: 'A',
+            link: function spinnerLoadLink(scope, elem, attrs) {
+                scope.$watch('ngSrc', function watchNgSrc() {
+                    elem.hide();
+                    elem.after('<i class="fa fa-spinner fa-lg fa-spin loader-images"></i>');  // add spinner
+                });
+                elem.on('load', function onLoad() {
+                    elem.fadeIn();
+                    elem.next('i.fa-spinner.loader-images').remove(); // remove spinner
+                });
+            }
+        };
+    }])
     .config(function (cfpLoadingBarProvider,$stateProvider, $urlRouterProvider, $httpProvider, $locationProvider, $translateProvider, tmhDynamicLocaleProvider, httpRequestInterceptorCacheBusterProvider, AlertServiceProvider) {
         // uncomment below to make alerts look like toast
         //AlertServiceProvider.showAsToast(true);

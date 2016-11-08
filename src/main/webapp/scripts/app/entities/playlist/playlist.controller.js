@@ -8,17 +8,18 @@ angular.module('soundxtreamappApp')
             $scope.isAuthenticated = Principal.isAuthenticated;
         });
 
-        $rootScope.playlists = [];
+        $scope.playlists = [];
         $scope.predicate = 'id';
         $scope.reverse = true;
         $scope.page = 0;
         $scope.loadAll = function() {
             Playlist.getPlaylistUser({login: $scope.account.login, page: $scope.page, size: 6, sort: [$scope.predicate + ',' + ($scope.reverse ? 'asc' : 'desc'), 'id']}, function(result, headers) {
                 $scope.links = ParseLinks.parse(headers('link'));
+                console.log(result)
                 for (var i = 0; i < result.length; i++) {
-                    for(var k = 0; k < result[i].songs.length; k++){
-                        if(result[i].songs[k].artwork == null){
-                            result[i].songs[k].artwork = "/uploads/no_image.jpg";
+                    for(var k = 0; k < result[i].playlist.songs.length; k++){
+                        if(result[i].playlist.songs[k].artwork == null){
+                            result[i].playlist.songs[k].artwork = "/uploads/no_image.jpg";
                         }
                     }
 

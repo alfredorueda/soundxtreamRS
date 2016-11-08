@@ -299,7 +299,7 @@ public class SongResource {
 
         for(Playlist playlist:playlists){
 
-            Set<Song> songsPlaylist = playlist.getSongs();
+            List<Song> songsPlaylist = playlist.getSongs();
 
             songsPlaylist.removeIf(song1 -> song.getId().equals(id));
             for(Song song2:playlist.getSongs()){

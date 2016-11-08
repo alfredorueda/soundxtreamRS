@@ -2,34 +2,7 @@
     <div class="hero-nav__inner">
         <h1>Soundxtream</h1>
         <div>
-            <!--<input id="inputor" placeholder="Search something" type="text" class="form-control input_sx_mat"/>-->
-            <div class="mention-container">
-                <textarea ui-mention mention-example
-                  ng-model="post.message"
-                  placeholder="Use @mention to trigger"
-                  ng-trim="false">
-
-                </textarea>
-                <div class="mention-highlight"></div>
-
-                <ul ng-if="$mention.choices.length" class="dropdown">
-                    <li ng-repeat="choice in $mention.choices" ng-class="{active:$mention.activeChoice==choice}">
-                        <a ng-click="$mention.select(choice)">
-                            {{::choice.first}} {{::choice.last}}
-                        </a>
-                    </li>
-                </ul>
-            </div>
-
-            <input ng-model="newValue" placeholder="New Value"><button ng-click="post.message=newValue">Set Value</button><br>
-
-            <p>
-                $mentions.mentions: {{$mention.mentions | json}}
-            </p>
-
-            <p>
-                ng-model (post.message): {{post.message | json}}
-            </p>
+            <input id="inputor" placeholder="Search" type="text" class="form-control input_sx_mat"/>
         </div>
     </div>
 </div>
@@ -70,7 +43,7 @@
                     </div>
                 </div>
                 <div class="info">
-                    <h5 style="cursor: pointer;text-align: center;" ui-sref="song.detail({id:songDTO.song.id})">{{songDTO.song.name}}</h5>
+                    <h5 style="cursor: pointer;text-align: center;" ui-sref="song.detail({accessUrl: songDTO.song.access_url,user: songDTO.song.user.login, id: songDTO.song.id})">{{songDTO.song.name}}</h5>
                     <h6 style="cursor: pointer;text-align: center;" ui-sref="user-profile({login:songDTO.song.user.login})">{{songDTO.song.user.login}}</h6>
                 </div>
             </div>
@@ -82,7 +55,6 @@
             <div ng-repeat="playlist in playlists" class="playlist-box" style="margin-left: 13px;">
                 <div class="playlist-image">
                     <img src="{{playlist.artwork}}" style="background: -webkit-linear-gradient(-45deg, rgb(85, 147, 255) 0%, rgb(150, 27, 255) 100%);"/>
-                    <div class="number-songs">{{playlist.songs.length}}</div>
                 </div>
                 <div class="info">
                     <h5 ui-sref="playlist.detail({id:playlist.id})">{{playlist.name}}</h5>
@@ -240,6 +212,21 @@
         text-decoration: none; }
     .dropdown .active {
         background: lightgreen; }
+
+    .playlist-box{
+        height: 180px;
+        width: 180px;
+        display: inline-block;
+    }
+    .playlist-image {
+        height: 100%;
+        width: 100%;
+    }
+
+    .playlist-image img{
+        width: 100%;
+        height:100%;
+    }
 </style>
 <script>
     /*var heroShinker = function() {

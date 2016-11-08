@@ -1,3 +1,4 @@
+<!--
 <div>
     <h2 translate="soundxtreamappApp.playlist_user.home.title">Playlist_users</h2>
     <jh-alert></jh-alert>
@@ -6,7 +7,7 @@
             <div class="col-xs-4 no-padding-left">
                 <button class="btn btn-primary" ui-sref="playlist_user.new" >
                     <span class="glyphicon glyphicon-plus"></span>
-                    <span 
+                    <span
 class="hidden-xs"                        translate="soundxtreamappApp.playlist_user.home.createLabel">Create new Playlist_user
                     </span>
                 </button>
@@ -57,7 +58,7 @@ class="hidden-xs"                        translate="soundxtreamappApp.playlist_u
                         <div class="btn-group flex-btn-group-container">
                             <button type="submit"
                                     ui-sref="playlist_user.detail({id:playlist_user.id})"
-                                    class="btn btn-info btn-sm"> 
+                                    class="btn btn-info btn-sm">
                                 <span class="glyphicon glyphicon-eye-open"></span>
                                 <span class="hidden-xs hidden-sm" translate="entity.action.view"></span>
                             </button>
@@ -69,7 +70,7 @@ class="hidden-xs"                        translate="soundxtreamappApp.playlist_u
                             </button>
                             <button type="submit"
                                     ui-sref="playlist_user.delete({id:playlist_user.id})"
-                                    class="btn btn-danger btn-sm">                                    
+                                    class="btn btn-danger btn-sm">
                                 <span class="glyphicon glyphicon-remove-circle"></span>
                                 <span class="hidden-xs hidden-sm" translate="entity.action.delete"></span>
                             </button>
@@ -80,3 +81,97 @@ class="hidden-xs"                        translate="soundxtreamappApp.playlist_u
         </table>
     </div>
 </div>
+-->
+
+<div class="row">
+    <div class="col-md-12" infinite-scroll="loadPage(page + 1)" infinite-scroll-disabled="links['last'] == page"
+         infinite-scroll-distance='2'
+         infinite-scroll-container="'#content'">
+        <h3 class="h3_title">
+            <i class="mdi mdi-bookmark-music mdi-36px mdi-sx-orange" aria-hidden="true"></i>
+            <span style="display: inline-flex;vertical-align: text-top;margin-top: -8px;" class="titles">YOUR PLAYLISTS LIKES</span>
+        </h3>
+        <div ng-repeat="playlist_user in playlist_users track by playlist_user.id" class="track-box" style="margin-left: 13px;">
+            <div class="track-image">
+                <img ng-src="{{playlist_user.playlist.artwork}}" img-preload style="background: -webkit-linear-gradient(-45deg, rgb(85, 147, 255) 0%, rgb(150, 27, 255) 100%);"/>
+                <!--<div class="controls">
+                    <md-button
+                        ng-if="playerPlaylist.getSongId(mediaPlayer.currentTrack) != song_user.song.id || playerPlaylist.playlistCurrent != 'fromYourLikes'"
+                        ng-click="playerPlaylist.addSongAll(song_users,mediaPlayer,$index,'fromYourLikes')"
+                        class="md-play" aria-label="play">
+                        <md-icon>
+                            <i class="material-icons">play_arrow</i>
+                        </md-icon>
+                    </md-button>
+                    <md-button
+                        ng-if="playerPlaylist.getSongId(mediaPlayer.currentTrack) ==  song_user.song.id && playerPlaylist.playlistCurrent == 'fromYourLikes'"
+                        ng-click="mediaPlayer.playPause()" class="md-play" aria-label="play">
+                        <md-icon>
+                            <i ng-if="!mediaPlayer.playing" class="material-icons">play_arrow</i>
+                            <i ng-if="mediaPlayer.playing" class="material-icons">pause</i>
+                        </md-icon>
+                    </md-button>
+                </div>-->
+                <div class="stats">
+                    <button class="sx__button like__button" ng-class="{true: 'active',false:''}[playlist_user.liked]" ng-click="unlike(playlist_user.playlist.id)">
+                        <i class="fa fa-heart-o fa-lg"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="info">
+                <h5 ui-sref="playlist.detail({id: playlist_user.playlist.id})">
+                    {{playlist_user.playlist.name}}</h5>
+                <h6 ui-sref="user-profile({login:playlist_user.playlist.user.login})">{{playlist_user.playlist.user.login}}</h6>
+            </div>
+        </div>
+    </div>
+    <div ng-cloak class="col-md-12 likes_empty_warning" ng-if="song_users.length == 0">
+        <i class="material-icons">warning</i>
+        <h3>No likes</h3>
+    </div>
+</div>
+
+<style>
+    @keyframes pulseWarning {
+        0% {
+            padding-top: 0px;
+            font-size: 155px;
+        }
+        50% {
+            padding-top: 35px;
+            font-size: 80px;
+        }
+        100% {
+            padding-top: 0px;
+            font-size: 155px;
+        }
+    }
+
+    .likes_empty_warning {
+        text-align: center;
+    }
+
+    .likes_empty_warning h3 {
+        background: -webkit-linear-gradient(-45deg, rgba(125, 151, 255, 1) 0%, rgba(116, 134, 207, 1) 41%, rgba(73, 79, 189, 1) 100%) !important;
+        background: linear-gradient(-45deg, rgba(125, 151, 255, 1) 0%, rgba(116, 134, 207, 1) 41%, rgba(73, 79, 189, 1) 100%) !important;
+        -webkit-background-clip: text !important;
+        -webkit-text-fill-color: transparent !important;
+    }
+
+    .likes_empty_warning i.material-icons {
+        margin-bottom: -2px;
+        font-size: 160px;
+        background: -webkit-linear-gradient(-45deg, rgba(125, 151, 255, 1) 0%, rgba(116, 134, 207, 1) 41%, rgba(73, 79, 189, 1) 100%) !important;
+        background: linear-gradient(-45deg, rgba(125, 151, 255, 1) 0%, rgba(116, 134, 207, 1) 41%, rgba(73, 79, 189, 1) 100%) !important;
+        -webkit-background-clip: text !important;
+        -webkit-text-fill-color: transparent !important;
+    / / text-shadow: 0 px 1 px 4 px rgba(0, 0, 0, .4);
+        animation-name: pulseWarning;
+        animation-duration: 3s;
+        animation-iteration-count: infinite;
+    }
+
+    .h3_title{
+        margin-top: 2px;
+    }
+</style>

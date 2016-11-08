@@ -14,7 +14,8 @@ angular.module('soundxtreamappApp')
                 }
             },
             'update': { method:'PUT' },
-            'like': { method: 'POST', isArray: false, url: 'api/playlist_users/:id/like'},
-            'share': { method: 'POST', isArray: false, url: 'api/playlist_users/:id/share'}
+            'addLike': { method: 'POST', isArray: false, url: 'api/playlist_users/:id/like'},
+            'addShare': { method: 'POST', isArray: false, url: 'api/playlist_users/:id/share'},
+            'getLikesUser': { method: 'GET', isArray: true, url: 'api/playlist/likesUser/:login'}
         });
     });

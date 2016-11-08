@@ -24,28 +24,31 @@
             <column name="name" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
-            
+
             <column name="artwork" type="varchar(255)"/>
-            
+
             <column name="date_created" type="timestamp"/>
-            
+
             <column name="full_duration" type="double"/>
-            
+
             <column name="banner_playlist" type="varchar(255)"/>
-            
+
             <column name="access_url" type="varchar(255)"/>
-            
+
             <column name="user_id" type="bigint"/>
             <!-- jhipster-needle-liquibase-add-column - Jhipster will add columns here, do not remove-->
         </createTable>
         <dropDefaultValue tableName="playlist" columnName="date_created" columnDataType="datetime"/>
 
-        
+
         <createTable tableName="playlist_song">
             <column name="songs_id" type="bigint">
                 <constraints nullable="false"/>
             </column>
             <column name="playlists_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="songs_order" type="bigint">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -63,7 +66,7 @@
                                  constraintName="fk_playlist_song_playlist_id"
                                  referencedColumnNames="id"
                                  referencedTableName="song"/>
-        
+
         <addForeignKeyConstraint baseColumnNames="user_id"
                                  baseTableName="playlist"
                                  constraintName="fk_playlist_user_id"

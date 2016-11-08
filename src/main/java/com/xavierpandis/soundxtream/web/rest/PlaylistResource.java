@@ -3,10 +3,7 @@ package com.xavierpandis.soundxtream.web.rest;
 import com.codahale.metrics.annotation.Timed;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.xavierpandis.soundxtream.domain.*;
-import com.xavierpandis.soundxtream.repository.PlaylistRepository;
-import com.xavierpandis.soundxtream.repository.Playlist_userRepository;
-import com.xavierpandis.soundxtream.repository.SeguimientoRepository;
-import com.xavierpandis.soundxtream.repository.UserRepository;
+import com.xavierpandis.soundxtream.repository.*;
 import com.xavierpandis.soundxtream.repository.search.PlaylistSearchRepository;
 import com.xavierpandis.soundxtream.security.SecurityUtils;
 import com.xavierpandis.soundxtream.web.rest.dto.ActivityDTO;
@@ -70,6 +67,9 @@ public class PlaylistResource {
     @Inject
     private Playlist_userRepository playlist_userRepository;
 
+    @Inject
+    private SongRepository songRepository;
+
     /**
      * POST  /playlists -> Create a new playlist.
      */
@@ -123,7 +123,7 @@ public class PlaylistResource {
 
         playlist.setFull_duration(new_duration);
 
-        /*if(songsList.size() >= 4){
+        if(songsList.size() >= 4){
 
             List<Image> images = new ArrayList<>();
 
@@ -178,7 +178,14 @@ public class PlaylistResource {
 
             playlist.setArtwork("uploads/"+playlist.getName()+"-"+playlist.getId()+".jpg");
 
-        }*/
+        }else{
+            if(songsList.size() >= 1){
+                playlist.setArtwork(songsList.get(0).getArtwork());
+            }
+            else{
+                playlist.setArtwork(user.getUser_image());
+            }
+        }
 
         Playlist result = playlistRepository.save(playlist);
         playlistSearchRepository.save(result);
@@ -244,11 +251,54 @@ public class PlaylistResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<Playlist> getPlaylist(@PathVariable Long id) {
+    public ResponseEntity<PlaylistDTO> getPlaylist(@PathVariable Long id) {
         log.debug("REST request to get Playlist : {}", id);
         Playlist playlist = playlistRepository.findOneWithEagerRelationships(id);
 
-        return Optional.ofNullable(playlist)
+        User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).get();
+
+        Playlist_user playlist_user = playlist_userRepository.findExistUserLiked(playlist.getId(),user.getLogin());
+        PlaylistDTO playlistDTO = new PlaylistDTO();
+
+        playlistDTO.setPlaylist(playlist);
+
+        if(playlist_user == null || playlist_user.getLiked() == null || !playlist_user.getLiked()){
+            playlistDTO.setLiked(false);
+        }
+        else{
+            playlistDTO.setLiked(true);
+        }
+
+        if(playlist_user == null || playlist_user.getShared() == null || !playlist_user.getShared()){
+            playlistDTO.setShared(false);
+        }
+        else{
+            playlistDTO.setShared(true);
+        }
+
+        List<Playlist_user> playlist_userLikes = playlist_userRepository.findUsersLiked(playlist.getId());
+        List<Playlist_user> playlist_userShares = playlist_userRepository.findUsersShared(playlist.getId());
+
+        Set<User> usersLiked = new HashSet<>();
+        Set<User> usersShared = new HashSet<>();
+
+        for(Playlist_user playlist_user2:playlist_userLikes){
+            usersLiked.add(playlist_user2.getUser());
+        }
+
+        for(Playlist_user playlist_user3:playlist_userShares){
+            usersShared.add(playlist_user3.getUser());
+        }
+
+        playlistDTO.setUsersLiked(usersLiked);
+        playlistDTO.setUsersShared(usersShared);
+
+        int countLikes = playlist_userRepository.findTotalLikes(playlist.getId());
+        int countShares = playlist_userRepository.findTotalShares(playlist.getId());
+        playlistDTO.setTotalLikes(countLikes);
+        playlistDTO.setTotalShares(countShares);
+
+        return Optional.ofNullable(playlistDTO)
             .map(result -> new ResponseEntity<>(
                 result,
                 HttpStatus.OK))
@@ -413,11 +463,57 @@ public class PlaylistResource {
         method = RequestMethod.GET,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<List<Playlist>> getPlaylistsUser(@PathVariable String login, Pageable pageable) throws URISyntaxException {
+    public ResponseEntity<List<PlaylistDTO>> getPlaylistsUser(@PathVariable String login, Pageable pageable) throws URISyntaxException {
 
         Page<Playlist> page = playlistRepository.findPlaylistsUser(login,pageable);
 
+        List<PlaylistDTO> listPlaylistDTO = new ArrayList<>();
+        User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).get();
+        ZonedDateTime now = ZonedDateTime.now();
 
+        for(Playlist playlist:page.getContent()){
+
+            Playlist_user playlist_user = playlist_userRepository.findExistUserLiked(playlist.getId(),user.getLogin());
+            PlaylistDTO playlistDTO = new PlaylistDTO();
+
+            playlistDTO.setPlaylist(playlist);
+
+            if(playlist_user == null || playlist_user.getLiked() == null || !playlist_user.getLiked()){
+                playlistDTO.setLiked(false);
+            }
+            else{
+                playlistDTO.setLiked(true);
+            }
+
+            if(playlist_user == null || playlist_user.getShared() == null || !playlist_user.getShared()){
+                playlistDTO.setShared(false);
+            }
+            else{
+                playlistDTO.setShared(true);
+            }
+
+            int countLikes = playlist_userRepository.findTotalLikes(playlist.getId());
+            int countShares = playlist_userRepository.findTotalShares(playlist.getId());
+            playlistDTO.setTotalLikes(countLikes);
+            playlistDTO.setTotalShares(countShares);
+
+            listPlaylistDTO.add(playlistDTO);
+
+        }
+
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/playlistUser");
+        return new ResponseEntity<>(listPlaylistDTO, headers, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/playlistUserLogged",
+        method = RequestMethod.GET,
+        produces = MediaType.APPLICATION_JSON_VALUE)
+    @Timed
+    public ResponseEntity<List<Playlist>> getPlaylistsUserLogged(Pageable pageable) throws URISyntaxException {
+
+        User user = userRepository.findOneByLogin(SecurityUtils.getCurrentUserLogin()).get();
+
+        Page<Playlist> page = playlistRepository.findPlaylistsUser(user.getLogin(),pageable);
 
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(page, "/api/playlistUser");
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);

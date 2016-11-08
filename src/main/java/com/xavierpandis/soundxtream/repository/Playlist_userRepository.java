@@ -13,8 +13,11 @@ import java.util.List;
  */
 public interface Playlist_userRepository extends JpaRepository<Playlist_user,Long> {
 
+    /*@Query("select playlist_user from Playlist_user playlist_user where playlist_user.user.login = ?#{principal.username}")
+    List<Playlist_user> findByUserIsCurrentUser();*/
+
     @Query("select playlist_user from Playlist_user playlist_user where playlist_user.user.login = ?#{principal.username}")
-    List<Playlist_user> findByUserIsCurrentUser();
+    Page<Playlist_user> findByUserIsCurrentUser(Pageable pageable);
 
     @Query("select playlist_user from Playlist_user playlist_user where playlist_user.user.login = :login AND playlist_user.playlist.id = :playlist_id")
     Playlist_user findExistUserLiked(@Param("playlist_id") Long id, @Param("login") String login);
@@ -28,10 +31,16 @@ public interface Playlist_userRepository extends JpaRepository<Playlist_user,Lon
     @Query("select playlist_user from Playlist_user playlist_user where playlist_user.liked = true")
     Page<Playlist_user> findSongsLiked(Pageable pageable);
 
-    @Query("select playlist_user from Playlist_user playlist_user where playlist_user.user.login = :login ORDER BY playlist_user.likedDate DESC")
+    @Query("select playlist_user from Playlist_user playlist_user where playlist_user.user.login = :login and playlist_user.liked = true ORDER BY playlist_user.likedDate DESC")
     Page<Playlist_user> findLikesUser(@Param("login") String login, Pageable pageable);
 
     @Query("select count(playlist_user) from Playlist_user playlist_user where playlist_user.user.login = :login AND playlist_user.liked = true")
     int totalLikesOfUser (@Param("login") String login);
+
+    @Query("select playlist_user from Playlist_user playlist_user WHERE playlist_user.playlist.id = :song_id AND playlist_user.liked = true")
+    List<Playlist_user> findUsersLiked(@Param("song_id") Long id);
+
+    @Query("select playlist_user from Playlist_user playlist_user WHERE playlist_user.playlist.id = :song_id AND playlist_user.shared = true")
+    List<Playlist_user> findUsersShared(@Param("song_id") Long id);
 
 }

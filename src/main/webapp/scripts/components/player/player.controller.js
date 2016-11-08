@@ -97,7 +97,8 @@ angular.module('soundxtreamappApp')
 
             $scope.logout = function () {
                 this.audioPlaylist = [];
-                this.playlistCurrent = null;
+                mediaPlayer.currentTrack = null;
+                mediaPlayer.playlistCurrent = null;
                 mediaPlayer.pause();
                 Auth.logout();
                 $rootScope.account = {};
@@ -323,10 +324,11 @@ angular.module('soundxtreamappApp')
 
             this.playTrackFromPlaylist = function(playlist,mediaPlayer,indexSong,playingFrom){
                 console.log(playlist);
+
                 var audioElement = {};
                 var songs = [];
                 this.playlistCurrent = playingFrom;
-
+                console.log(playingFrom +":"+this.playlistCurrent);
                 for(var k = 0; k < playlist.songs.length; k++){
                     audioElement = playlist.songs[k];
                     var song = {

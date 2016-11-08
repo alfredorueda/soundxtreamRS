@@ -31,7 +31,7 @@
     <div>
         <h4>Create new playlist</h4>
         <div class="row">
-            <div class="col-md-4">
+            <!--<div class="col-md-4">
                 <div class="form-group">
                     <div ngf-drop ng-model="picFile" ngf-pattern="image/*" accept="image/*"
                          class="cropArea">
@@ -46,8 +46,8 @@
                         </button>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-8">
+            </div>-->
+            <div class="col-md-12">
                 <div class="form-group">
                     <label class="control-label" translate="soundxtreamappApp.playlist.name"
                            for="field_name">Name</label>
@@ -66,12 +66,6 @@
                            for="field_access_url">Access url</label>
                     <input type="text" class="form-control" name="access_url" id="field_access_url" value="0"
                            ng-model="playlist.access_url" required/>
-                </div>
-                <div class="form-group">
-                    <label class="control-label" translate="soundxtreamappApp.playlist.full_duration"
-                           for="field_duration">Full length</label>
-                    <input type="number" class="form-control" name="name" id="field_duration" value="0"
-                           ng-model="playlist.full_duration" disabled required/>
                 </div>
                 <button type="button" class="sx__button" ng-click="isCollapsed = !isCollapsed">
                     <span class="glyphicon glyphicon-picture"></span> Add custom banner
@@ -135,10 +129,10 @@
         <div class="row">
             <div class="col-md-6 list-playlist">
                 <h5>Import tracks from your playlists</h5>
-                <md-card ng-repeat="item in playlists" ng-if="item.songs.length > 0">
+                <md-card ng-repeat="itemDTO in playlists" ng-if="itemDTO.playlist.songs.length > 0">
                     <md-card-title>
                         <md-card-title-text>
-                            <span class="md-subhead">{{item.name}}</span>
+                            <span class="md-subhead">{{itemDTO.playlist.name}}</span>
                             <span>
                                 <md-button type="button" class="md-primary sx__button sx__button__primary" ng-click="collapse =! collapse">View
                                     tracks
@@ -148,7 +142,7 @@
                     </md-card-title>
                     <md-divider></md-divider>
                     <div uib-collapse="collapse" ng-init="collapse=true">
-                        <div class="track-playlist" ng-repeat="track in item.songs">
+                        <div class="track-playlist" ng-repeat="track in itemDTO.playlist.songs">
                             <img src="{{track.artwork}}"/>
                             <span>{{track.name}}</span>
                             <button type="button" class="sx__button" ng-click="addTrack(track)">

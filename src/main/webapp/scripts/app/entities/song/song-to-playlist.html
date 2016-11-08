@@ -21,14 +21,13 @@
         </div>
     </div>
 </div>-->
-
 <div layout-gt-sm="row" layout="column">
     <div flex-gt-sm="50" flex>
         <div class="playlist-items">
             <md-list>
                 <md-subheader class="md-header-sx md-no-sticky header_add_track">Your playlists</md-subheader>
                 <md-divider></md-divider>
-                <md-list-item ng-repeat="playlist in playlists" ng-click="add(playlist.id)" class="noright">
+                <md-list-item ng-repeat="playlist in playlists" ng-click="add(playlist)" class="noright">
                     <img alt="{{ playlist.artwork }}" ng-src="{{ playlist.artwork }}" class="md-avatar"/>
                     <p>{{ playlist.name }}</p>
                     <span class="md-secondary">ADD</span>

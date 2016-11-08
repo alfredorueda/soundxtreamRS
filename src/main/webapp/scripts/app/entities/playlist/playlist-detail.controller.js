@@ -2,12 +2,12 @@
 
 angular.module('soundxtreamappApp')
     .controller('PlaylistDetailController', function (ParseLinks, $scope, $timeout,$rootScope, $stateParams, Seguimiento, entity,
-                                                      Playlist, Song, User,Principal, Playlist_user) {
+                                                      Playlist, Song, User,Principal, Playlist_user, toaster) {
         Principal.identity().then(function(account) {
             $scope.account = account;
             $scope.isAuthenticated = Principal.isAuthenticated;
         });
-        $scope.playlist = entity;
+        $scope.playlistDTO = entity;
         var unshuffledTracks = [];
         $scope.playlistsUser = [];
 
@@ -18,33 +18,25 @@ angular.module('soundxtreamappApp')
         var imagePlaylist = "";
         $scope.readyUserPlaylists = false;
 
-        $scope.playlist.$promise.then(function(){
-            Playlist.getPlaylistUser({login:$scope.playlist.user.login, page: $scope.page, size: 4, sort: [$scope.predicate + ',' + ($scope.reverse ? 'asc' : 'desc'), 'id']}, function(result, headers) {
+        $scope.playlistDTO.$promise.then(function(){
+            Playlist.getPlaylistUser({login:$scope.playlistDTO.playlist.user.login, page: $scope.page, size: 4, sort: [$scope.predicate + ',' + ($scope.reverse ? 'asc' : 'desc'), 'id']}, function(result, headers) {
                 $scope.links = ParseLinks.parse(headers('link'));
                 for (var i = 0; i < result.length; i++) {
-                    if(result[i].id != $scope.playlist.id){
+                    if(result[i].playlist.id != $scope.playlistDTO.playlist.id){
                         $scope.playlistsUser.push(result[i]);
                     }
                 }
                 $scope.readyUserPlaylists = true;
             });
 
-            User.get({login:$scope.playlist.user.login},function(res){
-                $scope.playlist.user.totalFollowers = res.totalFollowers;
-                $scope.playlist.user.totalFollowings = res.totalFollowings;
-                $scope.playlist.user.followedByUser = res.followedByUser;
+            User.get({login:$scope.playlistDTO.playlist.user.login},function(res){
+                $scope.playlistDTO.playlist.user.totalFollowers = res.totalFollowers;
+                $scope.playlistDTO.playlist.user.totalFollowings = res.totalFollowings;
+                $scope.playlistDTO.playlist.user.followedByUser = res.followedByUser;
             });
 
 
         });
-
-        $scope.like = function(id){
-            Playlist_user.like({id: id}, successLike, function(error){
-            });
-        }
-
-        function successLike(result){
-        }
 
         $scope.follow = function(user){
             $scope.seguimiento = {
@@ -54,7 +46,7 @@ angular.module('soundxtreamappApp')
                 seguido: null,
                 fecha: null
             };
-            if($scope.playlist.user.followedByUser) {
+            if($scope.playlistDTO.playlist.user.followedByUser) {
                 $scope.seguimiento.siguiendo = false;
             }
             else{
@@ -63,12 +55,12 @@ angular.module('soundxtreamappApp')
             $scope.seguimiento.seguido = user;
             Seguimiento.save($scope.seguimiento,function(res){
                 if(res.siguiendo == true){
-                    $scope.playlist.user.followedByUser = true;
-                    $scope.playlist.user.totalFollowers += 1;
+                    $scope.playlistDTO.playlist.user.followedByUser = true;
+                    $scope.playlistDTO.playlist.user.totalFollowers += 1;
                 }
                 else{
-                    $scope.playlist.user.followedByUser = false;
-                    $scope.playlist.user.totalFollowers -= 1;
+                    $scope.playlistDTO.playlist.user.followedByUser = false;
+                    $scope.playlistDTO.playlist.user.totalFollowers -= 1;
                 }
             });
         };
@@ -114,9 +106,50 @@ angular.module('soundxtreamappApp')
         }
 
         $scope.removeTrack = function (index){
-            $scope.playlist.songs.splice(index, 1);
-            Playlist.update($scope.playlist,function(res){
-                $scope.playlist.full_duration = res.full_duration;
+            $scope.playlistDTO.playlist.songs.splice(index, 1);
+            Playlist.update($scope.playlistDTO.playlist,function(res){
+                $scope.playlistDTO.playlist.full_duration = res.full_duration;
+                $scope.playlistDTO.playlist.artwork = res.artwork;
             });
+        }
+
+        $scope.like = function(id){
+            Playlist_user.addLike({id: id},{}, successLike);
+        };
+
+        var successLike = function(result){
+            $scope.playlistDTO.liked = result.liked;
+            if($scope.playlistDTO.liked){
+                $scope.playlistDTO.totalLikes += 1;
+            }
+            else{
+                $scope.playlistDTO.totalLikes -= 1;
+            }
+            if(result.liked == true){
+                toaster.pop('success',"Success","Playlist added to your favorites");
+            }
+            else{
+                toaster.pop('success',"Success","Playlist removed from your favorites");
+            }
+        };
+
+        $scope.share = function(id){
+            Playlist_user.addShare({id: id},{}, successShare);
+        };
+
+        function successShare(result) {
+            $scope.playlistDTO.shared = result.shared;
+            if($scope.playlistDTO.shared){
+                $scope.playlistDTO.totalShares += 1;
+            }
+            else{
+                $scope.playlistDTO.totalShares -= 1;
+            }
+            if(result.shared == true){
+                toaster.pop('success',"Success","Playlist shared to your followers");
+            }
+            else{
+                toaster.pop('success',"Success","Playlist removed from your favorites");
+            }
         }
     });

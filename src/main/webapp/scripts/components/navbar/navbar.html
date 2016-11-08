@@ -1,29 +1,29 @@
 <div id="menu-container" ng-switch="isAuthenticated()">
     <div id="logo-container">
         <div id="logo">
-            <a href="" id="logo-link">
+            <a ui-sref="home" id="logo-link">
                 <!--SX-->
             </a>
         </div>
     </div>
-    <div id="options-menu-container">
+    <div id="options-menu-container" ng-s>
         <ul id="options-list">
-            <li class="option-menu">
+            <li class="option-menu" ng-switch-when="true">
                 <a ui-sref="stream">
                     <span class="mdi mdi-home-modern mdi-36px"></span>
-                    <span>EXPLORE</span>
+                    <span>Feed</span>
                 </a>
             </li>
-            <li class="option-menu">
+            <li class="option-menu" ng-switch-when="true">
                 <a ui-sref="library.tracks">
                     <span class="mdi mdi-library-music mdi-36px"></span>
-                    <span>YOUR LIBRARY</span>
+                    <span>Your library</span>
                 </a>
             </li>
-            <li class="option-menu admin-panel-menu">
+            <li ng-class="{active: vm.$state.includes('admin')}" class="option-menu admin-panel-menu" has-authority="ROLE_ADMIN">
                 <a href="">
                     <span class="mdi mdi-console mdi-36px"></span>
-                    <span>ADMIN PANEL</span>
+                    <span>Admin panel</span>
                 </a>
                 <ul class="submenu-sx closed">
                     <li>
@@ -64,20 +64,32 @@
                     </li>
                 </ul>
             </li>
-            <li class="option-menu">
-                <a href="">
+            <li class="option-menu" ng-switch-when="true">
+                <a ui-sref="user-profile({login: account.login})">
                     <span class="mdi mdi-account-box mdi-36px"></span>
-                    <span>USER PANEL</span>
+                    <span>User profile</span>
                 </a>
             </li>
-            <li class="option-menu">
+            <li class="option-menu" ng-switch-when="true">
                 <a ui-sref="upload">
                     <span class="mdi mdi-upload mdi-36px"></span>
-                    <span>UPLOAD</span>
+                    <span>Upload</span>
+                </a>
+            </li>
+            <li class="option-menu" ng-switch-when="false">
+                <a ui-sref="login">
+                    <span class="mdi mdi-login-variant mdi-36px"></span>
+                    <span>Login</span>
+                </a>
+            </li>
+            <li class="option-menu" ng-switch-when="false">
+                <a ui-sref="register">
+                    <span class="mdi mdi-account-plus mdi-36px"></span>
+                    <span>Register</span>
                 </a>
             </li>
         </ul>
-        <ul id="user-menu-container">
+        <ul id="user-menu-container" ng-switch-when="true">
             <li class="option-user-menu">
                 <a class="user-image" ui-sref="user-profile({login:account.login})">
                     <img style="border-radius: 100%;height: 55px;margin-top: -8px;margin-bottom: -30px;display: inline-block;" ng-src="{{account.user_image}}" alt="">
@@ -88,12 +100,12 @@
                     <span class="mdi mdi-account-settings-variant mdi-24px"></span>
                 </a>
             </li>
-            <li class="option-user-menu" ng-switch-when="true">
+            <li class="option-user-menu" >
                 <a ng-click="logout()">
                     <span class="mdi mdi-exit-to-app mdi-24px mdi-red"></span>
                 </a>
             </li>
-            <li class="option-user-menu" ng-switch-when="false">
+            <li class="option-user-menu" ng-switch-when="true">
                 <a ui-sref="login">
                     <span class="mdi mdi-exit-to-app mdi-24px mdi-red"></span>
                 </a>

@@ -100,9 +100,9 @@ angular.module('soundxtreamappApp')
                     }]
                 }
             })
-            .state('library.likes', {
+            .state('library.likesTracks', {
                 parent: 'library',
-                url: '/likes',
+                url: '/tracks/likes',
                 data: {
                     authorities: ['ROLE_USER'],
                     pageTitle: 'soundxtreamappApp.song_user.home.title'
@@ -116,6 +116,27 @@ angular.module('soundxtreamappApp')
                 resolve: {
                     translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
                         $translatePartialLoader.addPart('song_user');
+                        $translatePartialLoader.addPart('global');
+                        return $translate.refresh();
+                    }]
+                }
+            })
+            .state('library.likesPlaylists', {
+                parent: 'library',
+                url: '/playlist/likes',
+                data: {
+                    authorities: ['ROLE_USER'],
+                    pageTitle: 'soundxtreamappApp.song_user.home.title'
+                },
+                views: {
+                    'lib@library': {
+                        templateUrl: 'scripts/app/entities/playlist_user/playlist_users.html',
+                        controller: 'Playlist_userController'
+                    }
+                },
+                resolve: {
+                    translatePartialLoader: ['$translate', '$translatePartialLoader', function ($translate, $translatePartialLoader) {
+                        $translatePartialLoader.addPart('playlist_user');
                         $translatePartialLoader.addPart('global');
                         return $translate.refresh();
                     }]

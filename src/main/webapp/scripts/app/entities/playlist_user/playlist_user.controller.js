@@ -51,4 +51,16 @@ angular.module('soundxtreamappApp')
                 id: null
             };
         };
+
+        $scope.unlike = function(id){
+            Playlist_user.addLike({id: id},{},successUnlike);
+        };
+        
+        function successUnlike(result) {
+            for(var k = 0; k < $scope.playlist_users.length; k++){
+                if($scope.playlist_users[k].playlist.id == result.playlist.id){
+                    $scope.playlist_users.splice(k,1);
+                }
+            }
+        }
     });

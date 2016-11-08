@@ -13,15 +13,23 @@ angular.module('soundxtreamappApp')
                 }
             },
             'update': { method:'PUT' },
-            /*'getPlaylistUser':{
-                method: 'GET',
-                isArray: true,
-                url: 'api/playlistUser/:login'
-            },*/
             'getPlaylistUser':{
                 method: 'GET',
                 isArray: true,
                 url: 'api/playlistUser/:login'
+            },
+            'getPlaylistUserLogged':{
+                method: 'GET',
+                isArray: true,
+                url: 'api/playlistUserLogged'
+            },
+            'addTrackPlaylist':{
+                method: 'PUT',
+                url: 'api/addTrackPlaylist/:id_track/to/:id_playlist',
+                params:{
+                    id_track:'@id_track',
+                    id_playlist: '@id_playlist'
+                }
             }
         });
     });

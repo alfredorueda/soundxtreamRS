@@ -14,9 +14,9 @@ angular.module('soundxtreamappApp').controller('SongToPlaylist',
             $scope.songDTO = entity_song;
             $scope.playlists = entity;
 
-            Playlist.getPlaylistUser({login: $scope.account.login}, function(result){
+            /*Playlist.getPlaylistUser({login: $scope.account.login}, function(result){
                 $scope.playlists = result;
-            });
+            });*/
 
             $scope.load = function (id) {
                 Playlist.get({id: id}, function (result) {
@@ -74,10 +74,31 @@ angular.module('soundxtreamappApp').controller('SongToPlaylist',
                 $scope.datePickerForDateCreated.status.opened = true;
             };
 
-            $scope.add = function (id) {
-                $scope.playlist = Playlist.get({id: id});
+            $scope.add = function (playlist) {
+                //$scope.playlist = Playlist.get({id: id});
 
-                $scope.playlist.$promise.then(function (result) {
+                console.log(playlist);
+
+                var exist = false;
+                for (var k = 0; k < playlist.songs.length; k++) {
+                    if (playlist.songs[k].id == $scope.songDTO.song.id) {
+                        exist = true;
+                    }
+                }
+
+                if(!exist){
+                    playlist.songs.push($scope.songDTO.song);
+                    playlist.full_duration = 0;
+                    for(var k = 0; k < playlist.songs.length; k++){
+                        playlist.full_duration += playlist.songs[k].duration;
+                    }
+                    Playlist.update(playlist, function(result){
+                        $rootScope.$broadcast('soundxtreamappApp:playlistUpdated', result);
+                    });
+                    $uibModalInstance.close();
+                }
+
+                /*$scope.playlist.$promise.then(function (result) {
                     var exist = false;
                     for (var k = 0; k < $scope.playlist.songs.length; k++) {
                         if ($scope.playlist.songs[k].id == $scope.songDTO.song.id) {
@@ -96,7 +117,7 @@ angular.module('soundxtreamappApp').controller('SongToPlaylist',
                         });
                         $uibModalInstance.close();
                     }
-                });
+                });*/
             };
 
             $scope.addConfirm = false;
@@ -119,7 +140,7 @@ angular.module('soundxtreamappApp').controller('SongToPlaylist',
                 }
                 if(!existName){
                     Playlist.save($scope.playlistNew);
-                    $scope.playlists = Playlist.getPlaylistUser({});
+                    //$scope.playlists = Playlist.getPlaylistUser({});
                     //$scope.playlists.push($scope.playlistNew);
                     $scope.playlistNew = null;
                     $scope.errorName = false;

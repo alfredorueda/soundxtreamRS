@@ -4,7 +4,7 @@
 'use strict';
 
 angular.module('soundxtreamappApp')
-    .controller('UserProfileController', function (Song_user,$scope, $rootScope, $http, $location, $state, Auth, Principal, $modal,Upload, Seguimiento,userInfo,toaster) {
+    .controller('UserProfileController', function (Playlist_user,ParseLinks, Playlist, Song_user, $scope, $rootScope, $http, $location, $state, Auth, Principal, $modal,Upload, Seguimiento,userInfo,toaster) {
 
         Principal.identity().then(function(account) {
             $scope.account = account;
@@ -40,6 +40,12 @@ angular.module('soundxtreamappApp')
                 url: 'api/songs/newest/user/'+$scope.user.login
             }).then(function successCallback(response) {
                 $scope.tracksUser = response.data;
+            });
+            Playlist.getPlaylistUser({login:$scope.user.login, page: $scope.page, size: 4, sort: [$scope.predicate + ',' + ($scope.reverse ? 'asc' : 'desc'), 'id']}, function(result, headers) {
+                $scope.links = ParseLinks.parse(headers('link'));
+                for (var i = 0; i < result.length; i++) {
+                    $scope.playlistsUser.push(result[i]);
+                }
             });
         });
 
@@ -78,6 +84,22 @@ angular.module('soundxtreamappApp')
         $scope.like = function(id){
             Song_user.addLike({id: id},{},successLike);
         };
+
+        $scope.unlike = function(id){
+            Playlist_user.addLike({id: id},{},successUnlike);
+        };
+
+        function successUnlike(result) {
+            for(var k = 0; k < $scope.playlistsUser.length; k++){
+                if($scope.playlistsUser[k].playlist.id == result.playlist.id){
+                    if($scope.playlistsUser[k].liked = result.liked){
+                        $scope.playlistsUser[k].totalLikes += 1;
+                    }else{
+                        $scope.playlistsUser[k].totalLikes -= 1;
+                    }
+                }
+            }
+        }
 
         var successLike = function(result){
             for(var k = 0; k < $scope.tracksUser.length; k++){
