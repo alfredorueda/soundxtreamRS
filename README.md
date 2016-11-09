@@ -2,7 +2,7 @@
 
 ##Installation
 
-    1. Download repository with git clone https://github.com/xavierpandis/soundxtreamapp
+    1. Download repository with git clone https://github.com/xavierpandis/soundxtreamRS
     2. User bower to install all required dependencies with bower install
     
     ```sh
@@ -29,7 +29,7 @@ If you want to customize de application you have to download:
     4. Install Yeoman: npm install -g yo
     5. Install Bower: npm install -g bower
     6. npm install -g grunt-cli.
-    7. Install JHipster: npm install -g generator-jhipster
+    7. Install JHipster: npm install -g generator-jhipster@2.27.2
 
     For building the application use mvn spring-boot:run or 
 
